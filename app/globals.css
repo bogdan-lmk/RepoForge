@@ -94,32 +94,6 @@ body {
   border-color: var(--color-teal) !important;
 }
 
-.nav-underline {
-  position: relative;
-}
-
-.nav-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  width: 0;
-  height: 1.5px;
-  background: var(--color-teal);
-  border-radius: 1px;
-  transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), left 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.nav-underline:hover::after {
-  width: 100%;
-  left: 0;
-}
-
-.nav-underline.active::after {
-  width: 100%;
-  left: 0;
-}
-
 @keyframes save-pop {
   0% { transform: scale(1); }
   30% { transform: scale(1.35); }

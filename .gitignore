@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -30,8 +28,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +39,29 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# Design files
+*.pen
+design.pen
+
+# Debug screenshots
+debug-*.png
+homepage-*.png
+
+# Logs
+*.log
+
+# Agent/AI context
+AGENTS.md
+CLAUDE.md
+plan.md
+DESIGN.md

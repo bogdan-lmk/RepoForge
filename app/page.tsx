@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Nav } from "@/components/Nav";
 import { SearchBar } from "@/components/SearchBar";
@@ -9,7 +9,7 @@ import { IdeaCard } from "@/components/IdeaCard";
 import { ForgeSpinner } from "@/components/ForgeSpinner";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { CursorGlow } from "@/components/CursorGlow";
-import type { RepoDoc, ComboIdea } from "@/core/types";
+import { useSavedIdeas } from "@/lib/use-saved-ideas";
 
 const stagger: Variants = {
   hidden: {},
@@ -91,15 +91,70 @@ function TrustMetric({ value, label, delay }: { value: string; label: string; de
   );
 }
 
+interface RepoResult {
+  slug: string;
+  name: string;
+  description: string;
+  language: string | null;
+  stars: number;
+}
+
+interface ComboResult {
+  title: string;
+  thesis: string;
+  formula?: string | null;
+  repoSlugs: string[];
+  capabilities: string[];
+  scores: Record<string, number | null>;
+  demo72h?: string | null;
+}
+
+interface LastSearch {
+  query: string;
+  repos: RepoResult[];
+  ideas: ComboResult[];
+}
+
+const LAST_SEARCH_KEY = "category-forge-last-search";
+
+function readLastSearch(): LastSearch | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(LAST_SEARCH_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeLastSearch(data: LastSearch) {
+  try {
+    localStorage.setItem(LAST_SEARCH_KEY, JSON.stringify(data));
+  } catch {}
+}
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [repos, setRepos] = useState<RepoDoc[]>([]);
-  const [ideas, setIdeas] = useState<ComboIdea[]>([]);
+  const [repos, setRepos] = useState<RepoResult[]>([]);
+  const [ideas, setIdeas] = useState<ComboResult[]>([]);
   const [searched, setSearched] = useState(false);
+  const [lastQuery, setLastQuery] = useState("");
+  const { save, isSaved } = useSavedIdeas();
+
+  useEffect(() => {
+    const cached = readLastSearch();
+    if (cached) {
+      setRepos(cached.repos);
+      setIdeas(cached.ideas);
+      setLastQuery(cached.query);
+      setSearched(true);
+    }
+  }, []);
 
   const handleSearch = useCallback(async (q: string) => {
     setLoading(true);
     setSearched(true);
+    setLastQuery(q);
     setRepos([]);
     setIdeas([]);
 
@@ -107,8 +162,11 @@ export default function Home() {
       const res = await fetch(`/api/ideas/search?q=${encodeURIComponent(q)}`);
       if (!res.ok) throw new Error("Search failed");
       const data = await res.json();
-      setRepos(data.repos ?? []);
-      setIdeas(data.ideas ?? []);
+      const foundRepos: RepoResult[] = data.data?.repos ?? [];
+      const foundIdeas: ComboResult[] = data.data?.combos ?? [];
+      setRepos(foundRepos);
+      setIdeas(foundIdeas);
+      writeLastSearch({ query: q, repos: foundRepos, ideas: foundIdeas });
     } catch {
       setRepos([]);
       setIdeas([]);
@@ -117,13 +175,18 @@ export default function Home() {
     }
   }, []);
 
-  const handleSave = useCallback(async (idea: ComboIdea) => {
-    await fetch("/api/combos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(idea),
+  const handleSave = useCallback((idea: ComboResult) => {
+    save({
+      title: idea.title,
+      thesis: idea.thesis,
+      scores: idea.scores,
+      repoSlugs: idea.repoSlugs,
+      capabilities: idea.capabilities,
+      demo72h: idea.demo72h ?? null,
+      formula: idea.formula ?? null,
+      queryText: "",
     });
-  }, []);
+  }, [save]);
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -140,7 +203,7 @@ export default function Home() {
               initial="hidden"
               animate="visible"
               exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.3 } }}
-              className="flex flex-1 flex-col items-center justify-center px-5 pb-12 pt-4 md:pb-20"
+              className="flex flex-1 flex-col items-center justify-center px-5 pb-12 pt-20 md:pb-20 md:pt-24"
             >
               <motion.div variants={badgePop} className="mb-6 md:mb-8">
                 <div className="flex items-center gap-2.5 rounded-full border border-teal/15 bg-teal/[0.06] px-4 py-2 backdrop-blur-sm">
@@ -230,7 +293,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-1 items-center justify-center px-5 pt-10"
+              className="flex flex-1 items-center justify-center px-5 pt-24"
             >
               <ForgeSpinner step={2} />
             </motion.div>
@@ -240,10 +303,10 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col gap-6 px-4 py-6 md:px-6 md:py-8 lg:py-10"
+              className="flex flex-col gap-6 px-4 pt-20 pb-6 md:px-6 md:pt-24 md:pb-8 lg:pb-10"
             >
               <div className="mx-auto w-full max-w-[1200px]">
-                <SearchBar onSearch={handleSearch} loading={loading} variant="compact" />
+                <SearchBar key={lastQuery} onSearch={handleSearch} loading={loading} variant="compact" defaultValue={lastQuery} />
               </div>
 
               <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 lg:flex-row">
@@ -310,21 +373,22 @@ export default function Home() {
 
                   <motion.div variants={stagger} className="flex flex-col gap-3">
                     {ideas.map((idea, i) => (
-                      <motion.div key={i} variants={fadeUp}>
+                      <motion.div key={idea.title} variants={fadeUp}>
                         <IdeaCard
                           index={i}
                           title={idea.title}
                           description={idea.thesis}
                           score={
                             idea.scores
-                              ? (idea.scores.novelty +
-                                  idea.scores.composableFit +
-                                  idea.scores.accessibilityWedge) /
-                                3
+                              ? (() => {
+                                  const vals = Object.values(idea.scores).filter((v): v is number => v != null);
+                                  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+                                })()
                               : null
                           }
-                          tags={idea.repoSlugs?.slice(0, 3)}
+                          tags={idea.capabilities?.slice(0, 3)}
                           demo72h={idea.demo72h}
+                          saved={isSaved(idea.title)}
                           onSave={() => handleSave(idea)}
                         />
                       </motion.div>

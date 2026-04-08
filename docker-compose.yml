@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: forge
+      POSTGRES_PASSWORD: forge
+      POSTGRES_DB: categoryforge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forge -d categoryforge"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6335:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  pgdata:
+  qdrant_data:

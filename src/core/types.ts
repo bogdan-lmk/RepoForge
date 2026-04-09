@@ -13,11 +13,20 @@ export interface RepoDoc {
   source?: string;
 }
 
+export type QueryType =
+  | "specific_tool"
+  | "capability_search"
+  | "comparison"
+  | "alternative"
+  | "tutorial";
+
 export interface ParsedQuery {
   text: string;
   anchorTerms: string[];
   capabilityTerms: string[];
   intentType: "explore" | "build" | "lookup";
+  queryType: QueryType;
+  requiredEntities: string[];
   githubQueries: string[];
 }
 
@@ -31,6 +40,7 @@ export interface ComboScores {
 }
 
 export interface ComboIdea {
+  id?: number | null;
   title: string;
   thesis: string;
   formula: string;

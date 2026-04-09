@@ -2,9 +2,10 @@ import { db, repos } from "@/db";
 import { searchMulti, fetchReadme } from "@/lib/github";
 import { parseQuery, generateCombos } from "@/lib/openai";
 import { searchVectors, upsertVectors } from "@/lib/qdrant";
+import { rerank } from "@/services/reranker";
 import { logger } from "@/lib/logger";
 import { sql, getTableColumns } from "drizzle-orm";
-import type { RepoDoc, ParsedQuery } from "@/core/types";
+import type { RepoDoc, ParsedQuery, QueryType } from "@/core/types";
 
 export async function search(
   queryText: string,
@@ -13,23 +14,17 @@ export async function search(
   const parsed = await parseQuery(queryText);
   logger.info({ parsed }, "Query parsed");
 
-  // Build enriched query for vector search: parsed terms only, no raw query duplication.
-  // anchorTerms + capabilityTerms already contain AI-extracted intent — no need to repeat queryText.
   const enrichedVectorQuery = [
     ...parsed.anchorTerms,
     ...parsed.capabilityTerms,
   ].join(" ") || queryText;
 
-  // Determine up front whether we need GitHub (can't know without lexical result,
-  // but we can predict: explore/build intents almost always need it)
   const intentNeedsGithub =
     parsed.intentType === "explore" || parsed.intentType === "build";
 
-  // --- Run FTS and vector search in parallel ---
-  // GitHub search is conditional on lexical results, so it runs in a second wave.
   const [ftsResult, vectorResult] = await Promise.allSettled([
     lexicalSearch(parsed, 12),
-    searchVectors(enrichedVectorQuery, parsed, 8),
+    searchVectors(enrichedVectorQuery, parsed, 12),
   ]);
 
   const ftsRepos: RepoDoc[] =
@@ -42,7 +37,6 @@ export async function search(
   if (vectorResult.status === "rejected")
     logger.warn({ err: vectorResult.reason }, "Vector search failed");
 
-  // Decide whether to hit GitHub based on FTS outcome + intent
   const needsGithub =
     intentNeedsGithub ||
     ftsRepos.length < 4 ||
@@ -51,28 +45,42 @@ export async function search(
   let githubRepos: RepoDoc[] = [];
   if (needsGithub && parsed.githubQueries.length > 0) {
     githubRepos = await searchFromGithub(parsed.githubQueries, 15);
+    githubRepos = rescoreGithubRepos(githubRepos, parsed);
   }
 
-  // Fuse all three ranked lists with Weighted RRF
-  const allRepos = weightedRRF(
-    [
-      { repos: ftsRepos,     weight: 1.4 }, // FTS: highest weight — keyword precision
-      { repos: vectorRepos,  weight: 1.2 }, // Vector: semantic coverage
-      { repos: githubRepos,  weight: 1.0 }, // GitHub: freshness / long-tail
-    ],
-    { k: 20 },
-  ).slice(0, 15);
-
-  logger.info(
-    { fts: ftsRepos.length, vector: vectorRepos.length, github: githubRepos.length, merged: allRepos.length },
-    "Search sources merged via RRF",
+  const weights = computeAdaptiveWeights(
+    parsed,
+    ftsRepos.length,
+    avgScore(ftsRepos),
   );
 
-  const combos = allRepos.length >= 2
-    ? await generateCombos(allRepos, queryText, comboLimit)
+  const allRepos = weightedRRF(
+    [
+      { repos: ftsRepos, weight: weights.fts },
+      { repos: vectorRepos, weight: weights.vector },
+      { repos: githubRepos, weight: weights.github },
+    ],
+    { k: 20 },
+  ).slice(0, 30);
+
+  let reranked: RepoDoc[];
+  try {
+    reranked = await rerank(queryText, allRepos, 15);
+  } catch (e) {
+    logger.warn({ err: e }, "Re-ranking failed, using RRF order");
+    reranked = allRepos.slice(0, 15);
+  }
+
+  logger.info(
+    { fts: ftsRepos.length, vector: vectorRepos.length, github: githubRepos.length, merged: allRepos.length, reranked: reranked.length },
+    "Search pipeline complete",
+  );
+
+  const combos = reranked.length >= 2
+    ? await generateCombos(reranked, queryText, comboLimit)
     : [];
 
-  return { parsed, repos: allRepos, combos };
+  return { parsed, repos: reranked, combos };
 }
 
 /* ------------------------------------------------------------------ */
@@ -86,11 +94,8 @@ async function lexicalSearch(
   const terms = [...parsed.anchorTerms, ...parsed.capabilityTerms];
   if (!terms.length) return [];
 
-  // Build a tsquery string: "claude code context management" → "claude & code & context & management"
-  // Using plainto_tsquery handles stemming and stop-words automatically.
   const rawQuery = terms.join(" ");
 
-  // Exclude the generated `fts` column from SELECT (it's a large tsvector blob)
   const { fts: _fts, ...selectColumns } = getTableColumns(repos);
 
   const rows = await db
@@ -107,13 +112,10 @@ async function lexicalSearch(
     return rows.map((r) => toRepoDoc(r, r.rank, "fts"));
   }
 
-  // Fallback: if FTS returned nothing (e.g. all terms are stop-words, or
-  // the generated column hasn't been backfilled yet), use ILIKE as before.
   logger.info({ terms }, "FTS returned 0 results, falling back to ILIKE");
   return ilikeFallback(terms, limit);
 }
 
-/** ILIKE fallback — kept for graceful degradation before migration runs */
 async function ilikeFallback(
   terms: string[],
   limit: number,
@@ -145,7 +147,6 @@ async function ilikeFallback(
     .slice(0, limit);
 }
 
-/** Map a DB row to a RepoDoc */
 function toRepoDoc(
   r: Omit<typeof repos.$inferSelect, "fts">,
   score: number,
@@ -228,19 +229,128 @@ async function persistRepos(repoDocs: RepoDoc[]): Promise<void> {
   }
 }
 
+// ── GitHub Re-Scoring ───────────────────────────────────────────────────────
+//
+// Compute text relevance score for GitHub results before feeding into RRF.
+// RRF assumes rank=1 means "most relevant", but GitHub returns by stars.
+// This re-scores so ranks reflect textual relevance, not popularity.
+
+function rescoreGithubRepos(
+  repos: RepoDoc[],
+  parsed: ParsedQuery,
+): RepoDoc[] {
+  const queryTerms = [
+    ...parsed.anchorTerms,
+    ...parsed.capabilityTerms,
+  ].map((t) => t.toLowerCase());
+
+  const anchorLower = parsed.anchorTerms.map((t) => t.toLowerCase());
+  const requiredLower = parsed.requiredEntities.map((e) => e.toLowerCase());
+
+  if (queryTerms.length === 0) return repos;
+
+  const scored = repos.map((repo) => {
+    const slugLower = repo.slug.toLowerCase();
+    const nameLower = repo.name.toLowerCase();
+    const descLower = (repo.description ?? "").toLowerCase();
+    const topicsLower = (repo.topics ?? []).join(" ").toLowerCase();
+
+    const docTerms = new Set(
+      `${slugLower} ${nameLower} ${descLower} ${topicsLower}`
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+
+    let matchCount = 0;
+    let slugBonus = 0;
+    let anchorBonus = 0;
+
+    for (const term of queryTerms) {
+      const inDoc =
+        slugLower.includes(term) ||
+        nameLower.includes(term) ||
+        descLower.includes(term) ||
+        topicsLower.includes(term);
+      if (inDoc) matchCount++;
+
+      if (slugLower.includes(term) || nameLower.includes(term)) {
+        slugBonus++;
+      }
+    }
+
+    for (const anchor of anchorLower) {
+      if (slugLower.includes(anchor) || nameLower.includes(anchor)) {
+        anchorBonus++;
+      }
+    }
+
+    let requiredBonus = 0;
+    for (const req of requiredLower) {
+      if (slugLower.includes(req) || nameLower.includes(req) || descLower.includes(req)) {
+        requiredBonus++;
+      }
+    }
+
+    const jaccard = matchCount / (queryTerms.length + docTerms.size - matchCount || 1);
+    const baseScore = 0.2 + 0.5 * jaccard;
+    const slugWeight = Math.min(slugBonus / queryTerms.length, 1) * 0.15;
+    const anchorWeight = Math.min(anchorBonus / Math.max(anchorLower.length, 1), 1) * 0.1;
+    const requiredWeight = requiredBonus > 0 ? 0.05 * requiredBonus : 0;
+
+    const score = Math.min(baseScore + slugWeight + anchorWeight + requiredWeight, 1.0);
+
+    return { ...repo, score };
+  });
+
+  scored.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+
+  return scored;
+}
+
+// ── Adaptive RRF Weights ────────────────────────────────────────────────────
+
+function computeAdaptiveWeights(
+  parsed: ParsedQuery,
+  ftsCount: number,
+  ftsAvgScore: number,
+): { fts: number; vector: number; github: number } {
+  const w = { fts: 1.4, vector: 1.2, github: 1.0 };
+
+  const qt: QueryType = parsed.queryType ?? "capability_search";
+
+  if (parsed.intentType === "lookup" || qt === "specific_tool") {
+    w.fts *= 1.3;
+    w.vector *= 0.7;
+  }
+  if (parsed.intentType === "explore" || qt === "capability_search") {
+    w.vector *= 1.3;
+    w.github *= 1.2;
+  }
+  if (parsed.intentType === "build") {
+    w.vector *= 1.2;
+    w.github *= 1.2;
+  }
+  if (qt === "alternative") {
+    w.vector *= 1.4;
+    w.github *= 1.2;
+  }
+  if (qt === "comparison") {
+    w.fts *= 1.2;
+    w.vector *= 1.2;
+  }
+
+  if (ftsCount < 3) {
+    w.vector *= 1.2;
+    w.github *= 1.2;
+  }
+  if (ftsAvgScore > 0.7) {
+    w.fts *= 1.15;
+  }
+
+  return w;
+}
+
 // ── Weighted Reciprocal Rank Fusion ─────────────────────────────────────────
-//
-// Classic RRF: score(d) = Σ  1 / (k + rank_i(d))
-// Weighted RRF: score(d) = Σ  w_i / (k + rank_i(d))
-//
-// k=20 is tuned for small result sets (FTS:12, GitHub:15, Vector:8).
-// With k=60 (web-search standard), the score differences across ranks
-// become negligible at our scale.
-//
-// Source weights reflect precision/recall tradeoffs:
-//   FTS 1.4  — exact keyword match on slug/name has highest precision
-//   Vector 1.2 — semantic coverage, good recall for paraphrases
-//   GitHub 1.0 — freshness/long-tail, lower precision (sorted by stars)
 
 interface RankedSource {
   repos: RepoDoc[];
@@ -251,17 +361,15 @@ export function weightedRRF(
   sources: RankedSource[],
   { k = 20 }: { k?: number } = {},
 ): RepoDoc[] {
-  // slug → { rrfScore, merged RepoDoc }
   const scores = new Map<string, { score: number; doc: RepoDoc }>();
 
   for (const { repos, weight } of sources) {
     for (let rank = 0; rank < repos.length; rank++) {
       const r = repos[rank];
-      const contribution = weight / (k + rank + 1); // rank is 0-indexed
+      const contribution = weight / (k + rank + 1);
       const existing = scores.get(r.slug);
       if (existing) {
         existing.score += contribution;
-        // Merge metadata: prefer the richer value from whichever source has it
         if (!existing.doc.readme && r.readme) existing.doc.readme = r.readme;
         if (!existing.doc.capabilities.length && r.capabilities.length)
           existing.doc.capabilities = r.capabilities;

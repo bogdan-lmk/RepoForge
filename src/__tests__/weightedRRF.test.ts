@@ -116,7 +116,7 @@ describe("weightedRRF", () => {
     expect(result).toHaveLength(4);
     const shared = result.find((r) => r.slug === "shared/repo")!;
     const singleSource = result.find((r) => r.slug === "other/a")!;
-    expect(shared.score).toBeGreaterThan(singleSource.score);
+    expect(shared.score!).toBeGreaterThan(singleSource.score ?? 0);
   });
 
   it("merges primitives from richer source", () => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
+import { useEffect, useRef, useCallback, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface SparklesCoreProps {
@@ -42,12 +42,12 @@ export function SparklesCore({
   particleColor = "#2dd4bf",
 }: SparklesCoreProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const particles = useRef<Particle[]>([])
+  const [particles, setParticles] = useState<Particle[]>([])
 
   const init = useCallback(() => {
     if (!containerRef.current) return
     const { clientWidth: w, clientHeight: h } = containerRef.current
-    particles.current = generateParticles(particleCount, w, h, minSize, maxSize)
+    setParticles(generateParticles(particleCount, w, h, minSize, maxSize))
   }, [particleCount, minSize, maxSize])
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function SparklesCore({
       style={{ background, position: "relative", overflow: "hidden" }}
     >
       <AnimatePresence>
-        {particles.current.map((p, i) => (
+        {particles.map((p, i) => (
           <motion.span
             key={i}
             initial={{ opacity: 0, scale: 0 }}

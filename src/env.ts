@@ -12,6 +12,8 @@ export const env = createEnv({
     OPENAI_EMBEDDING_MODEL: z.string().default("text-embedding-3-small"),
     GITHUB_TOKEN: z.string().optional(),
     LIBRARIES_IO_API_KEY: z.string().optional(),
+    INGEST_SECRET: z.string().optional(),
+    REINDEX_SECRET: z.string().optional(),
   },
   client: {},
   runtimeEnv: {
@@ -24,5 +26,7 @@ export const env = createEnv({
     OPENAI_EMBEDDING_MODEL: process.env.OPENAI_EMBEDDING_MODEL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     LIBRARIES_IO_API_KEY: process.env.LIBRARIES_IO_API_KEY,
+    INGEST_SECRET: process.env.INGEST_SECRET,
+    REINDEX_SECRET: process.env.REINDEX_SECRET,
   },
 });

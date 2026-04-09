@@ -16,6 +16,11 @@ interface Node {
   radius: number
 }
 
+function pseudoRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
 function generateNodes(count: number, size: number): Node[] {
   const nodes: Node[] = []
   const cx = size / 2
@@ -23,12 +28,12 @@ function generateNodes(count: number, size: number): Node[] {
   const maxR = size * 0.35
 
   for (let i = 0; i < count; i++) {
-    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8
-    const dist = maxR * (0.3 + Math.random() * 0.7)
+    const angleJitter = (pseudoRandom((i + 1) * 13.17 + size) - 0.5) * 0.8
+    const dist = maxR * (0.3 + pseudoRandom((i + 1) * 37.91 + size) * 0.7)
     nodes.push({
-      x: cx + Math.cos(angle) * dist,
-      y: cy + Math.sin(angle) * dist,
-      radius: 1.5 + Math.random() * 2.5,
+      x: cx + Math.cos((Math.PI * 2 * i) / count + angleJitter) * dist,
+      y: cy + Math.sin((Math.PI * 2 * i) / count + angleJitter) * dist,
+      radius: 1.5 + pseudoRandom((i + 1) * 53.29 + size) * 2.5,
     })
   }
 
@@ -51,11 +56,12 @@ export function NeuralSynapse({
         const dy = nodes[i].y - nodes[j].y
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist < size * 0.35) {
+          const seed = (i + 1) * 97 + (j + 1) * 193 + size
           conns.push({
             from: nodes[i],
             to: nodes[j],
-            delay: Math.random() * 3,
-            duration: 1.5 + Math.random() * 2,
+            delay: pseudoRandom(seed) * 3,
+            duration: 1.5 + pseudoRandom(seed * 1.7) * 2,
           })
         }
       }
@@ -99,6 +105,10 @@ export function NeuralSynapse({
         )
       })}
       {nodes.map((node, i) => (
+        (() => {
+          const duration = 2 + pseudoRandom((i + 1) * 71.13 + size) * 2
+          const delay = pseudoRandom((i + 1) * 83.41 + size) * 2
+          return (
         <motion.circle
           key={`node-${i}`}
           cx={node.x}
@@ -111,12 +121,14 @@ export function NeuralSynapse({
             scale: [0.8, 1.2, 0.8],
           }}
           transition={{
-            duration: 2 + Math.random() * 2,
-            delay: Math.random() * 2,
+            duration,
+            delay,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
+          )
+        })()
       ))}
       <motion.circle
         cx={size / 2}

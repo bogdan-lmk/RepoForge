@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { saveButton } from "@/lib/motion";
@@ -14,6 +15,7 @@ interface IdeaCardProps {
   repoSlugs?: string[];
   demo72h?: string | null;
   saved?: boolean;
+  href?: string | null;
   onSave?: () => void;
 }
 
@@ -49,23 +51,21 @@ export function IdeaCard({
   tags,
   demo72h,
   saved,
+  href,
   onSave,
 }: IdeaCardProps) {
   const [justSaved, setJustSaved] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setJustSaved(true);
     onSave?.();
     setTimeout(() => setJustSaved(false), 500);
   };
 
-  return (
-    <div
-      className={cn(
-        "group relative flex gap-4 overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated/70 p-5 backdrop-blur-sm",
-        "transition-all hover:border-teal/15",
-      )}
-    >
+  const inner = (
+    <>
       <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-teal/60 via-teal/20 to-transparent" />
 
       <div className="flex flex-1 flex-col gap-3 pl-2">
@@ -130,6 +130,22 @@ export function IdeaCard({
           <span className="text-[9px] uppercase tracking-wider text-fg-muted">score</span>
         </div>
       )}
-    </div>
+    </>
   );
+
+  const cardClasses = cn(
+    "group relative flex gap-4 overflow-hidden rounded-2xl border border-border-subtle bg-surface-elevated/70 p-5 backdrop-blur-sm",
+    "transition-all hover:border-teal/15",
+    href && "cursor-pointer hover:border-teal/25 hover:shadow-lg hover:shadow-teal/5",
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={cardClasses}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return <div className={cardClasses}>{inner}</div>;
 }

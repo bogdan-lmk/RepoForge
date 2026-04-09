@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const {
   mockSearch,
+  mockQuery,
   mockGetCollections,
   mockCreateCollection,
   mockCreatePayloadIndex,
@@ -10,6 +11,7 @@ const {
   mockGenerateEmbedding,
 } = vi.hoisted(() => ({
   mockSearch: vi.fn(),
+  mockQuery: vi.fn(),
   mockGetCollections: vi.fn(),
   mockCreateCollection: vi.fn(),
   mockCreatePayloadIndex: vi.fn(),
@@ -28,6 +30,7 @@ vi.mock("@qdrant/js-client-rest", () => ({
     this.createCollection = mockCreateCollection;
     this.createPayloadIndex = mockCreatePayloadIndex;
     this.search = mockSearch;
+    this.query = mockQuery;
     this.upsert = mockUpsert;
     this.deleteCollection = mockDeleteCollection;
   }),
@@ -37,7 +40,7 @@ vi.mock("@/lib/openai", () => ({
   generateEmbedding: mockGenerateEmbedding,
 }));
 
-import { upsertVectors, reindexAll } from "@/lib/qdrant";
+import { upsertVectors, reindexAll, _resetCollectionReady } from "@/lib/qdrant";
 import type { RepoDoc } from "@/core/types";
 
 function makeRepo(slug: string): RepoDoc {
@@ -56,8 +59,10 @@ function makeRepo(slug: string): RepoDoc {
 }
 
 beforeEach(() => {
+  _resetCollectionReady();
   vi.clearAllMocks();
-  mockGetCollections.mockResolvedValue({ collections: [{ name: "repos" }] });
+  mockGetCollections.mockResolvedValue({ collections: [] });
+  mockCreateCollection.mockResolvedValue({});
   mockCreatePayloadIndex.mockResolvedValue({});
   mockUpsert.mockResolvedValue({ status: "ok" });
   mockGenerateEmbedding.mockResolvedValue(new Array(1536).fill(0.1));
@@ -71,7 +76,8 @@ describe("ensureCollection", () => {
     await upsertVectors([makeRepo("test/repo")]);
 
     expect(mockCreateCollection).toHaveBeenCalledWith("repos", {
-      vectors: { size: 1536, distance: "Cosine" },
+      vectors: { dense: { size: 1536, distance: "Cosine" } },
+      sparse_vectors: { bm25: { modifier: "idf" } },
     });
   });
 

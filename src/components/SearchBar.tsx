@@ -42,12 +42,6 @@ export function SearchBar({
   }, []);
 
   useEffect(() => {
-    if (defaultValue !== undefined && defaultValue !== query) {
-      setQuery(defaultValue);
-    }
-  }, [defaultValue]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
     if (!hydrated || focused || query) return;
 
     const current = PLACEHOLDERS[placeholderIdxRef.current];

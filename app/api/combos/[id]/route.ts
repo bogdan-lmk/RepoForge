@@ -2,7 +2,36 @@ import { NextRequest } from "next/server";
 import { db, combos } from "@/db";
 import { eq } from "drizzle-orm";
 import { apiResponse, apiError } from "@/core/api-helpers";
+import { mapComboToApi } from "@/core/mappers";
 import { logger } from "@/lib/logger";
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const numericId = Number(id);
+    if (Number.isNaN(numericId)) {
+      return apiError("Invalid combo id", 400);
+    }
+
+    const rows = await db
+      .select()
+      .from(combos)
+      .where(eq(combos.id, numericId))
+      .limit(1);
+
+    if (!rows.length) {
+      return apiError("Combo not found", 404);
+    }
+
+    return apiResponse(mapComboToApi(rows[0]));
+  } catch (e) {
+    logger.error({ err: e }, "GET /api/combos/[id] failed");
+    return apiError("Failed to fetch combo", 500);
+  }
+}
 
 export async function PATCH(
   _req: NextRequest,

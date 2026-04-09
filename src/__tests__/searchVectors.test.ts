@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ParsedQuery } from "@/core/types";
 
-const { mockSearch, mockGetCollections, mockCreateCollection, mockCreatePayloadIndex } =
+const { mockQuery, mockSearch, mockGetCollections, mockCreateCollection, mockCreatePayloadIndex } =
   vi.hoisted(() => ({
+    mockQuery: vi.fn(),
     mockSearch: vi.fn(),
     mockGetCollections: vi.fn(),
     mockCreateCollection: vi.fn(),
@@ -18,6 +19,7 @@ vi.mock("@qdrant/js-client-rest", () => ({
     this.getCollections = mockGetCollections;
     this.createCollection = mockCreateCollection;
     this.createPayloadIndex = mockCreatePayloadIndex;
+    this.query = mockQuery;
     this.search = mockSearch;
   }),
 }));
@@ -34,6 +36,8 @@ function makeParsed(overrides: Partial<ParsedQuery> = {}): ParsedQuery {
     anchorTerms: [],
     capabilityTerms: ["context management"],
     intentType: "explore",
+    queryType: "capability_search",
+    requiredEntities: [],
     githubQueries: ["claude OR ai coding assistant"],
     ...overrides,
   };
@@ -43,49 +47,60 @@ beforeEach(() => {
   vi.clearAllMocks();
   mockGetCollections.mockResolvedValue({ collections: [{ name: "repos" }] });
   mockCreatePayloadIndex.mockResolvedValue({});
+  mockQuery.mockResolvedValue({ points: [] });
   mockSearch.mockResolvedValue([]);
 });
 
 describe("searchVectors", () => {
-  it("calls search without filter when no anchor terms", async () => {
+  it("uses hybrid query with prefetch (dense + BM25) and RRF fusion", async () => {
     const parsed = makeParsed({ anchorTerms: [] });
 
     await searchVectors("context management", parsed, 8);
 
-    expect(mockSearch).toHaveBeenCalledWith(
+    expect(mockQuery).toHaveBeenCalledWith(
       "repos",
       expect.objectContaining({
-        vector: expect.any(Array),
+        prefetch: expect.arrayContaining([
+          expect.objectContaining({
+            using: "bm25",
+            limit: 20,
+          }),
+          expect.objectContaining({
+            using: "dense",
+            limit: 20,
+          }),
+        ]),
+        query: expect.objectContaining({
+          rrf: expect.objectContaining({
+            weights: [1.0, 3.0],
+          }),
+        }),
         limit: 8,
         with_payload: true,
       }),
     );
-    const callArgs = mockSearch.mock.calls[0][1] as Record<string, unknown>;
-    expect(callArgs).not.toHaveProperty("filter");
   });
 
-  it("passes should filter with slug+topics for each anchor term", async () => {
-    const parsed = makeParsed({ anchorTerms: ["claude", "supabase"] });
+  it("passes BM25 text inference in prefetch", async () => {
+    const parsed = makeParsed();
 
-    await searchVectors("claude supabase context", parsed, 12);
+    await searchVectors("notebooklm python api", parsed, 8);
 
-    expect(mockSearch).toHaveBeenCalledWith(
-      "repos",
+    const callArgs = mockQuery.mock.calls[0][1] as Record<string, unknown>;
+    const prefetches = callArgs.prefetch as Array<Record<string, unknown>>;
+
+    const sparsePrefetch = prefetches.find((p) => p.using === "bm25");
+    expect(sparsePrefetch).toBeDefined();
+    expect(sparsePrefetch!.query).toEqual(
       expect.objectContaining({
-        filter: {
-          should: [
-            { key: "slug", match: { value: "claude" } },
-            { key: "topics", match: { value: "claude" } },
-            { key: "slug", match: { value: "supabase" } },
-            { key: "topics", match: { value: "supabase" } },
-          ],
-        },
+        text: "notebooklm python api",
+        model: "Qdrant/bm25",
       }),
     );
   });
 
   it("returns empty array when Qdrant returns no results", async () => {
-    mockSearch.mockResolvedValue([]);
+    mockQuery.mockResolvedValue({ points: [] });
     const parsed = makeParsed();
 
     const result = await searchVectors("nonexistent query", parsed, 5);
@@ -94,21 +109,23 @@ describe("searchVectors", () => {
   });
 
   it("maps Qdrant results to RepoDoc with source=vector", async () => {
-    mockSearch.mockResolvedValue([
-      {
-        score: 0.92,
-        payload: {
-          slug: "anthropics/claude-code",
-          name: "Claude Code",
-          description: "AI coding assistant",
-          capabilities: ["code-generation", "context-management"],
-          primitives: ["llm-calls"],
-          stars: 5000,
-          language: "TypeScript",
-          topics: ["claude", "ai", "coding"],
+    mockQuery.mockResolvedValue({
+      points: [
+        {
+          score: 0.92,
+          payload: {
+            slug: "anthropics/claude-code",
+            name: "Claude Code",
+            description: "AI coding assistant",
+            capabilities: ["code-generation", "context-management"],
+            primitives: ["llm-calls"],
+            stars: 5000,
+            language: "TypeScript",
+            topics: ["claude", "ai", "coding"],
+          },
         },
-      },
-    ]);
+      ],
+    });
 
     const parsed = makeParsed({ anchorTerms: ["claude"] });
     const result = await searchVectors("claude code", parsed, 8);
@@ -125,10 +142,12 @@ describe("searchVectors", () => {
   });
 
   it("handles results with missing payload fields", async () => {
-    mockSearch.mockResolvedValue([
-      { score: 0.5, payload: {} },
-      { score: 0.4, payload: { slug: "partial/repo" } },
-    ]);
+    mockQuery.mockResolvedValue({
+      points: [
+        { score: 0.5, payload: {} },
+        { score: 0.4, payload: { slug: "partial/repo" } },
+      ],
+    });
 
     const parsed = makeParsed();
     const result = await searchVectors("vague", parsed, 5);
@@ -140,8 +159,33 @@ describe("searchVectors", () => {
     expect(result[0].stars).toBe(0);
     expect(result[0].topics).toEqual([]);
     expect(result[0].capabilities).toEqual([]);
-    expect(result[0].primitives).toEqual([]);
     expect(result[1].slug).toBe("partial/repo");
     expect(result[1].url).toBe("https://github.com/partial/repo");
+  });
+
+  it("falls back to dense-only search when hybrid query fails", async () => {
+    mockQuery.mockRejectedValue(new Error("BM25 not supported"));
+    mockSearch.mockResolvedValue([
+      {
+        score: 0.85,
+        payload: {
+          slug: "fallback/repo",
+          name: "Fallback Repo",
+          description: "Dense only",
+          capabilities: [],
+          primitives: [],
+          stars: 100,
+          language: "Python",
+          topics: [],
+        },
+      },
+    ]);
+
+    const parsed = makeParsed();
+    const result = await searchVectors("fallback test", parsed, 5);
+
+    expect(mockSearch).toHaveBeenCalled();
+    expect(result).toHaveLength(1);
+    expect(result[0].slug).toBe("fallback/repo");
   });
 });

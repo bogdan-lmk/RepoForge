@@ -3,10 +3,12 @@ import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import { generateEmbedding } from "@/lib/openai";
 import type { RepoDoc, ParsedQuery } from "@/core/types";
-import { createHash } from "crypto";
 import { v5 as uuidv5 } from "uuid";
 
 const COLLECTION = "repos";
+const DENSE_VECTOR = "dense";
+const SPARSE_VECTOR = "bm25";
+
 const client = new QdrantClient({
   url: env.QDRANT_URL,
   apiKey: env.QDRANT_API_KEY,
@@ -14,19 +16,32 @@ const client = new QdrantClient({
 
 // ── Collection bootstrap ──────────────────────────────────────────────────────
 
-async function ensureCollection() {
-  const { collections } = await client.getCollections();
-  const exists = collections.some((c) => c.name === COLLECTION);
+let collectionReady = false;
 
-  if (!exists) {
+export function _resetCollectionReady() {
+  collectionReady = false;
+}
+
+async function ensureCollection() {
+  if (collectionReady) return;
+
+  const { collections } = await client.getCollections();
+  const existing = collections.find((c) => c.name === COLLECTION);
+
+  if (!existing) {
     await client.createCollection(COLLECTION, {
-      vectors: { size: 1536, distance: "Cosine" },
+      vectors: {
+        [DENSE_VECTOR]: { size: 1536, distance: "Cosine" },
+      },
+      sparse_vectors: {
+        [SPARSE_VECTOR]: {
+          modifier: "idf",
+        },
+      },
     });
-    logger.info("Created Qdrant collection: %s", COLLECTION);
+    logger.info("Created Qdrant collection with dense + BM25 sparse vectors");
   }
 
-  // 3a: Payload indexes — required for keyword filtering.
-  // createFieldIndex is idempotent: safe to call on every startup.
   await Promise.allSettled([
     client.createPayloadIndex(COLLECTION, {
       field_name: "slug",
@@ -44,24 +59,12 @@ async function ensureCollection() {
       wait: false,
     }),
   ]);
+
+  collectionReady = true;
 }
 
 // ── Indexing ──────────────────────────────────────────────────────────────────
 
-/**
- * Build the text that gets embedded for a repo.
- * Order matters for embeddings — most important signals first.
- *
- * Includes:
- *   - slug + name           → exact identity
- *   - topics                → categorical labels (e.g. "cli", "authentication")
- *   - capabilities          → AI-extracted abilities (e.g. "copy-trade a trader")
- *   - description           → one-line summary
- *   - readme[:1500 chars]   → ~350-500 tokens, covers feature overview
- *
- * We cap at 1500 chars for readme to stay well within text-embedding-3-small's
- * 8191 token limit (total input rarely exceeds 1000 tokens with this budget).
- */
 export function buildEmbedText(repo: RepoDoc): string {
   const parts = [
     repo.slug,
@@ -82,10 +85,16 @@ export async function upsertVectors(repos: RepoDoc[]): Promise<void> {
   for (const repo of repos) {
     const text = buildEmbedText(repo);
     try {
-      const vector = await generateEmbedding(text);
+      const denseVector = await generateEmbedding(text);
       points.push({
         id: hashSlug(repo.slug),
-        vector,
+        vector: {
+          [DENSE_VECTOR]: denseVector,
+          [SPARSE_VECTOR]: {
+            text,
+            model: "Qdrant/bm25",
+          } as unknown as number[],
+        },
         payload: {
           slug: repo.slug,
           name: repo.name,
@@ -95,7 +104,6 @@ export async function upsertVectors(repos: RepoDoc[]): Promise<void> {
           stars: repo.stars,
           language: repo.language,
           topics: repo.topics,
-          // README not stored in payload — too large, fetched from PG when needed
         },
       });
     } catch (e) {
@@ -105,33 +113,71 @@ export async function upsertVectors(repos: RepoDoc[]): Promise<void> {
 
   if (points.length) {
     await client.upsert(COLLECTION, { points });
-    logger.info({ count: points.length }, "Upserted vectors");
+    logger.info({ count: points.length }, "Upserted vectors (dense + BM25)");
   }
 }
 
-// ── Search ────────────────────────────────────────────────────────────────────
+// ── Hybrid Search: Dense + BM25 with RRF Fusion ──────────────────────────────
 
-/**
- * Vector search with optional keyword boosting via Qdrant `should` filter.
- *
- * 3b: If parsed query has anchor terms (brand/product names like "claude", "supabase"),
- * we add a `should` filter on slug + topics. Qdrant's `should` is a soft constraint —
- * documents that match score higher, but non-matching documents still appear.
- * This gives us "keyword-boosted vector search" without hard filtering.
- *
- * Note: Qdrant keyword index requires exact token match, so "claude" won't match
- * "claude-ai-helper" via slug keyword index — but topics like "claude" will match.
- * The vector itself handles partial/fuzzy matching for slug substring cases.
- */
 export async function searchVectors(
   query: string,
   parsed: ParsedQuery,
   limit = 12,
 ): Promise<RepoDoc[]> {
   await ensureCollection();
-  const vector = await generateEmbedding(query);
+  const denseVector = await generateEmbedding(query);
 
-  // Build `should` filter from anchor terms — soft boost, not hard filter
+  try {
+    const results = await client.query(COLLECTION, {
+      prefetch: [
+        {
+          query: {
+            text: query,
+            model: "Qdrant/bm25",
+          } as unknown as number[],
+          using: SPARSE_VECTOR,
+          limit: 20,
+        },
+        {
+          query: denseVector,
+          using: DENSE_VECTOR,
+          limit: 20,
+        },
+      ],
+      query: {
+        rrf: {
+          weights: [1.0, 3.0],
+        },
+      },
+      limit,
+      with_payload: true,
+    });
+
+    return (results.points ?? []).map((r) => ({
+      slug: (r.payload?.slug as string) ?? "",
+      name: (r.payload?.name as string) ?? "",
+      url: `https://github.com/${r.payload?.slug ?? ""}`,
+      description: (r.payload?.description as string) ?? "",
+      readme: "",
+      language: (r.payload?.language as string) ?? null,
+      topics: (r.payload?.topics as string[]) ?? [],
+      stars: (r.payload?.stars as number) ?? 0,
+      capabilities: (r.payload?.capabilities as string[]) ?? [],
+      primitives: (r.payload?.primitives as string[]) ?? [],
+      score: r.score ?? 0,
+      source: "vector",
+    }));
+  } catch (e) {
+    logger.warn({ err: e }, "Hybrid query failed, falling back to dense-only search");
+    return fallbackDenseSearch(denseVector, parsed, limit);
+  }
+}
+
+async function fallbackDenseSearch(
+  denseVector: number[],
+  parsed: ParsedQuery,
+  limit: number,
+): Promise<RepoDoc[]> {
   const anchorFilter =
     parsed.anchorTerms.length > 0
       ? {
@@ -143,7 +189,7 @@ export async function searchVectors(
       : undefined;
 
   const results = await client.search(COLLECTION, {
-    vector,
+    vector: denseVector,
     limit,
     with_payload: true,
     ...(anchorFilter ? { filter: anchorFilter } : {}),
@@ -154,8 +200,6 @@ export async function searchVectors(
     name: (r.payload?.name as string) ?? "",
     url: `https://github.com/${r.payload?.slug ?? ""}`,
     description: (r.payload?.description as string) ?? "",
-    // README is NOT stored in Qdrant payload (too large).
-    // mergeRepos will pick up readme from the FTS/GitHub result for the same slug.
     readme: "",
     language: (r.payload?.language as string) ?? null,
     topics: (r.payload?.topics as string[]) ?? [],
@@ -169,27 +213,20 @@ export async function searchVectors(
 
 // ── Re-index ──────────────────────────────────────────────────────────────────
 
-/**
- * Re-index all repos in a Qdrant collection from scratch.
- * Call this after changing buildEmbedText (e.g. adding README to embedding).
- *
- * Strategy: delete collection and re-create, then batch-upsert all provided repos.
- * Caller is responsible for fetching repos from PostgreSQL.
- */
 export async function reindexAll(repos: RepoDoc[]): Promise<void> {
-  logger.info({ count: repos.length }, "Starting full Qdrant re-index");
+  logger.info({ count: repos.length }, "Starting full Qdrant re-index (dense + BM25)");
 
-  // Drop and recreate to ensure clean slate (no stale vectors with old embedding scheme)
   try {
     await client.deleteCollection(COLLECTION);
+    collectionReady = false;
     logger.info("Deleted existing Qdrant collection for re-index");
   } catch (e) {
     logger.warn({ err: e }, "Could not delete collection (may not exist)");
+    collectionReady = false;
   }
 
   await ensureCollection();
 
-  // Batch in groups of 50 to avoid embedding API timeouts
   const BATCH = 50;
   for (let i = 0; i < repos.length; i += BATCH) {
     const batch = repos.slice(i, i + BATCH);
@@ -197,7 +234,7 @@ export async function reindexAll(repos: RepoDoc[]): Promise<void> {
     logger.info({ progress: `${i + batch.length}/${repos.length}` }, "Re-index progress");
   }
 
-  logger.info("Qdrant re-index complete");
+  logger.info("Qdrant re-index complete (dense + BM25 sparse)");
 }
 
 // ── Utils ─────────────────────────────────────────────────────────────────────

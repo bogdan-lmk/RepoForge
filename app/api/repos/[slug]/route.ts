@@ -24,23 +24,13 @@ export async function GET(
     }
 
     const repo = rows[0];
-    let sourceRank = repo.sourceRank;
-
-    if (!sourceRank) {
-      const sr = await fetchSourceRank(repo.slug);
-      if (sr) {
-        sourceRank = sr.sourceRank;
-        await db
-          .update(repos)
-          .set({ sourceRank: sr.sourceRank })
-          .where(eq(repos.slug, repo.slug));
-      }
-    }
+    const sourceRank =
+      repo.sourceRank || (await fetchSourceRank(repo.slug))?.sourceRank || 0;
 
     return apiResponse({
       ...mapRepoToApi(repo),
       readme: repo.readme,
-      sourceRank: sourceRank ?? 0,
+      sourceRank,
     });
   } catch (e) {
     logger.error({ err: e }, "GET /api/repos/[slug] failed");

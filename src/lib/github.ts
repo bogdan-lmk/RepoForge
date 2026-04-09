@@ -5,16 +5,24 @@ import type { RepoDoc } from "@/core/types";
 
 const octokit = env.GITHUB_TOKEN ? new Octokit({ auth: env.GITHUB_TOKEN }) : new Octokit();
 
+export type GithubSortMode = "stars" | "best-match";
+
 export async function searchRepos(
   query: string,
   perPage = 10,
+  sortMode: GithubSortMode = "stars",
 ): Promise<RepoDoc[]> {
-  const { data } = await octokit.rest.search.repos({
+  const params: Record<string, unknown> = {
     q: `${query} archived:false`,
     per_page: perPage,
-    sort: "stars",
-    order: "desc",
-  });
+  };
+
+  if (sortMode === "stars") {
+    params.sort = "stars";
+    params.order = "desc";
+  }
+
+  const { data } = await octokit.rest.search.repos(params as Parameters<typeof octokit.rest.search.repos>[0]);
 
   return data.items.map((r) => ({
     slug: r.full_name,
@@ -28,6 +36,45 @@ export async function searchRepos(
     capabilities: [],
     primitives: [],
   }));
+}
+
+export async function searchDual(
+  query: string,
+  perStrategy = 10,
+): Promise<RepoDoc[]> {
+  const [bestMatch, byStars] = await Promise.allSettled([
+    searchRepos(query, perStrategy, "best-match"),
+    searchRepos(query, perStrategy, "stars"),
+  ]);
+
+  const bestMatchRepos = bestMatch.status === "fulfilled" ? bestMatch.value : [];
+  const starsRepos = byStars.status === "fulfilled" ? byStars.value : [];
+
+  if (bestMatch.status === "rejected") {
+    logger.warn({ err: bestMatch.reason, query }, "GitHub best-match search failed");
+  }
+  if (byStars.status === "rejected") {
+    logger.warn({ err: byStars.reason, query }, "GitHub stars search failed");
+  }
+
+  const seen = new Set<string>();
+  const results: RepoDoc[] = [];
+
+  for (const repo of bestMatchRepos) {
+    if (!seen.has(repo.slug)) {
+      seen.add(repo.slug);
+      results.push(repo);
+    }
+  }
+
+  for (const repo of starsRepos) {
+    if (!seen.has(repo.slug)) {
+      seen.add(repo.slug);
+      results.push(repo);
+    }
+  }
+
+  return results;
 }
 
 export async function fetchReadme(
@@ -84,10 +131,13 @@ export async function searchMulti(
   const seen = new Set<string>();
   const results: RepoDoc[] = [];
 
-  for (const q of queries) {
+  for (let i = 0; i < queries.length; i++) {
     if (seen.size >= maxTotal) break;
     try {
-      const docs = await searchRepos(q, 10);
+      const docs = i === 0
+        ? await searchDual(queries[i], 10)
+        : await searchRepos(queries[i], 10);
+
       for (const doc of docs) {
         if (!seen.has(doc.slug) && seen.size < maxTotal) {
           seen.add(doc.slug);
@@ -95,7 +145,7 @@ export async function searchMulti(
         }
       }
     } catch (e) {
-      logger.warn({ query: q, err: e }, "GitHub search query failed");
+      logger.warn({ query: queries[i], err: e }, "GitHub search query failed");
     }
   }
 

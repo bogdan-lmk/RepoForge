@@ -119,10 +119,7 @@ export function Nav() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const lastY = useRef(0);
-
-  useEffect(() => { setMounted(true); }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);
@@ -165,9 +162,7 @@ export function Nav() {
 
         <div ref={containerRef} className="relative flex items-center gap-1">
           <AnimatePresence>
-            {mounted && (
-              <SlidingIndicator activeIndex={activeIndex >= 0 ? activeIndex : 0} containerRef={containerRef} />
-            )}
+            <SlidingIndicator activeIndex={activeIndex >= 0 ? activeIndex : 0} containerRef={containerRef} />
           </AnimatePresence>
 
           {NAV_ITEMS.map((item) => {

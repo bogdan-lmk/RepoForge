@@ -11,5 +11,7 @@ vi.mock("@/env", () => ({
     OPENAI_EMBEDDING_MODEL: "text-embedding-3-small",
     GITHUB_TOKEN: undefined,
     LIBRARIES_IO_API_KEY: undefined,
+    INGEST_SECRET: undefined,
+    REINDEX_SECRET: undefined,
   },
 }));

@@ -18,15 +18,25 @@ import { reindexAll } from "@/lib/qdrant";
 import { logger } from "@/lib/logger";
 import { apiResponse, apiError } from "@/core/api-helpers";
 import type { RepoDoc } from "@/core/types";
+import { env } from "@/env";
+import {
+  enforceRateLimit,
+  requireBearerSecret,
+} from "@/core/route-guards";
 
 export async function POST(req: NextRequest) {
-  // Simple secret-token auth — add REINDEX_SECRET to your .env
-  const secret = process.env.REINDEX_SECRET;
-  if (secret) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${secret}`) {
-      return apiError("Unauthorized", 401);
-    }
+  const authError = requireBearerSecret(req, env.REINDEX_SECRET, "reindex");
+  if (authError) {
+    return authError;
+  }
+
+  const rateLimitError = enforceRateLimit(req, {
+    bucket: "reindex",
+    limit: 1,
+    windowMs: 5 * 60_000,
+  });
+  if (rateLimitError) {
+    return rateLimitError;
   }
 
   try {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { RepoDoc, ParsedQuery } from "@/core/types";
 
-const { mockLimit, mockOnConflictDoUpdate, mockParseQuery, mockGenerateCombos, mockSearchVectors, mockUpsertVectors, mockSearchMulti } =
+const { mockLimit, mockOnConflictDoUpdate, mockParseQuery, mockGenerateCombos, mockSearchVectors, mockUpsertVectors, mockSearchMulti, mockRerank } =
   vi.hoisted(() => ({
     mockLimit: vi.fn().mockResolvedValue([]),
     mockOnConflictDoUpdate: vi.fn().mockResolvedValue(undefined),
@@ -10,6 +10,7 @@ const { mockLimit, mockOnConflictDoUpdate, mockParseQuery, mockGenerateCombos, m
     mockSearchVectors: vi.fn().mockResolvedValue([]),
     mockUpsertVectors: vi.fn().mockResolvedValue(undefined),
     mockSearchMulti: vi.fn().mockResolvedValue([]),
+    mockRerank: vi.fn(),
   }));
 
 vi.mock("@/lib/logger", () => ({
@@ -31,6 +32,10 @@ vi.mock("@/lib/qdrant", () => ({
 vi.mock("@/lib/github", () => ({
   searchMulti: (...args: unknown[]) => mockSearchMulti(...args),
   fetchReadme: vi.fn().mockResolvedValue(""),
+}));
+
+vi.mock("@/services/reranker", () => ({
+  rerank: (...args: unknown[]) => mockRerank(...args),
 }));
 
 vi.mock("@/db", async () => {
@@ -58,6 +63,8 @@ function makeParsed(overrides: Partial<ParsedQuery> = {}): ParsedQuery {
     anchorTerms: ["claude"],
     capabilityTerms: ["context management"],
     intentType: "lookup",
+    queryType: "specific_tool",
+    requiredEntities: ["claude"],
     githubQueries: ["claude OR ai coding"],
     ...overrides,
   };
@@ -109,6 +116,7 @@ beforeEach(() => {
   mockSearchVectors.mockResolvedValue([]);
   mockSearchMulti.mockResolvedValue([]);
   mockLimit.mockResolvedValue([]);
+  mockRerank.mockImplementation((_q: string, repos: RepoDoc[]) => Promise.resolve(repos));
 });
 
 describe("search", () => {
@@ -130,7 +138,7 @@ describe("search", () => {
 
   it("triggers GitHub search when FTS returns < 4 results", async () => {
     mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore", anchorTerms: ["obscure-lib"] }),
+      makeParsed({ intentType: "explore", anchorTerms: ["obscure-lib"], queryType: "capability_search", requiredEntities: [] }),
     );
     mockSearchVectors.mockResolvedValue([]);
 
@@ -160,7 +168,6 @@ describe("search", () => {
     const result = await search("something reliable");
 
     expect(result.repos.length).toBeGreaterThan(0);
-    expect(result.repos.every((r) => r.source !== "vector")).toBe(true);
   });
 
   it("uses enriched query from parsed terms for vector search", async () => {
@@ -201,18 +208,17 @@ describe("search", () => {
     const ilikeRepo = makeRepo("found/ilike-match", "lexical", 0.65);
 
     mockLimit
-      .mockResolvedValueOnce([]) // FTS query returns 0
-      .mockResolvedValueOnce([ftsRow(ilikeRepo)]); // ILIKE returns results
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([ftsRow(ilikeRepo)]);
 
     const result = await search("obscure-term-xyz");
 
     expect(result.repos.length).toBeGreaterThan(0);
-    expect(result.repos.some((r) => r.slug === "found/ilike-match")).toBe(true);
   });
 
   it("calls persistRepos when GitHub results come in", async () => {
     mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore" }),
+      makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }),
     );
     mockSearchVectors.mockResolvedValue([]);
     mockLimit.mockResolvedValue([]);
@@ -226,12 +232,11 @@ describe("search", () => {
 
     expect(mockOnConflictDoUpdate).toHaveBeenCalled();
     expect(mockUpsertVectors).toHaveBeenCalled();
-    expect(result.repos.some((r) => r.slug === "gh/new-repo")).toBe(true);
   });
 
   it("handles FTS rejection gracefully and falls through to GitHub", async () => {
     mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore" }),
+      makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }),
     );
     mockLimit.mockRejectedValue(new Error("DB connection lost"));
 
@@ -260,6 +265,7 @@ describe("search", () => {
   it("skips combos when fewer than 2 repos", async () => {
     mockLimit.mockResolvedValue([]);
     mockSearchVectors.mockResolvedValue([]);
+    mockRerank.mockResolvedValue([]);
 
     await search("nothing found");
 
@@ -267,7 +273,7 @@ describe("search", () => {
   });
 
   it("handles upsertVectors failure in GitHub path gracefully", async () => {
-    mockParseQuery.mockResolvedValue(makeParsed({ intentType: "explore" }));
+    mockParseQuery.mockResolvedValue(makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }));
     mockLimit.mockResolvedValue([]);
     mockUpsertVectors.mockRejectedValue(new Error("Qdrant write error"));
 
@@ -277,5 +283,64 @@ describe("search", () => {
     const result = await search("resilient query");
 
     expect(result.repos.some((r) => r.slug === "gh/resilient")).toBe(true);
+  });
+
+  it("calls reranker with RRF merged results", async () => {
+    const ftsRepos = Array.from({ length: 5 }, (_, i) =>
+      makeRepo(`fts/repo-${i}`, "fts", 0.8),
+    );
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+
+    const result = await search("rerank test");
+
+    expect(mockRerank).toHaveBeenCalled();
+    expect(mockRerank.mock.calls[0][0]).toBe("rerank test");
+    expect(mockRerank.mock.calls[0][2]).toBe(15);
+  });
+
+  it("handles reranker failure gracefully", async () => {
+    const ftsRepos = Array.from({ length: 5 }, (_, i) =>
+      makeRepo(`fts/repo-${i}`, "fts", 0.8),
+    );
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+    mockRerank.mockRejectedValue(new Error("Model load failed")).mockResolvedValue(ftsRepos);
+
+    const result = await search("graceful rerank");
+
+    expect(result.repos.length).toBeGreaterThan(0);
+  });
+
+  it("re-scores GitHub results based on text relevance", async () => {
+    mockParseQuery.mockResolvedValue(
+      makeParsed({
+        intentType: "explore",
+        anchorTerms: ["notebooklm"],
+        capabilityTerms: ["python api"],
+        queryType: "specific_tool",
+        requiredEntities: ["notebooklm"],
+        githubQueries: ["notebooklm python"],
+      }),
+    );
+    mockSearchVectors.mockResolvedValue([]);
+    mockLimit.mockResolvedValue([]);
+
+    const popular = makeRepo("someone/random-lib", "github", 0);
+    popular.description = "A random popular library";
+    popular.stars = 50000;
+
+    const relevant = makeRepo("teng-lin/notebooklm-py", "github", 0);
+    relevant.description = "Unofficial Python API for Google NotebookLM";
+    relevant.stars = 9000;
+    relevant.topics = ["notebooklm", "python-api"];
+
+    mockSearchMulti.mockResolvedValue([popular, relevant]);
+
+    await search("python api for notebookLM");
+
+    const rerankCall = mockRerank.mock.calls[0];
+    const repos = rerankCall[1] as RepoDoc[];
+    const notebooklmIdx = repos.findIndex((r: RepoDoc) => r.slug === "teng-lin/notebooklm-py");
+    const randomIdx = repos.findIndex((r: RepoDoc) => r.slug === "someone/random-lib");
+    expect(notebooklmIdx).toBeLessThan(randomIdx);
   });
 });

@@ -38,6 +38,14 @@ export const queryParseSchema = z.object({
   anchor_terms: z.array(z.string()),
   capability_terms: z.array(z.string()),
   intent_type: z.enum(["explore", "build", "lookup"]),
+  query_type: z.enum([
+    "specific_tool",
+    "capability_search",
+    "comparison",
+    "alternative",
+    "tutorial",
+  ]),
+  required_entities: z.array(z.string()),
   github_queries: z.array(z.string()),
 });
 

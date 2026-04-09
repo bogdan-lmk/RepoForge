@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate": "drizzle-kit push",
+    "db:seed": "curl -s -X POST http://localhost:3000/api/ingest"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.52",

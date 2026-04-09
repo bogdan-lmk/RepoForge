@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npx drizzle-kit push && next build",
+  "crons": [
+    {
+      "path": "/api/ingest",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}

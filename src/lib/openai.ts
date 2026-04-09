@@ -22,7 +22,8 @@ export async function parseQuery(query: string): Promise<ParsedQuery> {
       system: `You rewrite user product queries into structured search intents.
 Return anchor_terms (named entities like brand/product names), capability_terms (verbs/abilities the user wants),
 intent_type (explore = browsing, build = wants to make something, lookup = specific repo lookup),
-and github_queries (2-3 rewritten GitHub search queries using OR, synonyms, broader terms).`,
+and github_queries (2-3 rewritten GitHub search queries using OR, synonyms, broader terms).
+CRITICAL: Each github_query MUST contain at most 5 AND/OR/NOT operators combined. GitHub Search API rejects queries with more than 5. Use simpler, focused queries instead of complex boolean expressions.`,
       prompt: `Query: "${query}"`,
     });
     return {

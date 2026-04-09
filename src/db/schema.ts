@@ -9,7 +9,18 @@ import {
   uniqueIndex,
   boolean,
   numeric,
+  customType,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+
+/* ------------------------------------------------------------------ */
+/*  Custom tsvector type for PostgreSQL Full-Text Search               */
+/* ------------------------------------------------------------------ */
+const tsVector = customType<{ data: string }>({
+  dataType() {
+    return "tsvector";
+  },
+});
 
 export const repos = pgTable(
   "repos",
@@ -30,8 +41,24 @@ export const repos = pgTable(
     primitives: jsonb("primitives").$type<string[]>().default([]),
     discoveredAt: timestamp("discovered_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+
+    /* ----------------------------------------------------------------
+     * Full-Text Search vector — STORED generated column.
+     * Weights:  A = slug + name  |  B = description  |  C = readme
+     *           D = topics + capabilities (jsonb string[] → text)
+     * Auto-updated by PostgreSQL on every INSERT/UPDATE.
+     * ---------------------------------------------------------------- */
+    fts: tsVector("fts").generatedAlwaysAs(
+      sql`setweight(to_tsvector('english', coalesce("slug", '') || ' ' || coalesce("name", '')), 'A') ||
+          setweight(to_tsvector('english', coalesce("description", '')), 'B') ||
+          setweight(to_tsvector('english', left(coalesce("readme", ''), 4000)), 'C') ||
+          setweight(to_tsvector('english', regexp_replace(coalesce("topics"::text, ''), '["\[\]{}]', ' ', 'g') || ' ' || regexp_replace(coalesce("capabilities"::text, ''), '["\[\]{}]', ' ', 'g')), 'D')`,
+    ),
   },
-  (t) => [index("repos_language_idx").on(t.language)],
+  (t) => [
+    index("repos_language_idx").on(t.language),
+    index("repos_fts_idx").using("gin", t.fts),
+  ],
 );
 
 export const combos = pgTable(

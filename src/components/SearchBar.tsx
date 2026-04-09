@@ -17,6 +17,7 @@ interface SearchBarProps {
   loading?: boolean;
   variant?: "hero" | "compact";
   defaultValue?: string;
+  onClear?: () => void;
 }
 
 export function SearchBar({
@@ -24,6 +25,7 @@ export function SearchBar({
   loading,
   variant = "hero",
   defaultValue,
+  onClear,
 }: SearchBarProps) {
   const [query, setQuery] = useState(defaultValue ?? "");
   const [focused, setFocused] = useState(false);
@@ -38,6 +40,12 @@ export function SearchBar({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (defaultValue !== undefined && defaultValue !== query) {
+      setQuery(defaultValue);
+    }
+  }, [defaultValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!hydrated || focused || query) return;
@@ -85,10 +93,16 @@ export function SearchBar({
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     const trimmed = query.trim();
     if (trimmed) onSearch(trimmed);
+  };
+
+  const handleClear = () => {
+    setQuery("");
+    inputRef.current?.focus();
+    onClear?.();
   };
 
   const formHeight = isHero ? "h-[58px] md:h-[62px]" : "h-[52px]";
@@ -102,7 +116,7 @@ export function SearchBar({
   return (
     <div className={`flex w-full flex-col gap-3 ${wrapperClass}`}>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
         className={`relative flex w-full ${maxW} items-center gap-3 rounded-2xl border border-border/60 bg-surface-elevated/70 backdrop-blur-xl px-3 transition-all duration-300 hover:border-border ${formHeight} ${focused ? "!border-teal/30 !shadow-[0_0_0_1px_rgba(20,184,166,0.1),0_0_40px_-8px_rgba(20,184,166,0.12)]" : ""}`}
       >
         <div className={`flex shrink-0 items-center justify-center rounded-xl bg-teal/10 ${iconSize}`}>
@@ -139,6 +153,20 @@ export function SearchBar({
             </span>
           )}
         </div>
+
+        {query && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="flex shrink-0 items-center justify-center rounded-lg p-1.5 text-fg-muted/50 transition-colors hover:bg-surface/80 hover:text-fg-muted"
+            aria-label="Clear search"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="size-4">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        )}
 
         <kbd className="mr-1 hidden items-center gap-0.5 rounded-md border border-border/50 bg-surface/50 px-1.5 py-0.5 font-mono text-[10px] text-fg-muted/40 lg:flex">
           ⌘K

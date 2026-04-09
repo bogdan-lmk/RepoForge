@@ -1,5 +1,16 @@
 {
   "buildCommand": "npx drizzle-kit push && next build",
+  "functions": {
+    "app/api/ideas/search/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/repos/search/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/ingest/route.ts": {
+      "maxDuration": 300
+    }
+  },
   "crons": [
     {
       "path": "/api/ingest",

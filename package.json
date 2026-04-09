@@ -13,6 +13,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^3.0.52",
     "@lordicon/react": "^1.11.0",
+    "@neondatabase/serverless": "^1.0.2",
     "@qdrant/js-client-rest": "^1.17.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "ai": "^6.0.154",

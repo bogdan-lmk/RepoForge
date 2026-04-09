@@ -6,7 +6,10 @@ import type { RepoDoc } from "@/core/types";
 import { createHash } from "crypto";
 
 const COLLECTION = "repos";
-const client = new QdrantClient({ url: env.QDRANT_URL });
+const client = new QdrantClient({
+  url: env.QDRANT_URL,
+  apiKey: env.QDRANT_API_KEY,
+});
 
 async function ensureCollection() {
   const collections = await client.getCollections();

@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     QDRANT_URL: z.string().url(),
+    QDRANT_API_KEY: z.string().optional(),
     OPENAI_API_KEY: z.string().min(1),
     OPENAI_BASE_URL: z.string().url().default("https://api.openai.com/v1"),
     OPENAI_MODEL: z.string().default("gpt-4o"),
@@ -16,6 +17,7 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     QDRANT_URL: process.env.QDRANT_URL,
+    QDRANT_API_KEY: process.env.QDRANT_API_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_BASE_URL: process.env.OPENAI_BASE_URL,
     OPENAI_MODEL: process.env.OPENAI_MODEL,

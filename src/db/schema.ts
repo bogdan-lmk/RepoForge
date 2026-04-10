@@ -92,9 +92,13 @@ export const combos = pgTable(
     }>().default({}),
     queryText: text("query_text"),
     saved: boolean("saved").default(false).notNull(),
+    isFeatured: boolean("is_featured").default(false).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
-  (t) => [uniqueIndex("combos_query_title_idx").on(t.queryText, t.title)],
+  (t) => [
+    uniqueIndex("combos_query_title_idx").on(t.queryText, t.title),
+    index("combos_featured_created_at_idx").on(t.isFeatured, t.createdAt),
+  ],
 );
 
 export const scanLog = pgTable("scan_log", {
@@ -144,12 +148,20 @@ export const retrievalTraces = pgTable("retrieval_traces", {
   mergedCount: integer("merged_count").notNull(),
   rerankedCount: integer("reranked_count").notNull(),
   topSlugs: jsonb("top_slugs").$type<string[]>(),
+  clickedSlugs: jsonb("clicked_slugs").$type<string[]>().default([]),
   scoreP50: real("score_p50"),
   scoreP90: real("score_p90"),
   latencyFtsMs: integer("latency_fts_ms"),
   latencyVectorMs: integer("latency_vector_ms"),
   latencyGithubMs: integer("latency_github_ms"),
   latencyTotalMs: integer("latency_total_ms"),
+});
+
+export const repoStarSnapshots = pgTable("repo_star_snapshots", {
+  id: serial("id").primaryKey(),
+  repoId: integer("repo_id").references(() => repos.id),
+  stars: integer("stars").notNull(),
+  capturedAt: timestamp("captured_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
 export type Repo = typeof repos.$inferSelect;

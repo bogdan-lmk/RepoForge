@@ -24,6 +24,7 @@ export const EVENT_TYPES = [
   "chip_clicked",
   "dice_clicked",
   "combo_save_failed",
+  "combo_steps_viewed",
 ] as const;
 
 export type EventType = (typeof EVENT_TYPES)[number];
@@ -55,6 +56,7 @@ export const SEARCH_MODES = [
 export type SearchMode = (typeof SEARCH_MODES)[number];
 
 export interface SearchTrace {
+  id?: number;
   ftsCount: number;
   vectorCount: number;
   githubCount: number;
@@ -79,33 +81,35 @@ export interface ParsedQuery {
 }
 
 export interface ComboScores {
-  novelty: number;
-  composableFit: number;
-  accessibilityWedge: number;
-  timeToDemo: number;
-  categoryUpside: number;
-  narrativeClarity: number;
+  novelty?: number;
+  composableFit?: number;
+  accessibilityWedge?: number;
+  timeToDemo?: number;
+  categoryUpside?: number;
+  narrativeClarity?: number;
 }
 
 export interface ComboIdea {
   id?: number | null;
   title: string;
   thesis: string;
-  formula: string;
+  formula: string | null;
   repoSlugs: string[];
   repoRoles: Record<string, string>;
   steps: string[];
-  recommendedShell: string;
-  whatIsBeingCombined: string;
+  recommendedShell: string | null;
+  whatIsBeingCombined: string | null;
   capabilities: string[];
   supportingPrimitives: string[];
-  whyFit: string;
-  useCase: string;
-  whyBetterThanSingle: string;
-  firstUser: string;
-  demo72h: string;
+  whyFit: string | null;
+  useCase: string | null;
+  whyBetterThanSingle: string | null;
+  firstUser: string | null;
+  demo72h: string | null;
   keyRisks: string[];
   scores: ComboScores;
+  queryText?: string | null;
+  isFeatured?: boolean;
 }
 
 export interface TrendingRepo {

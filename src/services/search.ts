@@ -91,6 +91,16 @@ export async function runSearchMode(
     disableRerank: options.disableRerank ?? false,
   });
 
+  if (process.env.ENABLE_PRIMITIVE_BOOST === "true") {
+    const queryPrimitives = parsed.capabilityTerms;
+    repos.forEach((r) => {
+      if (r.primitives?.some((p) => queryPrimitives.some((qp) => p.toLowerCase().includes(qp.toLowerCase())))) {
+        r.score = (r.score ?? 0) * 1.15;
+      }
+    });
+    repos.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+  }
+
   const latencyTotalMs = performance.now() - t0;
 
   const trace: SearchTrace = {
@@ -117,19 +127,23 @@ export async function runSearchMode(
     "Search mode complete",
   );
 
-  void persistTrace({
-    queryText,
-    parsed,
-    ftsCount: trace.ftsCount,
-    vectorCount: trace.vectorCount,
-    githubCount: trace.githubCount,
-    githubTriggered: trace.githubTriggered,
-    mergedCount: trace.mergedCount,
-    rerankedCount: trace.rerankedCount,
-    topSlugs: trace.topSlugs,
-    scores: repos.map((r) => r.score ?? 0),
-    latencyMs: { fts: trace.latencyFtsMs, vector: trace.latencyVectorMs, github: trace.latencyGithubMs, total: trace.latencyTotalMs },
-  }).catch((e) => logger.warn({ err: e }, "Trace persist failed"));
+  try {
+    trace.id = await persistTrace({
+      queryText,
+      parsed,
+      ftsCount: trace.ftsCount,
+      vectorCount: trace.vectorCount,
+      githubCount: trace.githubCount,
+      githubTriggered: trace.githubTriggered,
+      mergedCount: trace.mergedCount,
+      rerankedCount: trace.rerankedCount,
+      topSlugs: trace.topSlugs,
+      scores: repos.map((r) => r.score ?? 0),
+      latencyMs: { fts: trace.latencyFtsMs, vector: trace.latencyVectorMs, github: trace.latencyGithubMs, total: trace.latencyTotalMs },
+    });
+  } catch (e) {
+    logger.warn({ err: e }, "Trace persist failed");
+  }
 
   return {
     parsed,

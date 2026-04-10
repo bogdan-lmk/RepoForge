@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -12,12 +12,14 @@ interface IdeaCardProps {
   description?: string | null;
   score?: number | null;
   tags?: string[];
+  steps?: string[];
   repoSlugs?: string[];
   demo72h?: string | null;
   saved?: boolean;
   href?: string | null;
   onSave?: () => void;
-  onOpen?: () => void;
+  onOpen?: (meta?: { source?: string }) => void;
+  onStepsViewed?: () => void;
 }
 
 function ScoreRing({ score, size = 42 }: { score: number; size?: number }) {
@@ -50,13 +52,32 @@ export function IdeaCard({
   description,
   score,
   tags,
+  steps,
   demo72h,
   saved,
   href,
   onSave,
   onOpen,
+  onStepsViewed,
 }: IdeaCardProps) {
   const [justSaved, setJustSaved] = useState(false);
+  const stepsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!stepsRef.current || !onStepsViewed) return;
+    const el = stepsRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onStepsViewed();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [onStepsViewed]);
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -86,6 +107,22 @@ export function IdeaCard({
 
         {description && (
           <p className="line-clamp-2 text-[13px] leading-relaxed text-fg-muted">{description}</p>
+        )}
+
+        {steps && steps.length > 0 && (
+          <div ref={stepsRef} className="rounded-xl border border-teal/10 bg-teal/[0.04] px-3 py-2.5">
+            <div className="mb-1 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-teal">
+              <span>{steps.length} steps to build</span>
+            </div>
+            <p className="line-clamp-2 text-[12px] leading-relaxed text-fg-secondary">
+              1. {steps[0]}
+            </p>
+            {steps.length > 1 && (
+              <p className="mt-1 text-[11px] text-fg-muted">
+                +{steps.length - 1} more steps in the full idea
+              </p>
+            )}
+          </div>
         )}
 
         <div className="flex items-center justify-between pt-1">
@@ -143,7 +180,7 @@ export function IdeaCard({
 
   if (href) {
     return (
-      <Link href={href} className={cardClasses} onClick={onOpen}>
+      <Link href={href} className={cardClasses} onClick={() => onOpen?.()}>
         {inner}
       </Link>
     );

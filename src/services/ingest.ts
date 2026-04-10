@@ -1,4 +1,4 @@
-import { db, repos, scanLog } from "@/db";
+import { db, repos, scanLog, repoStarSnapshots } from "@/db";
 import { fetchTrending } from "@/lib/ossinsight";
 import { fetchRepoDetails } from "@/lib/github";
 import { extractCapabilities } from "@/lib/openai";
@@ -55,6 +55,22 @@ export async function ingestTrending(): Promise<{
               updatedAt: new Date(),
             },
           });
+
+        try {
+          const [existing] = await db
+            .select({ id: repos.id })
+            .from(repos)
+            .where(eq(repos.slug, doc.slug))
+            .limit(1);
+          if (existing) {
+            await db.insert(repoStarSnapshots).values({
+              repoId: existing.id,
+              stars: doc.stars ?? 0,
+            });
+          }
+        } catch (snapErr) {
+          logger.warn({ err: snapErr, slug: doc.slug }, "Star snapshot insert failed");
+        }
 
         try {
           await upsertVectors([doc]);

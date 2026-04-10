@@ -15,7 +15,8 @@
     "metrics:funnel": "node --env-file=.env scripts/report-events.mjs",
     "eval:queries": "tsx --env-file=.env scripts/run-query-lab.mts",
     "eval:retrieval": "tsx --env-file=.env scripts/run-retrieval-bench.mts",
-    "eval:combos": "tsx --env-file=.env scripts/run-combo-judge.mts"
+    "eval:combos": "tsx --env-file=.env scripts/run-combo-judge.mts",
+    "check:dead": "knip && ts-prune"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.52",

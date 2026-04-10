@@ -26,6 +26,8 @@ export function mapComboToApi(c: Combo) {
     thesis: c.thesis,
     formula: c.formula,
     repoSlugs: c.repoSlugs ?? [],
+    repoRoles: c.repoRoles ?? {},
+    steps: c.steps ?? [],
     recommendedShell: c.recommendedShell ?? "web",
     whatIsBeingCombined: c.whatIsBeingCombined,
     capabilities: c.capabilities ?? [],
@@ -38,6 +40,7 @@ export function mapComboToApi(c: Combo) {
     keyRisks: c.keyRisks ?? [],
     scores: c.scores ?? {},
     saved: c.saved,
+    isFeatured: c.isFeatured,
     queryText: c.queryText,
     createdAt: c.createdAt,
   };

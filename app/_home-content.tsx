@@ -7,6 +7,7 @@ import { Nav } from "@/components/Nav";
 import { SearchBar } from "@/components/SearchBar";
 import { RepoCard } from "@/components/RepoCard";
 import { IdeaCard } from "@/components/IdeaCard";
+import { ShowcaseCard } from "@/components/ShowcaseCard";
 import { ForgeSpinner } from "@/components/ForgeSpinner";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { CursorGlow } from "@/components/CursorGlow";
@@ -104,6 +105,10 @@ function pickRandom<T>(items: readonly T[]): T {
   return items[Math.floor(Math.random() * items.length)]!;
 }
 
+function VerticalDivider() {
+  return <div aria-hidden="true" className="h-8 w-px bg-border" />;
+}
+
 const badgePop: Variants = {
   hidden: { opacity: 0, scale: 0.5, y: 10 },
   visible: {
@@ -155,7 +160,13 @@ function TrustMetric({ value, label, delay }: { value: string; label: string; de
   );
 }
 
-export default function HomeContent({ stats }: { stats: HomeMetrics }) {
+export default function HomeContent({
+  stats,
+  featuredCombos,
+}: {
+  stats: HomeMetrics;
+  featuredCombos: ComboIdea[];
+}) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -166,8 +177,12 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
   const [searched, setSearched] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTrace, setSearchTrace] = useState<SearchTrace | null>(null);
+  const [traceId, setTraceId] = useState<number | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ kind: "error" | "success"; message: string } | null>(null);
   const [forgeStep, setForgeStep] = useState(1);
   const progressTimersRef = useRef<number[]>([]);
+  const toastTimerRef = useRef<number | null>(null);
 
   const clearProgressTimers = useCallback(() => {
     for (const timer of progressTimersRef.current) {
@@ -176,7 +191,17 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
     progressTimersRef.current = [];
   }, []);
 
-  useEffect(() => () => clearProgressTimers(), [clearProgressTimers]);
+  const clearToastTimer = useCallback(() => {
+    if (toastTimerRef.current !== null) {
+      window.clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => () => {
+    clearProgressTimers();
+    clearToastTimer();
+  }, [clearProgressTimers, clearToastTimer]);
 
   const scheduleProgressStep = useCallback((step: number, delay: number) => {
     const timer = window.setTimeout(() => {
@@ -184,6 +209,15 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
     }, delay);
     progressTimersRef.current.push(timer);
   }, []);
+
+  const showToast = useCallback((kind: "error" | "success", message: string) => {
+    setToast({ kind, message });
+    clearToastTimer();
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast(null);
+      toastTimerRef.current = null;
+    }, 3500);
+  }, [clearToastTimer]);
 
   const updateURL = useCallback(
     (q: string) => {
@@ -199,12 +233,13 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
   );
 
   const handleSearch = useCallback(
-    async (q: string) => {
-      const source = searched ? "results-searchbar" : "hero-searchbar";
+    async (q: string, sourceOverride?: string) => {
+      const source = sourceOverride ?? (searched ? "results-searchbar" : "hero-searchbar");
       clearPendingRestore();
       clearProgressTimers();
       setForgeStep(1);
       setSearchTrace(null);
+      setSearchError(null);
 
       enqueueEvent({
         type: searched ? "query_retried" : "search_started",
@@ -243,6 +278,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
         setRepos(nextRepos);
         setIdeas(nextIdeas);
         setSearchTrace((payload.trace ?? null) as SearchTrace | null);
+        setTraceId(payload.trace?.id ?? null);
         persistSearchSnapshot(q, nextRepos, nextIdeas);
         enqueueEvent({
           type: "results_rendered",
@@ -259,6 +295,8 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
         setRepos([]);
         setIdeas([]);
         setSearchTrace(null);
+        setSearchError("Search failed. Please try again in a moment.");
+        setTraceId(null);
         enqueueEvent({
           type: "search_failed",
           queryText: q,
@@ -287,6 +325,8 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
     setIdeas([]);
     setSearchQuery("");
     setSearchTrace(null);
+    setSearchError(null);
+    setTraceId(null);
     setForgeStep(1);
     clearProgressTimers();
     clearSearchSession();
@@ -306,7 +346,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
         },
       });
       void flushEvents();
-      void handleSearch(chip.text);
+      void handleSearch(chip.text, "inspiration-chips");
     },
     [handleSearch],
   );
@@ -323,7 +363,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
       },
     });
     void flushEvents();
-    void handleSearch(picked.text);
+    void handleSearch(picked.text, "hero-dice");
   }, [handleSearch]);
 
   useEffect(() => {
@@ -374,6 +414,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
           },
         });
         void flushEvents();
+        showToast("error", "Couldn't save this idea. Try again.");
         return;
       }
 
@@ -405,6 +446,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
         },
       });
       void flushEvents();
+      showToast("error", "Couldn't save this idea. Try again.");
     } catch (error) {
       enqueueEvent({
         type: "combo_save_failed",
@@ -418,8 +460,9 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
         },
       });
       void flushEvents();
+      showToast("error", "Couldn't save this idea. Check your connection and try again.");
     }
-  }, [searchQuery]);
+  }, [searchQuery, showToast]);
 
   const forgeQueryLabel = truncate(searchQuery || "your idea", 28);
   const forgeFoundCount = searchTrace?.mergedCount ?? null;
@@ -529,7 +572,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                   className="flex items-center gap-2 rounded-full border border-teal/20 bg-teal/10 px-4 py-2 text-[13px] font-semibold text-teal transition-colors hover:border-teal/30 hover:bg-teal/15"
                   aria-label="Surprise me with a random inspiration"
                 >
-                  <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                  <svg aria-hidden="true" className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
                     <path d="M12 2 2 7l10 5 10-5-10-5Zm0 10L2 7v10l10 5 10-5V7l-10 5Zm0 0v10" />
                   </svg>
                   Surprise me
@@ -542,12 +585,60 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                 transition={{ delay: 2, duration: 0.8 }}
                 className="mt-10 flex items-center gap-8 md:mt-14 md:gap-12"
               >
-                <TrustMetric value={formatCount(stats.repoCount)} label="Repos indexed" delay={2.1} />
-                <div className="h-8 w-px bg-border" />
-                <TrustMetric value={formatLatency(stats.p50LatencyMs)} label="P50 latency" delay={2.3} />
-                <div className="h-8 w-px bg-border" />
-                <TrustMetric value={formatCount(stats.comboCount)} label="Ideas generated" delay={2.5} />
+                <TrustMetric value={formatCount(stats.repoCount)} label="Repos indexed" delay={1.6} />
+                <VerticalDivider />
+                <TrustMetric value={formatLatency(stats.p50LatencyMs)} label="P50 latency" delay={1.7} />
+                <VerticalDivider />
+                <TrustMetric value={formatCount(stats.comboCount)} label="Ideas generated" delay={1.8} />
               </motion.div>
+
+              {featuredCombos.length > 0 && (
+                <motion.section
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.9, duration: 0.45 }}
+                  className="mt-8 w-full max-w-[1040px]"
+                >
+                  <div className="mb-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-teal">
+                        Featured ideas
+                      </p>
+                      <h2 className="mt-1 text-xl font-semibold text-fg">
+                        Start from a proven blueprint
+                      </h2>
+                    </div>
+                    <p className="max-w-[320px] text-right text-sm text-fg-muted">
+                      Pick a featured combo and run your own fresh search from the same prompt.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {featuredCombos.map((combo) => (
+                      <ShowcaseCard
+                        key={combo.id ?? combo.title}
+                        title={combo.title}
+                        thesis={combo.thesis}
+                        score={
+                          combo.scores
+                            ? ((combo.scores.novelty ?? 0) +
+                                (combo.scores.composableFit ?? 0) +
+                                (combo.scores.accessibilityWedge ?? 0)) / 3
+                            : null
+                        }
+                        tags={combo.capabilities}
+                        queryText={combo.queryText}
+                        onTry={() => {
+                          if (!combo.queryText) {
+                            return;
+                          }
+                          void handleSearch(combo.queryText, "showcase-card");
+                        }}
+                      />
+                    ))}
+                  </div>
+                </motion.section>
+              )}
             </motion.main>
           ) : loading ? (
             <motion.div
@@ -583,6 +674,12 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                 />
               </div>
 
+              {searchError && (
+                <div className="mx-auto w-full max-w-[1200px] rounded-2xl border border-red-500/20 bg-red-500/8 px-4 py-3 text-sm text-red-200">
+                  {searchError}
+                </div>
+              )}
+
               <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 lg:flex-row">
                 <motion.section
                   variants={stagger}
@@ -593,7 +690,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                   <motion.div variants={sectionHeader} className="flex items-center justify-between pb-1">
                     <div className="flex items-center gap-2">
                       <div className="flex size-6 items-center justify-center rounded-md bg-surface-elevated">
-                        <svg className="size-3.5 text-fg-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <svg aria-hidden="true" className="size-3.5 text-fg-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                           <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                         </svg>
                       </div>
@@ -613,23 +710,30 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                           description={repo.description}
                           language={repo.language}
                           stars={repo.stars}
-                          onOpen={() => {
+                          onOpen={(meta) => {
                             enqueueEvent({
                               type: "repo_opened",
                               repoSlug: repo.slug,
                               queryText: searchQuery || null,
                               page: "home",
-                              source: "repos-panel",
+                              source: meta?.source ?? "repos-panel",
                             });
                             void flushEvents();
+                            if (traceId) {
+                              void fetch(`/api/traces/${traceId}/clicks`, {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ slug: repo.slug }),
+                              });
+                            }
                           }}
                         />
                       </motion.div>
                     ))}
                   </motion.div>
 
-                  {repos.length === 0 && (
-                    <p className="py-8 text-center text-sm text-fg-muted">
+                  {repos.length === 0 && !searchError && (
+                    <p role="status" aria-live="polite" className="py-8 text-center text-sm text-fg-muted">
                       No repos found. Try a different query.
                     </p>
                   )}
@@ -644,7 +748,7 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                   <motion.div variants={sectionHeader} className="flex items-center justify-between pb-1">
                     <div className="flex items-center gap-2">
                       <div className="flex size-6 items-center justify-center rounded-md bg-teal/10">
-                        <svg className="size-3.5 text-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <svg aria-hidden="true" className="size-3.5 text-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                           <path d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                       </div>
@@ -664,28 +768,39 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
                           description={idea.thesis}
                           score={
                             idea.scores
-                              ? (idea.scores.novelty +
-                                  idea.scores.composableFit +
-                                  idea.scores.accessibilityWedge) /
+                              ? ((idea.scores.novelty ?? 0) +
+                                  (idea.scores.composableFit ?? 0) +
+                                  (idea.scores.accessibilityWedge ?? 0)) /
                                 3
                               : null
                           }
                           tags={idea.repoSlugs?.slice(0, 3)}
+                          steps={idea.steps}
                           demo72h={idea.demo72h}
                           href={idea.id ? `/ideas/${idea.id}` : null}
-                          onOpen={() => {
+                          onOpen={(meta) => {
                             markPendingRestore(searchQuery);
                             enqueueEvent({
                               type: "combo_expanded",
                               comboId: idea.id ?? null,
                               queryText: searchQuery || null,
                               page: "home",
-                              source: "ideas-panel",
+                              source: meta?.source ?? "ideas-panel",
                               payload: { title: idea.title },
                             });
                             void flushEvents();
                           }}
                           onSave={() => handleSave(idea)}
+                          onStepsViewed={() => {
+                            enqueueEvent({
+                              type: "combo_steps_viewed",
+                              comboId: idea.id ?? null,
+                              queryText: searchQuery || null,
+                              page: "home",
+                              source: "ideas-panel",
+                            });
+                            void flushEvents();
+                          }}
                         />
                       </motion.div>
                     ))}
@@ -702,6 +817,23 @@ export default function HomeContent({ stats }: { stats: HomeMetrics }) {
           )}
         </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            className={`fixed bottom-5 right-5 z-50 max-w-[340px] rounded-2xl border px-4 py-3 text-sm shadow-xl backdrop-blur ${
+              toast.kind === "error"
+                ? "border-red-500/25 bg-red-500/10 text-red-100"
+                : "border-teal/25 bg-teal/10 text-teal-50"
+            }`}
+          >
+            {toast.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -96,6 +96,16 @@ Scoring rubric:
 - time_to_demo: 0 = weeks of custom infra, 1 = demoable in a weekend.
 - category_upside: 0 = tiny outcome, 1 = strong platform or startup upside.
 - narrative_clarity: 0 = confusing pitch, 1 = immediately understandable.
+
+EXAMPLE 1 (high scores):
+repos: [shadcn/ui, tRPC]
+→ { title: "Typed API Explorer", thesis: "Auto-generate a fully typed API playground from tRPC router schemas, rendered with shadcn/ui components for zero-config exploration and testing.", formula: "tRPC router introspection + shadcn/ui data tables + form components", novelty: 0.8, composable_fit: 0.9, accessibility_wedge: 0.85, time_to_demo: 0.9, category_upside: 0.7, narrative_clarity: 0.9 }
+
+EXAMPLE 2 (medium scores — explain why not higher):
+repos: [react-todo-app, another-todo-app]
+→ { title: "Collaborative Todo", thesis: "Combine two todo app patterns for a shared task list.", novelty: 0.3, composable_fit: 0.5, accessibility_wedge: 0.2, time_to_demo: 0.8, category_upside: 0.1, narrative_clarity: 0.6 }
+Reason: repos too similar, low novelty — both are todo apps with no distinct capabilities to combine.
+
 Generate exactly ${limit} combos. Be specific and actionable.`,
       prompt: `Query: "${query}"\n\nAvailable repos:\n${repoSummaries}`,
     });

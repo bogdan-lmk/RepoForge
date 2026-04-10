@@ -16,7 +16,7 @@ interface RepoCardProps {
   description?: string | null;
   language?: string | null;
   stars?: number | null;
-  onOpen?: () => void;
+  onOpen?: (meta?: { source?: string }) => void;
 }
 
 export function RepoCard({ slug, description, language, stars, onOpen }: RepoCardProps) {
@@ -30,7 +30,7 @@ export function RepoCard({ slug, description, language, stars, onOpen }: RepoCar
     >
       <Link
         href={`/repos/${encodeURIComponent(slug)}`}
-        onClick={onOpen}
+        onClick={() => onOpen?.()}
         className="group flex items-center gap-4 rounded-xl border border-border-subtle bg-surface-elevated/70 px-4 py-3.5 backdrop-blur-sm transition-all hover:border-teal/15 hover:bg-surface-elevated"
       >
         <div

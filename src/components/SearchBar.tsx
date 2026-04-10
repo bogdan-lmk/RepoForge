@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, type FormEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useTypewriterPlaceholder } from "@/hooks/use-typewriter-placeholder";
 
 const PLACEHOLDERS = [
   "AI code assistant for Rust...",
@@ -29,54 +30,16 @@ export function SearchBar({
   variant = "hero",
   onClear,
 }: SearchBarProps) {
+  const reduceMotion = useReducedMotion();
   const query = value;
   const [focused, setFocused] = useState(false);
   const [hydrated, setHydrated] = useState(false);
-  const [placeholderText, setPlaceholderText] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const isHero = variant === "hero";
-  const placeholderIdxRef = useRef(0);
-  const typingRef = useRef(true);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated || focused || query) return;
-
-    const current = PLACEHOLDERS[placeholderIdxRef.current];
-
-    if (typingRef.current) {
-      if (placeholderText.length < current.length) {
-        const t = setTimeout(
-          () => setPlaceholderText(current.slice(0, placeholderText.length + 1)),
-          55,
-        );
-        return () => clearTimeout(t);
-      }
-      const t = setTimeout(() => {
-        typingRef.current = false;
-        setPlaceholderText((prev) => prev.slice(0, -1));
-      }, 2000);
-      return () => clearTimeout(t);
-    }
-
-    if (placeholderText.length > 0) {
-      const t = setTimeout(
-        () => setPlaceholderText((prev) => prev.slice(0, -1)),
-        30,
-      );
-      return () => clearTimeout(t);
-    }
-
-    placeholderIdxRef.current = (placeholderIdxRef.current + 1) % PLACEHOLDERS.length;
-    typingRef.current = true;
-    const next = PLACEHOLDERS[placeholderIdxRef.current];
-    const t = setTimeout(() => setPlaceholderText(next.slice(0, 1)), 55);
-    return () => clearTimeout(t);
-  }, [placeholderText, focused, query, hydrated]);
+  const placeholderText = useTypewriterPlaceholder(PLACEHOLDERS, {
+    enabled: hydrated && !focused && !query && !reduceMotion,
+  });
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -84,10 +47,14 @@ export function SearchBar({
         e.preventDefault();
         inputRef.current?.focus();
       }
+      if (e.key === "Escape" && query) {
+        e.preventDefault();
+        handleClear();
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [query]);
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -141,10 +108,10 @@ export function SearchBar({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             placeholder={hydrated && !query && !focused ? "" : "Describe what you want to build..."}
-            className={`w-full bg-transparent text-fg placeholder:text-fg-muted/50 focus:outline-none ${fontSize}`}
+            className={`w-full bg-transparent text-fg placeholder:text-fg-muted/70 focus:outline-none ${fontSize}`}
           />
-          {hydrated && !query && !focused && placeholderText && (
-            <span className={`pointer-events-none absolute inset-0 flex items-center text-fg-muted/40 ${fontSize}`} aria-hidden>
+          {hydrated && !reduceMotion && !query && !focused && placeholderText && (
+            <span className={`pointer-events-none absolute inset-0 flex items-center text-fg-muted/60 ${fontSize}`} aria-hidden>
               {placeholderText}
               <span className="ml-[1px] animate-pulse text-teal/60">|</span>
             </span>
@@ -165,13 +132,14 @@ export function SearchBar({
           </button>
         )}
 
-        <kbd className="mr-1 hidden items-center gap-0.5 rounded-md border border-border/50 bg-surface/50 px-1.5 py-0.5 font-mono text-[10px] text-fg-muted/40 lg:flex">
+        <kbd title="Press ⌘K to focus search" className="mr-1 hidden items-center gap-0.5 rounded-md border border-border/50 bg-surface/50 px-1.5 py-0.5 font-mono text-[10px] text-fg-muted/50 lg:flex">
           ⌘K
         </kbd>
 
         <motion.button
           type="submit"
           disabled={loading || !query.trim()}
+          aria-label={loading ? "Forging ideas, please wait" : "Search for product ideas"}
           whileHover={{
             scale: 1.05,
             boxShadow: "0 0 24px 8px rgba(20, 184, 166, 0.2)",

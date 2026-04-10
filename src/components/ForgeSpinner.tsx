@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { NeuralSynapse } from "./NeuralSynapse"
 import { ForgeIcon } from "./ForgeIcon"
@@ -35,6 +35,7 @@ function pickRandom(exclude: number): number {
 }
 
 export function ForgeSpinner({ step = 1, steps = STEPS, title = "Forging ideas...", subtitle = "Searching repos and combining them into product ideas" }: ForgeSpinnerProps) {
+  const reduceMotion = useReducedMotion()
   const [factIndex, setFactIndex] = useState(() => Math.floor(Math.random() * FUN_FACTS.length))
   const [factKey, setFactKey] = useState(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -48,16 +49,19 @@ export function ForgeSpinner({ step = 1, steps = STEPS, title = "Forging ideas..
   }, [])
 
   useEffect(() => {
+    if (reduceMotion) {
+      return
+    }
     intervalRef.current = setInterval(cycleFact, FACT_INTERVAL)
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [cycleFact])
+  }, [cycleFact, reduceMotion])
 
   const currentFact = FUN_FACTS[factIndex]
 
   return (
-    <div className="relative flex flex-col items-center gap-6">
+    <div role="status" aria-live="polite" aria-label={`Forging ideas, step ${step + 1} of ${steps.length}`} className="relative flex flex-col items-center gap-6">
       <SparklesCore
         className="pointer-events-none absolute inset-0"
         particleCount={20}

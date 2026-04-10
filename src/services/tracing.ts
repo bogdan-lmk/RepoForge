@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { retrievalTraces } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { env } from "@/env";
 import type { ParsedQuery } from "@/core/types";
 
@@ -22,10 +23,10 @@ export interface TraceInput {
   };
 }
 
-export async function persistTrace(input: TraceInput): Promise<void> {
+export async function persistTrace(input: TraceInput): Promise<number> {
   const { scoreP50, scoreP90 } = computePercentiles(input.scores);
 
-  await db.insert(retrievalTraces).values({
+  const [row] = await db.insert(retrievalTraces).values({
     queryText: input.queryText,
     intentType: input.parsed.intentType,
     queryType: input.parsed.queryType,
@@ -43,7 +44,9 @@ export async function persistTrace(input: TraceInput): Promise<void> {
     latencyVectorMs: Math.round(input.latencyMs.vector),
     latencyGithubMs: input.latencyMs.github !== null ? Math.round(input.latencyMs.github) : null,
     latencyTotalMs: Math.round(input.latencyMs.total),
-  });
+  }).returning({ id: retrievalTraces.id });
+
+  return row.id;
 }
 
 function computePercentiles(scores: number[]): { scoreP50: number | null; scoreP90: number | null } {
@@ -64,4 +67,22 @@ function percentile(sorted: number[], p: number): number {
   if (lo === hi) return sorted[lo]!;
   const frac = idx - lo;
   return sorted[lo]! * (1 - frac) + sorted[hi]! * frac;
+}
+
+export async function patchTraceClicks(traceId: number, slug: string): Promise<void> {
+  const [row] = await db
+    .select({ clickedSlugs: retrievalTraces.clickedSlugs })
+    .from(retrievalTraces)
+    .where(eq(retrievalTraces.id, traceId))
+    .limit(1);
+
+  if (!row) return;
+
+  const current = (row.clickedSlugs as string[] | null) ?? [];
+  if (current.includes(slug)) return;
+
+  await db
+    .update(retrievalTraces)
+    .set({ clickedSlugs: [...current, slug] })
+    .where(eq(retrievalTraces.id, traceId));
 }

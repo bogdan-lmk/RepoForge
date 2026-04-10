@@ -3,6 +3,7 @@ import { searchMulti, fetchReadme } from "@/lib/github";
 import { parseQuery, generateCombos } from "@/lib/openai";
 import { searchVectors, upsertVectors } from "@/lib/qdrant";
 import { rerank } from "@/services/reranker";
+import { persistTrace } from "@/services/tracing";
 import { logger } from "@/lib/logger";
 import { sql, getTableColumns } from "drizzle-orm";
 import type { RepoDoc, ParsedQuery, QueryType } from "@/core/types";
@@ -19,12 +20,13 @@ export async function search(
     ...parsed.capabilityTerms,
   ].join(" ") || queryText;
 
-  const intentNeedsGithub =
-    parsed.intentType === "explore" || parsed.intentType === "build";
+  const t0 = performance.now();
+  let latencyFtsMs = 0;
+  let latencyVectorMs = 0;
 
   const [ftsResult, vectorResult] = await Promise.allSettled([
-    lexicalSearch(parsed, 12),
-    searchVectors(enrichedVectorQuery, parsed, 12),
+    (async () => { const t = performance.now(); const r = await lexicalSearch(parsed, 12); latencyFtsMs = performance.now() - t; return r; })(),
+    (async () => { const t = performance.now(); const r = await searchVectors(enrichedVectorQuery, parsed, 12); latencyVectorMs = performance.now() - t; return r; })(),
   ]);
 
   const ftsRepos: RepoDoc[] =
@@ -37,15 +39,22 @@ export async function search(
   if (vectorResult.status === "rejected")
     logger.warn({ err: vectorResult.reason }, "Vector search failed");
 
+  // GitHub is rescue-only: only trigger when BOTH fts and vector signals are weak.
+  // Using vectorAvgScore (cosine similarity, normalized [0,1]) rather than
+  // ts_rank_cd scores which are unnormalized and frequently low for correct results.
+  const vectorAvgScore = avgScore(vectorRepos);
   const needsGithub =
-    intentNeedsGithub ||
-    ftsRepos.length < 4 ||
-    avgScore(ftsRepos) < 0.5;
+    parsed.githubQueries.length > 0 &&
+    ftsRepos.length < 3 &&
+    vectorAvgScore < 0.4;
 
   let githubRepos: RepoDoc[] = [];
-  if (needsGithub && parsed.githubQueries.length > 0) {
+  let latencyGithubMs: number | null = null;
+  if (needsGithub) {
+    const tGithubStart = performance.now();
     githubRepos = await searchFromGithub(parsed.githubQueries, 15);
     githubRepos = rescoreGithubRepos(githubRepos, parsed);
+    latencyGithubMs = performance.now() - tGithubStart;
   }
 
   const weights = computeAdaptiveWeights(
@@ -71,10 +80,26 @@ export async function search(
     reranked = allRepos.slice(0, 15);
   }
 
+  const latencyTotalMs = performance.now() - t0;
+
   logger.info(
     { fts: ftsRepos.length, vector: vectorRepos.length, github: githubRepos.length, merged: allRepos.length, reranked: reranked.length },
     "Search pipeline complete",
   );
+
+  void persistTrace({
+    queryText,
+    parsed,
+    ftsCount: ftsRepos.length,
+    vectorCount: vectorRepos.length,
+    githubCount: githubRepos.length,
+    githubTriggered: needsGithub,
+    mergedCount: allRepos.length,
+    rerankedCount: reranked.length,
+    topSlugs: reranked.slice(0, 5).map((r) => r.slug),
+    scores: reranked.map((r) => r.score ?? 0),
+    latencyMs: { fts: latencyFtsMs, vector: latencyVectorMs, github: latencyGithubMs, total: latencyTotalMs },
+  }).catch((e) => logger.warn({ err: e }, "Trace persist failed"));
 
   const combos = reranked.length >= 2
     ? await generateCombos(reranked, queryText, comboLimit)

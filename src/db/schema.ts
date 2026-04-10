@@ -9,6 +9,7 @@ import {
   uniqueIndex,
   boolean,
   numeric,
+  real,
   customType,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
@@ -107,7 +108,30 @@ export const scanLog = pgTable("scan_log", {
   completedAt: timestamp("completed_at", { withTimezone: true }),
 });
 
+export const retrievalTraces = pgTable("retrieval_traces", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  queryText: text("query_text").notNull(),
+  intentType: text("intent_type").notNull(),
+  queryType: text("query_type").notNull(),
+  vectorMode: text("vector_mode").notNull().default("hybrid"),
+  ftsCount: integer("fts_count").notNull(),
+  vectorCount: integer("vector_count").notNull(),
+  githubCount: integer("github_count").notNull(),
+  githubTriggered: boolean("github_triggered").notNull(),
+  mergedCount: integer("merged_count").notNull(),
+  rerankedCount: integer("reranked_count").notNull(),
+  topSlugs: jsonb("top_slugs").$type<string[]>(),
+  scoreP50: real("score_p50"),
+  scoreP90: real("score_p90"),
+  latencyFtsMs: integer("latency_fts_ms"),
+  latencyVectorMs: integer("latency_vector_ms"),
+  latencyGithubMs: integer("latency_github_ms"),
+  latencyTotalMs: integer("latency_total_ms"),
+});
+
 export type Repo = typeof repos.$inferSelect;
 export type NewRepo = typeof repos.$inferInsert;
 export type Combo = typeof combos.$inferSelect;
 export type NewCombo = typeof combos.$inferInsert;
+export type RetrievalTrace = typeof retrievalTraces.$inferSelect;

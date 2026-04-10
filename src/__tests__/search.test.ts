@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { RepoDoc, ParsedQuery } from "@/core/types";
 
-const { mockLimit, mockOnConflictDoUpdate, mockParseQuery, mockGenerateCombos, mockSearchVectors, mockUpsertVectors, mockSearchMulti, mockRerank } =
+const { mockLimit, mockOnConflictDoUpdate, mockParseQuery, mockGenerateCombos, mockSearchVectors, mockUpsertVectors, mockSearchMulti, mockRerank, mockPersistTrace } =
   vi.hoisted(() => ({
     mockLimit: vi.fn().mockResolvedValue([]),
     mockOnConflictDoUpdate: vi.fn().mockResolvedValue(undefined),
@@ -11,6 +11,7 @@ const { mockLimit, mockOnConflictDoUpdate, mockParseQuery, mockGenerateCombos, m
     mockUpsertVectors: vi.fn().mockResolvedValue(undefined),
     mockSearchMulti: vi.fn().mockResolvedValue([]),
     mockRerank: vi.fn(),
+    mockPersistTrace: vi.fn().mockResolvedValue(undefined),
   }));
 
 vi.mock("@/lib/logger", () => ({
@@ -36,6 +37,10 @@ vi.mock("@/lib/github", () => ({
 
 vi.mock("@/services/reranker", () => ({
   rerank: (...args: unknown[]) => mockRerank(...args),
+}));
+
+vi.mock("@/services/tracing", () => ({
+  persistTrace: (...args: unknown[]) => mockPersistTrace(...args),
 }));
 
 vi.mock("@/db", async () => {
@@ -120,8 +125,11 @@ beforeEach(() => {
 });
 
 describe("search", () => {
-  it("skips GitHub when FTS returns >= 4 results with high scores and intent is lookup", async () => {
-    const ftsRepos = Array.from({ length: 5 }, (_, i) =>
+  it("skips GitHub when FTS returns >= 3 results regardless of intent type", async () => {
+    mockParseQuery.mockResolvedValue(
+      makeParsed({ intentType: "explore", queryType: "capability_search" }),
+    );
+    const ftsRepos = Array.from({ length: 4 }, (_, i) =>
       makeRepo(`fts/repo-${i}`, "fts", 0.8),
     );
     mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
@@ -136,11 +144,14 @@ describe("search", () => {
     expect(mockSearchMulti).not.toHaveBeenCalled();
   });
 
-  it("triggers GitHub search when FTS returns < 4 results", async () => {
+  it("triggers GitHub only when both fts < 3 AND vector avg score < 0.4", async () => {
     mockParseQuery.mockResolvedValue(
       makeParsed({ intentType: "explore", anchorTerms: ["obscure-lib"], queryType: "capability_search", requiredEntities: [] }),
     );
-    mockSearchVectors.mockResolvedValue([]);
+    // Vector returns weak results (avg score 0.2 < 0.4 threshold)
+    mockSearchVectors.mockResolvedValue([
+      makeRepo("vector/weak", "vector", 0.2),
+    ]);
 
     const ftsRepos = [makeRepo("fts/solo", "fts", 0.3)];
     mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
@@ -155,6 +166,24 @@ describe("search", () => {
 
     expect(mockSearchMulti).toHaveBeenCalled();
     expect(result.repos.length).toBeGreaterThan(0);
+  });
+
+  it("skips GitHub when explore intent has strong vector results (rescue-only)", async () => {
+    mockParseQuery.mockResolvedValue(
+      makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }),
+    );
+    // Vector returns strong results (avg score 0.75 > 0.4 threshold)
+    mockSearchVectors.mockResolvedValue([
+      makeRepo("vector/strong-1", "vector", 0.8),
+      makeRepo("vector/strong-2", "vector", 0.7),
+    ]);
+    // FTS returns < 3 results but vector is strong — should NOT trigger GitHub
+    const ftsRepos = [makeRepo("fts/solo", "fts", 0.3)];
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+
+    await search("some explore query");
+
+    expect(mockSearchMulti).not.toHaveBeenCalled();
   });
 
   it("continues when vector search fails (rejected promise)", async () => {

@@ -8,3 +8,30 @@
 {"id":"c_comparison_prisma_drizzle","query":"prisma vs drizzle orm","notes":"Should generate comparison-driven product ideas or migration utilities with strong repo fit."}
 {"id":"c_trend_agents","query":"trending ai agent frameworks github","notes":"Should convert repo trends into category hypotheses with believable signal."}
 {"id":"c_trend_startup_tools","query":"open source startup tools worth tracking","notes":"Should produce crisp opportunity framing, not vague marketplace generalities."}
+{"id":"c_capability_evals","query":"llm eval framework with tracing and benchmarks","notes":"Should combine evaluation, observability, and regression-testing repos into a concrete stack."}
+{"id":"c_capability_observability","query":"open source llm observability stack","notes":"Should assemble tracing, prompt inspection, and quality feedback loops."}
+{"id":"c_capability_memory","query":"agent memory framework for long running tasks","notes":"Should emphasize memory, state, and execution durability instead of generic agent wrappers."}
+{"id":"c_capability_browser_agents","query":"browser automation agent framework open source","notes":"Should connect browser control, planning, and evaluation into a plausible product."}
+{"id":"c_capability_code_agents","query":"coding agent framework open source","notes":"Should distinguish between orchestration, execution sandboxes, and eval layers."}
+{"id":"c_capability_multimodal","query":"multimodal agent stack for documents and images","notes":"Should combine ingestion, OCR or vision, and workflow or UI surfaces credibly."}
+{"id":"c_capability_voice","query":"open source voice agent platform","notes":"Should produce end-to-end voice stacks with realtime, orchestration, and product surface."}
+{"id":"c_capability_search","query":"semantic search platform open source","notes":"Should combine embedding, vector search, indexing, and UX layers into a coherent wedge."}
+{"id":"c_capability_support_bot","query":"internal support copilot stack open source","notes":"Should feel deployable for IT or ops teams, with grounding and evaluation."}
+{"id":"c_capability_data_agent","query":"data analysis agent framework open source","notes":"Should combine notebook or SQL execution, orchestration, and observability meaningfully."}
+{"id":"c_alternative_vapi","query":"alternative to vapi open source voice agents","notes":"Should frame serious substitute stacks, not just list telephony libraries."}
+{"id":"c_alternative_n8n","query":"alternative to n8n open source automation","notes":"Should propose agentic or workflow-native alternatives with a clear category angle."}
+{"id":"c_alternative_langgraph","query":"alternative to langgraph for durable agents","notes":"Should focus on execution model, memory, and state transitions."}
+{"id":"c_alternative_pinecone","query":"alternative to pinecone open source vector stack","notes":"Should combine vector infra with ingestion and eval or app layers where useful."}
+{"id":"c_comparison_llamaindex_langchain","query":"llamaindex vs langchain for rag apps","notes":"Should turn the comparison into a useful combo thesis or migration wedge."}
+{"id":"c_comparison_temporal_n8n","query":"temporal vs n8n for workflow automation","notes":"Should generate buildable opportunity framing around developer workflow products."}
+{"id":"c_comparison_posthog_plausible","query":"posthog vs plausible analytics stack","notes":"Should propose differentiated product combinations instead of generic dashboards."}
+{"id":"c_comparison_qdrant_weaviate","query":"qdrant vs weaviate vector database","notes":"Should produce repo-grounded stack differences and combination opportunities."}
+{"id":"c_trend_rag","query":"best open source rag repos github","notes":"Should reveal patterns across ingestion, retrieval, UI, and eval layers."}
+{"id":"c_trend_agent_ops","query":"open source agent ops repos trending","notes":"Should focus on operations, eval, tracing, and deployment surfaces."}
+{"id":"c_trend_devtools_ai","query":"interesting open source ai devtools repos","notes":"Should surface coherent product patterns around build, test, or debugging."}
+{"id":"c_trend_infra","query":"open source infra tooling worth watching","notes":"Should produce category signals rather than broad startup listicles."}
+{"id":"c_vertical_legal","query":"open source stack for legal document ai assistant","notes":"Should combine document handling, retrieval, workflow, and review loops credibly."}
+{"id":"c_vertical_healthcare","query":"open source stack for healthcare intake copilot","notes":"Should prioritize workflow, guardrails, and auditable evaluation, not generic chat UI."}
+{"id":"c_vertical_sales","query":"open source stack for sales call copilot","notes":"Should combine realtime, summarization, CRM workflow, and evaluation layers coherently."}
+{"id":"c_vertical_finops","query":"open source stack for cloud cost ops copilot","notes":"Should produce ops-centric combos with observability and workflow integration."}
+{"id":"c_vertical_research","query":"open source stack for research assistant with citations","notes":"Should emphasize grounding, citations, retrieval, and reviewable outputs."}

@@ -10,8 +10,16 @@ import { IdeaCard } from "@/components/IdeaCard";
 import { ForgeSpinner } from "@/components/ForgeSpinner";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { CursorGlow } from "@/components/CursorGlow";
-import type { RepoDoc, ComboIdea } from "@/core/types";
+import type { ComboIdea } from "@/core/types";
 import { enqueueEvent, flushEvents } from "@/lib/analytics";
+import {
+  createHomeSearchSnapshot,
+  HOME_SEARCH_RESTORE_QUERY_KEY,
+  HOME_SEARCH_SNAPSHOT_KEY,
+  parseHomeSearchSnapshot,
+  shouldRestoreHomeSearchSnapshot,
+  type HomeSearchRepo,
+} from "@/lib/home-search-session";
 
 const stagger: Variants = {
   hidden: {},
@@ -98,7 +106,7 @@ export default function HomeContent() {
   const pathname = usePathname();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [repos, setRepos] = useState<RepoDoc[]>([]);
+  const [repos, setRepos] = useState<HomeSearchRepo[]>([]);
   const [ideas, setIdeas] = useState<ComboIdea[]>([]);
   const [searched, setSearched] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -119,6 +127,7 @@ export default function HomeContent() {
   const handleSearch = useCallback(
     async (q: string) => {
       const source = searched ? "results-searchbar" : "hero-searchbar";
+      clearPendingRestore();
 
       enqueueEvent({
         type: searched ? "query_retried" : "search_started",
@@ -143,8 +152,12 @@ export default function HomeContent() {
         if (!res.ok) throw new Error("Search failed");
         const json = await res.json();
         const payload = json.data ?? json;
-        setRepos(payload.repos ?? []);
-        setIdeas(payload.combos ?? []);
+        const nextRepos = (payload.repos ?? []) as HomeSearchRepo[];
+        const nextIdeas = (payload.combos ?? []) as ComboIdea[];
+
+        setRepos(nextRepos);
+        setIdeas(nextIdeas);
+        persistSearchSnapshot(q, nextRepos, nextIdeas);
         enqueueEvent({
           type: "results_rendered",
           queryText: q,
@@ -178,12 +191,27 @@ export default function HomeContent() {
     setRepos([]);
     setIdeas([]);
     setSearchQuery("");
+    clearSearchSession();
     updateURL("");
   }, [updateURL]);
 
   useEffect(() => {
     const q = searchParams.get("q");
-    if (q) handleSearch(q);
+    if (!q) {
+      return;
+    }
+
+    const snapshot = readSearchSnapshot();
+    const restoreQuery = readRestoreQuery();
+    if (snapshot && shouldRestoreHomeSearchSnapshot(snapshot, { query: q, restoreQuery })) {
+      setSearched(true);
+      setSearchQuery(q);
+      setRepos(snapshot.repos);
+      setIdeas(snapshot.ideas);
+      return;
+    }
+
+    handleSearch(q);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSave = useCallback(async (idea: ComboIdea) => {
@@ -432,6 +460,7 @@ export default function HomeContent() {
                           demo72h={idea.demo72h}
                           href={idea.id ? `/ideas/${idea.id}` : null}
                           onOpen={() => {
+                            markPendingRestore(searchQuery);
                             enqueueEvent({
                               type: "combo_expanded",
                               comboId: idea.id ?? null,
@@ -461,4 +490,78 @@ export default function HomeContent() {
       </div>
     </div>
   );
+}
+
+function persistSearchSnapshot(query: string, repos: HomeSearchRepo[], ideas: ComboIdea[]) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    const snapshot = createHomeSearchSnapshot(query, repos, ideas);
+    window.sessionStorage.setItem(HOME_SEARCH_SNAPSHOT_KEY, JSON.stringify(snapshot));
+  } catch {
+    // Ignore storage failures; search should still work without snapshot restore.
+  }
+}
+
+function readSearchSnapshot() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return parseHomeSearchSnapshot(window.sessionStorage.getItem(HOME_SEARCH_SNAPSHOT_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function markPendingRestore(query: string) {
+  if (typeof window === "undefined" || !query) {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(HOME_SEARCH_RESTORE_QUERY_KEY, query);
+  } catch {
+    // Ignore storage failures; navigation to detail should still proceed.
+  }
+}
+
+function readRestoreQuery() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return window.sessionStorage.getItem(HOME_SEARCH_RESTORE_QUERY_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function clearPendingRestore() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.sessionStorage.removeItem(HOME_SEARCH_RESTORE_QUERY_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
+function clearSearchSession() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.sessionStorage.removeItem(HOME_SEARCH_SNAPSHOT_KEY);
+    window.sessionStorage.removeItem(HOME_SEARCH_RESTORE_QUERY_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
 }

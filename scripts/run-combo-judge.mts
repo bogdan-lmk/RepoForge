@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 function parseArg(name: string) {
@@ -26,6 +26,7 @@ function toMarkdown(result: {
     baselineAverage: Record<string, number>;
     candidateAverage: Record<string, number>;
     decision: string;
+    humanOverrideCount?: number;
     notes: string[];
   };
 }) {
@@ -38,6 +39,7 @@ function toMarkdown(result: {
     `- Queries: ${result.summary.queryCount}`,
     `- Pairwise win rate: ${result.summary.pairwiseWinRate}`,
     `- Decision: ${result.summary.decision}`,
+    `- Human overrides: ${result.summary.humanOverrideCount ?? 0}`,
     "",
     "## Baseline Averages",
     ...Object.entries(result.summary.baselineAverage).map(([key, value]) => `- ${key}: ${value}`),
@@ -54,6 +56,7 @@ async function main() {
   const baseline = parseArg("baseline") ?? "baseline";
   const candidate = parseArg("candidate") ?? "variant-a";
   const limit = parseLimitArg();
+  const overridesPath = parseArg("overrides") ?? path.resolve("evals/combo-judge/human-overrides.json");
 
   const ComboEval = await import("../src/services/eval/combo-eval.ts");
   const Search = await import("../src/services/search.ts");
@@ -70,6 +73,9 @@ async function main() {
   const allQueries = await ComboEval.loadComboJudgeQueries(queryFile);
   const queries = limit ? allQueries.slice(0, limit) : allQueries;
   const runId = path.basename(rawDir);
+  const humanOverrides = (await fileExists(overridesPath))
+    ? await ComboEval.loadHumanOverrides(overridesPath)
+    : [];
 
   const items = [];
   for (const query of queries) {
@@ -80,30 +86,39 @@ async function main() {
 
     const baselineOutput = await ComboEval.generateVariantCombos(query.query, repos, baselinePrompt);
     const candidateOutput = await ComboEval.generateVariantCombos(query.query, repos, candidatePrompt);
-    const judgment = await ComboEval.judgeComboVariants({
+    const modelJudgment = await ComboEval.judgeComboVariants({
       query: query.query,
       notes: query.notes,
       repos,
       baselineOutput,
       candidateOutput,
     });
+    const [judgment] = ComboEval.applyHumanOverrides(
+      [
+        {
+          queryId: query.id,
+          query: query.query,
+          verdict: modelJudgment.verdict,
+          baseline: modelJudgment.baseline,
+          candidate: modelJudgment.candidate,
+          rationale: modelJudgment.rationale,
+        },
+      ],
+      humanOverrides,
+    );
 
     const raw = {
       query,
       repos,
       baselineOutput,
       candidateOutput,
-      judgment,
+      modelJudgment,
+      finalJudgment: judgment,
     };
     await writeFile(path.join(rawDir, `${query.id}.json`), JSON.stringify(raw, null, 2));
 
     items.push({
-      queryId: query.id,
-      query: query.query,
-      verdict: judgment.verdict,
-      baseline: judgment.baseline,
-      candidate: judgment.candidate,
-      rationale: judgment.rationale,
+      ...judgment,
     });
   }
 
@@ -113,7 +128,11 @@ async function main() {
     generatedAt: new Date().toISOString(),
     baseline,
     candidate,
-    summary,
+    overridesPath,
+    summary: {
+      ...summary,
+      humanOverrideCount: humanOverrides.length,
+    },
     items,
   };
 
@@ -125,6 +144,15 @@ async function main() {
   await writeFile(path.join(rawDir, "summary.json"), json);
 
   console.log(markdown);
+}
+
+async function fileExists(filePath: string) {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 main().catch((error) => {

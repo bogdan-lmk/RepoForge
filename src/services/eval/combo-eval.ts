@@ -32,9 +32,23 @@ const pairwiseJudgeSchema = z.object({
   rationale: z.string(),
 });
 
+const partialRubricScoresSchema = rubricScoresSchema.partial().refine(
+  (value) => Object.keys(value).length > 0,
+  "At least one rubric score must be provided when overriding a score block.",
+);
+
+const humanOverrideSchema = z.object({
+  queryId: z.string().min(1),
+  verdict: pairwiseJudgeSchema.shape.verdict.optional(),
+  baseline: partialRubricScoresSchema.optional(),
+  candidate: partialRubricScoresSchema.optional(),
+  rationale: z.string().min(1).optional(),
+});
+
 export type ComboJudgeQuery = z.infer<typeof comboJudgeQuerySchema>;
 export type ComboJudgeScores = z.infer<typeof rubricScoresSchema>;
 export type ComboJudgeVerdict = z.infer<typeof pairwiseJudgeSchema>;
+export type ComboJudgeHumanOverride = z.infer<typeof humanOverrideSchema>;
 
 export type ComboJudgeRunItem = {
   queryId: string;
@@ -82,6 +96,11 @@ export async function loadComboJudgeQueries(filePath: string) {
 
 export async function loadPromptVariant(filePath: string) {
   return (await readFile(filePath, "utf8")).trim();
+}
+
+export async function loadHumanOverrides(filePath: string) {
+  const raw = await readFile(filePath, "utf8");
+  return z.array(humanOverrideSchema).parse(JSON.parse(raw));
 }
 
 export async function generateVariantCombos(
@@ -144,6 +163,32 @@ export async function judgeComboVariants(input: {
   });
 
   return object;
+}
+
+export function applyHumanOverrides(
+  items: ComboJudgeRunItem[],
+  overrides: ComboJudgeHumanOverride[],
+) {
+  if (overrides.length === 0) {
+    return items;
+  }
+
+  const overrideMap = new Map(overrides.map((override) => [override.queryId, override]));
+
+  return items.map((item) => {
+    const override = overrideMap.get(item.queryId);
+    if (!override) {
+      return item;
+    }
+
+    return {
+      ...item,
+      verdict: override.verdict ?? item.verdict,
+      rationale: override.rationale ?? item.rationale,
+      baseline: override.baseline ? { ...item.baseline, ...override.baseline } : item.baseline,
+      candidate: override.candidate ? { ...item.candidate, ...override.candidate } : item.candidate,
+    };
+  });
 }
 
 export function summarizeComboJudge(items: ComboJudgeRunItem[]): ComboJudgeSummary {

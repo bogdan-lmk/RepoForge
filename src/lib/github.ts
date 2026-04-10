@@ -1,4 +1,4 @@
-import { Octokit } from "octokit";
+import { Octokit } from "@octokit/rest";
 import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import type { RepoDoc } from "@/core/types";

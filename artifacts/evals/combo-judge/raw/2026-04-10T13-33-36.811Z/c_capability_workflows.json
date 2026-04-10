@@ -1,0 +1,614 @@
+{
+  "query": {
+    "id": "c_capability_workflows",
+    "query": "interesting workflow automation repos",
+    "notes": "Should produce composable automation ideas with clear user value."
+  },
+  "repos": [
+    {
+      "slug": "n8n-io/n8n",
+      "name": "n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "readme": "![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)\n\n# n8n - Secure Workflow Automation for Technical Teams\n\nn8n is a workflow automation platform that gives technical teams the flexibility of code with the speed of no-code. With 400+ integrations, native AI capabilities, and a fair-code license, n8n lets you build powerful automations while maintaining full control over your data and deployments.\n\n![n8n.io - Screenshot](https://raw.githubusercontent.com/n8n-io/n8n/master/assets/n8n-screenshot-readme.png)\n\n## Key Capabilities\n\n- **Code When You Need It**: Write JavaScript/Python, add npm packages, or use the visual interface\n- **AI-Native Platform**: Build AI agent workflows based on LangChain with your own data and models\n- **Full Control**: Self-host with our fair-code license or use our [cloud offering](https://app.n8n.cloud/login)\n- **Enterprise-Ready**: Advanced permissions, SSO, and air-gapped deployments\n- **Active Community**: 400+ integrations and 900+ ready-to-use [templates](https://n8n.io/workflows)\n\n## Quick Start\n\nTry n8n instantly with [npx](https://docs.n8n.io/hosting/installation/npm/) (requires [Node.js](https://nodejs.org/en/)):\n\n```\nnpx n8n\n```\n\nOr deploy with [Docker](https://docs.n8n.io/hosting/installation/docker/):\n\n```\ndocker volume create n8n_data\ndocker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n\n```\n\nAccess the editor at http://localhost:5678\n\n## Resources\n\n- 📚 [Documentation](https://docs.n8n.io)\n- 🔧 [400+ Integrations](https://n8n.io/integrations)\n- 💡 [Example Workflows](https://n8n.io/workflows)\n- 🤖 [AI & LangChain Guide](https://docs.n8n.io/advanced-ai/)\n- 👥 [Community Forum](https://community.n8n.io)\n- 📖 [Community Tutorials](https://community.n8n.io/c/tutorials/28)\n\n## Support\n\nNeed help? Our community forum is the place to get support and connect with other users:\n[community.n8n.io](https://community.n8n.io)\n\n## License\n\nn8n is [fair-code](https://faircode.io) distributed under the [Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md) and [n8n Enterprise License](https://github.com/n8n-io/n8n/blob/master/LICENSE_EE.md).\n\n- **Source Available**: Always visible source code\n- **Self-Hostable**: Deploy anywhere\n- **Extensible**: Add your own nodes and functionality\n\n[Enterprise Licenses](mailto:license@n8n.io) available for additional features and support.\n\nAdditional information about the license model can be found in the [docs](https://docs.n8n.io/sustainable-use-license/).\n\n## Contributing\n\nFound a bug 🐛 or have a feature idea ✨? Check our [Contributing Guide](https://github.com/n8n-io/n8n/blob/master/CONTRIBUTING.md) for a setup guide & best practices.\n\n## Join the Team\n\nWant to shape the future of automation? Check out our [job posts](https://n8n.io/careers) and join our team!\n\n## What does n8n mean?\n\n**Short answer:** It means \"nodemation\" and is pronounced as n-eight-n.\n\n**Long answer:** \"I get that question quite often (more often than I expected) so I decided it is probably best to answer it here. While looking for a good name for the project with a free domain I realized very quickly that all the good ones I could think of were already taken. So, in the end, I chose nodemation. 'node-' in the sense that it uses a Node-View and that it uses Node.js and '-mation' for 'automation' which is what the project is supposed to help with. However, I did not like how long the name was and I could not imagine writing something that long every time in the CLI. That is when I then ended up on 'n8n'.\" - **Jan Oberhauser, Founder and CEO, n8n.io**\n",
+      "language": "TypeScript",
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ],
+      "stars": 183398,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "meirwah/awesome-workflow-engines",
+      "name": "awesome-workflow-engines",
+      "url": "https://github.com/meirwah/awesome-workflow-engines",
+      "description": "A curated list of awesome open source workflow engines",
+      "readme": "# awesome-workflow-engines\n\nA curated list of awesome open source workflow engines\n\n\n## Full fledged product\n\n* [Activepieces](https://github.com/activepieces/activepieces) [![Stars](https://img.shields.io/github/stars/activepieces/activepieces.svg)](https://github.com/activepieces/activepieces) - Open source no-code business automation, alternative to Zapier\n* [AiiDA](https://github.com/aiidateam/aiida-core) [![Stars](https://img.shields.io/github/stars/aiidateam/aiida-core.svg)](https://github.com/aiidateam/aiida-core) - Open source workflow manager for computational science with strong focus on performance, provenance, and extensibility.\n* [Airflow](https://github.com/apache/incubator-airflow) [![Stars](https://img.shields.io/github/stars/apache/incubator-airflow.svg)](https://github.com/apache/incubator-airflow) - Python-based platform for running directed acyclic graphs (DAGs) of tasks\n* [Argo Workflows](https://github.com/argoproj/argo-workflows) [![Stars](https://img.shields.io/github/stars/argoproj/argo-workflows.svg)](https://github.com/argoproj/argo-workflows) - Open source container-native workflow engine for getting work done on Kubernetes\n* [Arvados](https://github.com/arvados/arvados) [![Stars](https://img.shields.io/github/stars/arvados/arvados.svg)](https://github.com/arvados/arvados) - Open Source data and workflow management platform with emphasis on reproducibily, scale, and secure data sharing, deployable on cloud and HPC.\n* [Azkaban](https://azkaban.github.io/) [![Stars](https://img.shields.io/github/stars/azkaban/azkaban.svg)](https://github.com/azkaban/azkaban) - Batch workflow job scheduler created at LinkedIn to run Hadoop jobs.\n* [Brigade](https://brigade.sh/) [![Stars](https://img.shields.io/github/stars/brigadecore/brigade.svg)](https://github.com/brigadecore/brigade) - Brigade is a tool for running scriptable, automated tasks in the cloud — as part of your Kubernetes cluster.\n* [Bytechef](https://www.bytechef.io/) [![Stars](https://img.shields.io/github/stars/bytechefhq/bytechef)](https://github.com/bytechefhq/bytechef) - Open-source, low-code, extendable API integration & workflow automation platform\n* [CabloyJS](https://cabloy.com) [![Stars](https://img.shields.io/github/stars/zhennann/cabloy.svg)](https://github.com/zhennann/cabloy) - A Node.js full-stack framework with workflow engine, based on koa + egg + vue + framework7.\n* [Cadence](https://github.com/uber/cadence) [![Stars](https://img.shields.io/github/stars/uber/cadence.svg)](https://github.com/uber/cadence) - An orchestration engine to execute asynchronous long-running business logic developed by Uber Engineering.\n* [Camunda](https://camunda.com) [![Stars](https://img.shields.io/github/stars/camunda/camunda-bpm-platform.svg)](https://github.com/camunda/camunda-bpm-platform) - BPMN-based workflow engine that can be embedded as java library (e.g. Spring Boot) or used standalone, including a graphical modeler and operations tooling.\n* [CDS](https://ovh.github.io/cds/) [![Stars](https://img.shields.io/github/stars/ovh/cds.svg)](https://github.com/ovh/cds) - Enterprise-grade continuous delivery & DevOps automation open source platform developped by OVHcloud.\n* [CGraph](https://github.com/ChunelFeng/CGraph) [![Stars](https://img.shields.io/github/stars/ChunelFeng/CGraph.svg)](https://github.com/ChunelFeng/CGraph) - A simple-used and cross-platform DAG framework based on C++17 without any 3rd-party.\n* [CloudSlang](http://www.cloudslang.io/) [![Stars](https://img.shields.io/github/stars/CloudSlang/cloud-slang.svg)](https://github.com/CloudSlang/cloud-slang) - Workflow engine to automate your DevOps use cases.\n* [Conductor](https://github.com/conductor-oss/conductor) [![Stars](https://img.shields.io/github/stars/conductor-oss/conductor.svg)](https://github.com/conductor-oss/conductor) - Conductor is a microservices orchestration platform that enables developers to build scalable, durable application flows. Conductor workflows are language and framework-agnostic. The Conductor is maintained by Orkes and a team of open-source contributors.  \n* [Copper](https://github.com/copper-engine/copper-engine) [![Stars](https://img.shields.io/github/stars/copper-engine/copper-engine.svg)](https://github.com/copper-engine/copper-engine) - A high performance Java workflow engine.\n* [Cordum](https://github.com/cordum-io/cordum) [![Stars](https://img.shields.io/github/stars/cordum-io/cordum.svg)](https://github.com/cordum-io/cordum) - Governance-first control plane for AI agents and external workers (policy-before-dispatch, approval gates, audit trails).\n* [Couler](https://github.com/couler-proj/couler) [![Stars](https://img.shields.io/github/stars/couler-proj/couler.svg)](https://github.com/couler-proj/couler) - Unified interface for constructing and managing workflows on different workflow engines, such as Argo Workflows, Tekton Pipelines, and Apache Airflow.\n* [Covalent](https://covalent.xyz) [![Stars](https://img.shields.io/github/stars/AgnostiqHQ/covalent.svg)](https://github.com/AgnostiqHQ/covalent) - Workflow orchestration platform for quantum and high performance computing.\n* [Cromwell](https://github.com/broadinstitute/cromwell) [![Stars](https://img.shields.io/github/stars/broadinstitute/cromwell.svg)](https://github.com/broadinstitute/cromwell) - Workflow engine written in Scala and designed for simplicity and scalability. Executes workflows written in [WDL](https://github.com/openwdl/wdl) or [CWL](https://www.commonwl.org/).\n* [Cylc](https://cylc.github.io/) [![Stars](https://img.shields.io/github/stars/cylc/cylc-flow.svg)](https://github.com/cylc/cylc-flow) - Workflow engine that orchestrates complex distributed workflows with cyclic or acyclic graphs. It was originally designed to automate weather forecasting systems at NIWA.  \n* [Dagu](https://github.com/yohamta/dagu) [![Stars](https://img.shields.io/github/stars/yohamta/dagu.svg)](https://github.com/yohamta/dagu) - A No-code workflow executor. It executes workflows from declarative YAML definitions.\n* [Dagster](https://dagster.io/) [![Stars](https://img.shields.io/github/stars/dagster-io/dagster.svg)](https://github.com/dagster-io/dagster) - Data orchestrator for machine learning, analytics, and ETL.  \n* [Dapr Workflows](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-overview/) [![Stars](https://img.shields.io/github/stars/dapr/dapr.svg)](https://github.com/dapr/dapr) - Author and execute durable & long-running Workflow-as-code at scale in Python, Javascript, .NET, Java & Go. Based on the Open-source Durable Task Framework. \n* [Didact](https://www.didact.dev) [![Stars](https://img.shields.io/github/stars/didacthq/didact.svg)](https://github.com/DidactHQ/didact) - The open source .NET job orchestrator.\n* [DigDag](https://www.digdag.io) [![Stars](https://img.shields.io/github/stars/treasure-data/digdag.svg)](https://github.com/treasure-data/digdag) - Digdag is a simple tool that helps you to build, run, schedule, and monitor complex pipelines of tasks.\n* [DolphinScheduler](https://github.com/apache/dolphinscheduler) [![Stars](https://img.shields.io/github/stars/apache/dolphinscheduler.svg)](https://github.com/apache/dolphinscheduler) Apache DolphinScheduler is a distributed and extensible workflow scheduler platform with powerful DAG visual interfaces, dedicated to solving complex job dependencies in the data pipeline and providing various types of jobs available out of box.\n* [elsa-workflows](https://github.com/elsa-workflows/elsa-core) [![Stars](https://img.shields.io/github/stars/elsa-workflows/elsa-core.svg)](https://github.com/elsa-workflows/elsa-core) - A .NET Standard 2.0 Workflows Library.\n* [easy-rules](https://github.com/j-easy/easy-rules) [![Stars](https://img.shields.io/github/stars/j-easy/easy-rules.svg)](https://github.com/j-easy/easy-rules) - The simple, stupid rules engine for Java.\n* [FireWorks](https://materialsproject.github.io/fireworks/) [![Stars](https://img.shields.i",
+      "language": null,
+      "topics": [],
+      "stars": 7762,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "makafeli/n8n-workflow-builder",
+      "name": "n8n-workflow-builder",
+      "url": "https://github.com/makafeli/n8n-workflow-builder",
+      "description": "AI assistant integration for n8n workflow automation through Model Context Protocol (MCP). Connect Claude Desktop, ChatGPT, and other AI assistants to n8n for natural language workflow management.",
+      "readme": "# n8n Workflow Builder MCP Server\n\n<!-- Social Media Preview Meta Tags -->\n<meta property=\"og:title\" content=\"n8n Workflow Builder MCP Server - AI Assistant Integration for n8n Automation\">\n<meta property=\"og:description\" content=\"Connect Claude Desktop, ChatGPT, and other AI assistants directly to your n8n instance for seamless workflow management, creation, and execution through natural language commands.\">\n<meta property=\"og:image\" content=\"https://raw.githubusercontent.com/makafeli/n8n-workflow-builder/main/.github/assets/social-preview.png\">\n<meta property=\"og:url\" content=\"https://github.com/makafeli/n8n-workflow-builder\">\n<meta property=\"og:type\" content=\"website\">\n<meta property=\"twitter:card\" content=\"summary_large_image\">\n<meta property=\"twitter:title\" content=\"n8n Workflow Builder MCP Server - AI Assistant Integration\">\n<meta property=\"twitter:description\" content=\"Connect AI assistants like Claude Desktop to n8n for natural language workflow automation. Create, manage, and execute workflows through conversation.\">\n<meta property=\"twitter:image\" content=\"https://raw.githubusercontent.com/makafeli/n8n-workflow-builder/main/.github/assets/social-preview.png\">\n\n**The ultimate AI assistant integration for n8n workflow automation** - Connect Claude Desktop, ChatGPT, and other AI assistants directly to your n8n instance for seamless workflow management, creation, and execution through the Model Context Protocol (MCP).\n\n<div align=\"center\">\n\n<a href=\"https://smithery.ai/server/@makafeli/n8n-workflow-builder\">\n  <img src=\"https://smithery.ai/badge/@makafeli/n8n-workflow-builder\" alt=\"Smithery Server Badge\">\n</a>\n\n<br><br>\n\n<!-- Package & Repository Stats -->\n<a href=\"https://www.npmjs.com/package/@makafeli/n8n-workflow-builder\">\n  <img src=\"https://img.shields.io/npm/v/@makafeli/n8n-workflow-builder?style=flat-square&logo=npm&color=CB3837\" alt=\"npm version\">\n</a>\n<a href=\"https://www.npmjs.com/package/@makafeli/n8n-workflow-builder\">\n  <img src=\"https://img.shields.io/npm/dm/@makafeli/n8n-workflow-builder?style=flat-square&logo=npm&color=CB3837\" alt=\"npm downloads\">\n</a>\n<a href=\"https://github.com/makafeli/n8n-workflow-builder\">\n  <img src=\"https://img.shields.io/github/stars/makafeli/n8n-workflow-builder?style=flat-square&logo=github&color=181717\" alt=\"GitHub stars\">\n</a>\n<a href=\"https://github.com/makafeli/n8n-workflow-builder/network/members\">\n  <img src=\"https://img.shields.io/github/forks/makafeli/n8n-workflow-builder?style=flat-square&logo=github&color=181717\" alt=\"GitHub forks\">\n</a>\n\n<br>\n\n<!-- Build & Quality Badges -->\n<a href=\"https://github.com/makafeli/n8n-workflow-builder/actions\">\n  <img src=\"https://img.shields.io/github/actions/workflow/status/makafeli/n8n-workflow-builder/ci.yml?style=flat-square&logo=github-actions&label=tests\" alt=\"CI Status\">\n</a>\n<a href=\"https://github.com/makafeli/n8n-workflow-builder/blob/main/LICENSE\">\n  <img src=\"https://img.shields.io/github/license/makafeli/n8n-workflow-builder?style=flat-square&color=green\" alt=\"License\">\n</a>\n<a href=\"https://nodejs.org/\">\n  <img src=\"https://img.shields.io/node/v/@makafeli/n8n-workflow-builder?style=flat-square&logo=node.js&color=339933\" alt=\"Node.js version\">\n</a>\n<a href=\"https://www.typescriptlang.org/\">\n  <img src=\"https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square&logo=typescript\" alt=\"TypeScript\">\n</a>\n\n<br>\n\n<!-- Platform Integration Badges -->\n<a href=\"https://glama.ai/mcp/servers/fhoynrlnpp\">\n  <img src=\"https://glama.ai/mcp/servers/fhoynrlnpp/badge\" alt=\"n8n Workflow Builder Server MCP server\" height=\"40\">\n</a>\n&nbsp;\n<a href=\"https://mseep.ai/app/makafeli-n8n-workflow-builder\">\n  <img src=\"https://mseep.net/pr/makafeli-n8n-workflow-builder-badge.png\" alt=\"MseeP.ai Security Assessment Badge\" height=\"40\">\n</a>\n\n</div>\n\n\nA powerful Model Context Protocol (MCP) server that enables AI assistants to manage n8n workflows seamlessly. Connect your AI tools directly to n8n for automated workflow creation, execution, and management.\n\n## 📚 Table of Contents\n\n- [What is this?](#-what-is-this)\n- [Key Features](#-key-features)\n- [Requirements](#-requirements)\n- [Installation & Usage](#-installation--usage)\n- [Configuration](#️-configuration)\n- [MCP Client Setup](#-mcp-client-setup)\n- [Available Tools](#️-available-tools)\n- [Usage Examples](#-usage-examples)\n- [Troubleshooting](#-troubleshooting)\n- [FAQ](#-frequently-asked-questions)\n- [Contributing](#-contributing)\n- [License](#-license)\n- [Useful Links](#-useful-links)\n\n## 📖 Additional Documentation\n\n- **[🚀 Getting Started Guide](GETTING_STARTED.md)** - Quick setup in under 5 minutes\n- **[💼 Real-World Use Cases](USE_CASES.md)** - E-commerce, data processing, API integrations, and more\n- **[🔍 Comparison with Alternatives](COMPARISON.md)** - vs Zapier, Make.com, n8n Web UI, and CLI\n- **[🔧 Comprehensive Troubleshooting](TROUBLESHOOTING.md)** - Solutions for common issues and problems\n\n## 🎯 What is this?\n\nThe n8n Workflow Builder MCP Server bridges the gap between AI assistants (like Claude Desktop, Cline, or any MCP-compatible client) and your n8n automation platform. It provides a comprehensive set of tools that allow AI assistants to:\n\n- **List and browse** your existing n8n workflows\n- **Create new workflows** with complex node configurations\n- **Execute workflows** on demand\n- **Manage workflow lifecycle** (activate, deactivate, update, delete)\n- **Monitor workflow status** and retrieve detailed information\n\nPerfect for teams using n8n who want to leverage AI assistants for workflow automation and management.\n\n## ✨ Key Features\n\n- 🔧 **Complete Workflow Management** - Full CRUD operations for n8n workflows\n- 🤖 **AI-First Design** - Built specifically for AI assistant integration\n- 🚀 **Zero Configuration** - Works out of the box with NPX\n- 🔒 **Secure** - Uses n8n's official API with proper authentication\n- 📦 **Modern Architecture** - Built with TypeScript and latest MCP SDK\n- ⚡ **High Performance** - Optimized for fast response times\n\n## 📋 Requirements\n\n- **Node.js** v18.0.0 or higher\n- **n8n instance** (self-hosted or cloud)\n- **n8n API key** with appropriate permissions\n\n## 🚀 Installation & Usage\n\n### Method 1: Smithery.ai (Hosted - Recommended)\n\nUse the hosted version on Smithery.ai - no installation required:\n\n1. **Visit**: [smithery.ai](https://smithery.ai)\n2. **Search**: \"n8n-workflow-builder\"\n3. **Connect**: Configure with your n8n host and API key\n4. **Use**: Access from any MCP-compatible AI assistant\n\n**Benefits**: No local setup, automatic updates, professional hosting, tool playground.\n\n### Method 2: NPX (Local)\n\nRun locally with NPX:\n\n```bash\nnpx @makafeli/n8n-workflow-builder\n```\n\n### Method 2: Manual Installation\n\nFor development or customization:\n\n```bash\n# Clone the repository\ngit clone https://github.com/makafeli/n8n-workflow-builder.git\ncd n8n-workflow-builder\n\n# Install dependencies\nnpm install\n\n# Build the project\nnpm run build\n\n# Start the server\nnpm start\n```\n\n## ⚙️ Configuration\n\n### Environment Variables\n\nConfigure the following environment variables to connect to your n8n instance:\n\n| Variable | Description | Example |\n|----------|-------------|---------|\n| `N8N_HOST` | Your n8n instance URL | `http://localhost:5678` or `https://your-n8n.com/api/v1` |\n| `N8N_API_KEY` | Your n8n API key | `n8n_api_1234567890abcdef...` |\n\n### Getting Your n8n API Key\n\n1. Open your n8n instance\n2. Go to **Settings** → **API Keys**\n3. Click **Create API Key**\n4. Copy the generated key\n\n### Setting Environment Variables\n\n```bash\n# For local testing\nexport N8N_HOST=\"http://localhost:5678\"\nexport N8N_API_KEY=\"your-api-key-here\"\n\n# Then run the server\nnpx @makafeli/n8n-workflow-builder\n```\n\n## 🔧 MCP Client Setup\n\n### Claude Desktop\n\nAdd this configuration to your `claude_desktop_config.json`:\n\n```json\n{\n  \"mcpServers\": {\n    \"n8n-workflow-builder\": {\n      \"command\": \"npx\",\n      \"args\": [\"@makafeli/n8n-workflow-builder\"],\n      \"env\": {\n        \"N8N_HOST\": \"http://localhost:5678\",\n",
+      "language": "JavaScript",
+      "topics": [
+        "ai-assistant",
+        "ai-automation",
+        "ai-integration",
+        "api-integration",
+        "api-wrapper",
+        "automation-tools",
+        "chatgpt-integration",
+        "claude-desktop",
+        "low-code",
+        "mcp-server",
+        "model-context-protocol",
+        "n8n",
+        "no-code",
+        "nodejs",
+        "rest-api",
+        "typescript",
+        "webhook",
+        "workflow-automation",
+        "workflow-management"
+      ],
+      "stars": 507,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "actions/starter-workflows",
+      "name": "starter-workflows",
+      "url": "https://github.com/actions/starter-workflows",
+      "description": "Accelerating new GitHub Actions workflows ",
+      "readme": "<p align=\"center\">\n  <img src=\"https://avatars0.githubusercontent.com/u/44036562?s=100&v=4\"/> \n</p>\n\n## Starter Workflows\n\nThese are the workflow files for helping people get started with GitHub Actions.  They're presented whenever you start to create a new GitHub Actions workflow.\n\n**If you want to get started with GitHub Actions, you can use these starter workflows by clicking the \"Actions\" tab in the repository where you want to create a workflow.**\n\n<img src=\"https://d3vv6lp55qjaqc.cloudfront.net/items/353A3p3Y2x3c2t2N0c01/Image%202019-08-27%20at%203.25.07%20PM.png\" max-width=\"75%\"/>\n\n### Note\n\nThank you for your interest in this GitHub repo, however, right now we are not taking contributions. \n\nWe continue to focus our resources on strategic areas that help our customers be successful while making developers' lives easier. While GitHub Actions remains a key part of this vision, we are allocating resources towards other areas of Actions and are not taking contributions to this repository at this time. The GitHub public roadmap is the best place to follow along for any updates on features we’re working on and what stage they’re in.\n\nWe are taking the following steps to better direct requests related to GitHub Actions, including:\n\n1. We will be directing questions and support requests to our [Community Discussions area](https://github.com/orgs/community/discussions/categories/actions)\n\n2. High Priority bugs can be reported through Community Discussions or you can report these to our support team https://support.github.com/contact/bug-report.\n\n3. Security Issues should be handled as per our [security.md](security.md)\n\nWe will still provide security updates for this project and fix major breaking changes during this time.\n\nYou are welcome to still raise bugs in this repo.\n\n### Directory structure\n\n* [ci](ci): solutions for Continuous Integration workflows\n* [deployments](deployments): solutions for Deployment workflows\n* [automation](automation): solutions for automating workflows\n* [code-scanning](code-scanning): solutions for [Code Scanning](https://github.com/features/security)\n* [pages](pages): solutions for Pages workflows\n* [icons](icons): svg icons for the relevant template\n\nEach workflow must be written in YAML and have a `.yml` extension. They also need a corresponding `.properties.json` file that contains extra metadata about the workflow (this is displayed in the GitHub.com UI).\n\nFor example: `ci/django.yml` and `ci/properties/django.properties.json`.\n\n### Valid properties\n\n* `name`: the name shown in onboarding. This property is unique within the repository.\n* `description`: the description shown in onboarding\n* `iconName`: the icon name in the relevant folder, for example, `django` should have an icon `icons/django.svg`. Only SVG is supported at this time. Another option is to use [octicon](https://primer.style/octicons/). The format to use an octicon is `octicon <<icon name>>`. Example: `octicon person`\n* `creator`: creator of the template shown in onboarding. All the workflow templates from an author will have the same `creator` field.\n* `categories`: the categories that it will be shown under. Choose at least one category from the list [here](#categories). Further, choose the categories from the list of languages available [here](https://github.com/github/linguist/blob/master/lib/linguist/languages.yml) and the list of tech stacks available [here](https://github.com/github-starter-workflows/repo-analysis-partner/blob/main/tech_stacks.yml). When a user views the available templates, those templates that match the language and tech stacks will feature more prominently.\n\n### Categories\n* continuous-integration\n* deployment\n* testing\n* code-quality\n* code-review\n* dependency-management\n* monitoring\n* Automation\n* utilities\n* Pages\n* Hugo\n\n### Variables\nThese variables can be placed in the starter workflow and will be substituted as detailed below:\n\n* `$default-branch`: will substitute the branch from the repository, for example `main` and `master`\n* `$protected-branches`: will substitute any protected branches from the repository\n* `$cron-daily`: will substitute a valid but random time within the day\n\n## How to test templates before publishing\n\n### Disable template for public\nThe template author adds a `labels` array in the template's `properties.json` file with a label `preview`. This will hide the template from users, unless user uses query parameter `preview=true` in the URL.\nExample `properties.json` file:\n```json\n{\n    \"name\": \"Node.js\",\n    \"description\": \"Build and test a Node.js project with npm.\",\n    \"iconName\": \"nodejs\",\n    \"categories\": [\"Continuous integration\", \"JavaScript\", \"npm\", \"React\", \"Angular\", \"Vue\"],\n    \"labels\": [\"preview\"]\n}\n```\n\nFor viewing the templates with `preview` label, provide query parameter `preview=true` to the  `new workflow` page URL. Eg. `https://github.com/<owner>/<repo_name>/actions/new?preview=true`.\n\n### Enable template for public\nRemove the `labels` array from `properties.json` file to publish the template to public\n",
+      "language": "TypeScript",
+      "topics": [
+        "actions"
+      ],
+      "stars": 11466,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "ComposioHQ/awesome-claude-skills",
+      "name": "awesome-claude-skills",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "description": "A curated list of awesome Claude Skills, resources, and tools for customizing Claude AI workflows",
+      "readme": "<h1 align=\"center\">Awesome Claude Skills</h1>\n\n<p align=\"center\">\n<a href=\"https://platform.composio.dev/?utm_source=Github&utm_medium=Youtube&utm_campaign=2025-11&utm_content=AwesomeSkills\">\n  <img width=\"1280\" height=\"640\" alt=\"Composio banner\" src=\"https://github.com/user-attachments/assets/e91255af-e4ba-4d71-b1a8-bd081e8a234a\">\n</a>\n\n\n</p>\n\n<p align=\"center\">\n  <a href=\"https://awesome.re\">\n    <img src=\"https://awesome.re/badge.svg\" alt=\"Awesome\" />\n  </a>\n  <a href=\"https://makeapullrequest.com\">\n    <img src=\"https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square\" alt=\"PRs Welcome\" />\n  </a>\n  <a href=\"https://www.apache.org/licenses/LICENSE-2.0\">\n    <img src=\"https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat-square\" alt=\"License: Apache-2.0\" />\n  </a>\n</p>\n<div>\n<p align=\"center\">\n  <a href=\"https://twitter.com/composio\">\n    <img src=\"https://img.shields.io/badge/Follow on X-000000?style=for-the-badge&logo=x&logoColor=white\" alt=\"Follow on X\" />\n  </a>\n  <a href=\"https://www.linkedin.com/company/composiohq/\">\n    <img src=\"https://img.shields.io/badge/Follow on LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white\" alt=\"Follow on LinkedIn\" />\n  </a>\n  <a href=\"https://discord.com/invite/composio\">\n    <img src=\"https://img.shields.io/badge/Join our Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Join our Discord\" />\n  </a>\n  </p>\n</div>\n\nA curated list of practical Claude Skills for enhancing productivity across Claude.ai, Claude Code, and the Claude API.\n\n\n> **Want skills that do more than generate text?** Claude can send emails, create issues, post to Slack, and take actions across 1000+ apps. [See how →](./connect/)\n\n---\n\n## Quickstart: Connect Claude to 500+ Apps\n\nThe **connect-apps** plugin lets Claude perform real actions - send emails, create issues, post to Slack. It handles auth and connects to 500+ apps using Composio under the hood.\n\n### 1. Install the Plugin\n\n```bash\nclaude --plugin-dir ./connect-apps-plugin\n```\n\n### 2. Run Setup\n\n```\n/connect-apps:setup\n```\n\nPaste your API key when asked. (Get a free key at [platform.composio.dev](https://platform.composio.dev/?utm_source=Github&utm_content=AwesomeSkills))\n\n### 3. Restart & Try It\n\n```bash\nexit\nclaude\n```\n\n> **Want skills that do more than generate text?** Claude can send emails, create issues, post to Slack, and take actions across 1000+ apps. [See how →](./connect/)\n\nIf you receive the email, Claude is now connected to 500+ apps.\n\n**[See all supported apps →](https://composio.dev/toolkits)**\n\n---\n\n## Contents\n\n- [What Are Claude Skills?](#what-are-claude-skills)\n- [Skills](#skills)\n  - [Document Processing](#document-processing)\n  - [Development & Code Tools](#development--code-tools)\n  - [Data & Analysis](#data--analysis)\n  - [Business & Marketing](#business--marketing)\n  - [Communication & Writing](#communication--writing)\n  - [Creative & Media](#creative--media)\n  - [Productivity & Organization](#productivity--organization)\n  - [Collaboration & Project Management](#collaboration--project-management)\n  - [Security & Systems](#security--systems)\n  - [App Automation via Composio](#app-automation-via-composio)\n- [Getting Started](#getting-started)\n- [Creating Skills](#creating-skills)\n- [Contributing](#contributing)\n- [Resources](#resources)\n- [License](#license)\n\n## What Are Claude Skills?\n\nClaude Skills are customizable workflows that teach Claude how to perform specific tasks according to your unique requirements. Skills enable Claude to execute tasks in a repeatable, standardized manner across all Claude platforms.\n\n## Skills\n\n### Document Processing\n\n- [docx](https://github.com/anthropics/skills/tree/main/skills/docx) - Create, edit, analyze Word docs with tracked changes, comments, formatting.\n- [pdf](https://github.com/anthropics/skills/tree/main/skills/pdf) - Extract text, tables, metadata, merge & annotate PDFs.\n- [pptx](https://github.com/anthropics/skills/tree/main/skills/pptx) - Read, generate, and adjust slides, layouts, templates.\n- [xlsx](https://github.com/anthropics/skills/tree/main/skills/xlsx) - Spreadsheet manipulation: formulas, charts, data transformations.\n- [Markdown to EPUB Converter](https://github.com/smerchek/claude-epub-skill) - Converts markdown documents and chat summaries into professional EPUB ebook files. *By [@smerchek](https://github.com/smerchek)*\n\n### Development & Code Tools\n\n- [artifacts-builder](https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder) - Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui).\n- [aws-skills](https://github.com/zxkane/aws-skills) - AWS development with CDK best practices, cost optimization MCP servers, and serverless/event-driven architecture patterns.\n- [Changelog Generator](./changelog-generator/) - Automatically creates user-facing changelogs from git commits by analyzing history and transforming technical commits into customer-friendly release notes.\n- [Claude Code Terminal Title](https://github.com/bluzername/claude-code-terminal-title) - Gives each Claud-Code terminal window a dynamic title that describes the work being done so you don't lose track of what window is doing what.\n- [D3.js Visualization](https://github.com/chrisvoncsefalvay/claude-d3js-skill) - Teaches Claude to produce D3 charts and interactive data visualizations. *By [@chrisvoncsefalvay](https://github.com/chrisvoncsefalvay)*\n- [FFUF Web Fuzzing](https://github.com/jthack/ffuf_claude_skill) - Integrates the ffuf web fuzzer so Claude can run fuzzing tasks and analyze results for vulnerabilities. *By [@jthack](https://github.com/jthack)*\n- [finishing-a-development-branch](https://github.com/obra/superpowers/tree/main/skills/finishing-a-development-branch) - Guides completion of development work by presenting clear options and handling chosen workflow.\n- [iOS Simulator](https://github.com/conorluddy/ios-simulator-skill) - Enables Claude to interact with iOS Simulator for testing and debugging iOS applications. *By [@conorluddy](https://github.com/conorluddy)*\n- [jules](https://github.com/sanjay3290/ai-skills/tree/main/skills/jules) - Delegate coding tasks to Google Jules AI agent for async bug fixes, documentation, tests, and feature implementation on GitHub repos. *By [@sanjay3290](https://github.com/sanjay3290)*\n- [LangSmith Fetch](./langsmith-fetch/) - Debug LangChain and LangGraph agents by automatically fetching and analyzing execution traces from LangSmith Studio. First AI observability skill for Claude Code. *By [@OthmanAdi](https://github.com/OthmanAdi)*\n- [MCP Builder](./mcp-builder/) - Guides creation of high-quality MCP (Model Context Protocol) servers for integrating external APIs and services with LLMs using Python or TypeScript.\n- [move-code-quality-skill](https://github.com/1NickPappas/move-code-quality-skill) - Analyzes Move language packages against the official Move Book Code Quality Checklist for Move 2024 Edition compliance and best practices.\n- [Playwright Browser Automation](https://github.com/lackeyjb/playwright-skill) - Model-invoked Playwright automation for testing and validating web applications. *By [@lackeyjb](https://github.com/lackeyjb)*\n- [prompt-engineering](https://github.com/NeoLabHQ/context-engineering-kit/tree/master/plugins/customaize-agent/skills/prompt-engineering) - Teaches well-known prompt engineering techniques and patterns, including Anthropic best practices and agent persuasion principles.\n- [pypict-claude-skill](https://github.com/omkamal/pypict-claude-skill) - Design comprehensive test cases using PICT (Pairwise Independent Combinatorial Testing) for requirements or code, generating optimized test suites with pairwise coverage.\n- [reddit-fetch](https://github.com/ykdojo/claude-code-tips/tree/main/skills/reddit-fetch) - Fetches Reddit content via Gemini CLI when WebFetch is blocked or returns 403 errors",
+      "language": "Python",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "antigravity",
+        "automation",
+        "claude",
+        "claude-code",
+        "codex",
+        "composio",
+        "cursor",
+        "gemini-cli",
+        "mcp",
+        "rube",
+        "saas",
+        "skill",
+        "workflow-automation"
+      ],
+      "stars": 52650,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "aaif-goose/goose",
+      "name": "goose",
+      "url": "https://github.com/aaif-goose/goose",
+      "description": "an open source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM",
+      "readme": "> **🦆 goose has moved!** This project has moved from `block/goose` to the [Agentic AI Foundation (AAIF)](https://aaif.io/) at the Linux Foundation. Some links and references are still being updated — please bear with us during the transition.\n\n<div align=\"center\">\n\n# goose\n\n_your native open source AI agent — desktop app, CLI, and API — for code, workflows, and everything in between_\n\n<p align=\"center\">\n  <a href=\"https://opensource.org/licenses/Apache-2.0\"\n    ><img src=\"https://img.shields.io/badge/License-Apache_2.0-blue.svg\"></a>\n  <a href=\"https://discord.gg/goose-oss\"\n    ><img src=\"https://img.shields.io/discord/1287729918100246654?logo=discord&logoColor=white&label=Join+Us&color=blueviolet\" alt=\"Discord\"></a>\n  <a href=\"https://github.com/aaif-goose/goose/actions/workflows/ci.yml\"\n     ><img src=\"https://img.shields.io/github/actions/workflow/status/aaif-goose/goose/ci.yml?branch=main\" alt=\"CI\"></a>\n</p>\n</div>\n\ngoose is a general-purpose AI agent that runs on your machine. Not just for code — use it for research, writing, automation, data analysis, or anything you need to get done.\n\nA native desktop app for macOS, Linux, and Windows. A full CLI for terminal workflows. An API to embed it anywhere. Built in Rust for performance and portability.\n\ngoose works with 15+ providers — Anthropic, OpenAI, Google, Ollama, OpenRouter, Azure, Bedrock, and more. Use API keys or your existing Claude, ChatGPT, or Gemini subscriptions via [ACP](https://goose-docs.ai/docs/guides/acp-providers). Connect to 70+ extensions via the [Model Context Protocol](https://modelcontextprotocol.io/) open standard.\n\ngoose is part of the [Agentic AI Foundation (AAIF)](https://aaif.io/) at the Linux Foundation.\n\n# Get started\n\n**[Download the desktop app](https://goose-docs.ai/docs/getting-started/installation)** for macOS, Linux, and Windows.\n\nOr install the CLI:\n\n```bash\ncurl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh | bash\n```\n\n# Quick links\n- [Quickstart](https://goose-docs.ai/docs/quickstart)\n- [Installation](https://goose-docs.ai/docs/getting-started/installation)\n- [Tutorials](https://goose-docs.ai/docs/category/tutorials)\n- [Documentation](https://goose-docs.ai/docs/category/getting-started)\n- [Governance](https://github.com/aaif-goose/goose/blob/main/GOVERNANCE.md)\n- [Custom Distributions](https://github.com/aaif-goose/goose/blob/main/CUSTOM_DISTROS.md) — build your own goose distro with preconfigured providers, extensions, and branding\n\n## Need help?\n- [Diagnostics & Reporting](https://goose-docs.ai/docs/troubleshooting/diagnostics-and-reporting)\n- [Known Issues](https://goose-docs.ai/docs/troubleshooting/known-issues)\n\n# a little goose humor 🪿\n\n> Why did the developer choose goose as their AI agent?\n> \n> Because it always helps them \"migrate\" their code to production! 🚀\n\n# goose around with us\n- [Discord](https://discord.gg/goose-oss)\n- [YouTube](https://www.youtube.com/@goose-oss)\n- [LinkedIn](https://www.linkedin.com/company/goose-oss)\n- [Twitter/X](https://x.com/goose_oss)\n",
+      "language": "Rust",
+      "topics": [
+        "acp",
+        "ai",
+        "ai-agents",
+        "mcp"
+      ],
+      "stars": 40141,
+      "capabilities": [
+        "Run as a local general-purpose AI agent for coding, research, writing, automation, and data analysis",
+        "Provide multiple user interfaces: native desktop app, command-line interface, and embeddable API",
+        "Install, execute, edit, and test code or workflows with LLM assistance",
+        "Work with many LLM providers and models through a unified interface",
+        "Use either direct API keys or existing consumer AI subscriptions via ACP providers",
+        "Integrate with external tools and services through Model Context Protocol extensions",
+        "Support cross-platform local usage on macOS, Linux, and Windows",
+        "Create custom branded distributions with preconfigured providers and extensions"
+      ],
+      "primitives": [
+        "Run agent software locally on the user's machine",
+        "Expose functionality through desktop UI, CLI commands, and API endpoints",
+        "Invoke different LLM backends/providers",
+        "Authenticate providers using API keys",
+        "Connect to subscription-based providers via ACP",
+        "Call external extensions using the Model Context Protocol standard",
+        "Perform code editing operations on local files",
+        "Execute commands or tasks on the host system",
+        "Run tests as part of agent workflows",
+        "Package and distribute binaries for macOS, Linux, and Windows",
+        "Configure provider/extension sets and branding for custom distributions",
+        "Embed agent functionality into other applications via an API"
+      ],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "apache/airflow",
+      "name": "airflow",
+      "url": "https://github.com/apache/airflow",
+      "description": "Apache Airflow - A platform to programmatically author, schedule, and monitor workflows",
+      "readme": "",
+      "language": "Python",
+      "topics": [
+        "airflow",
+        "apache",
+        "apache-airflow",
+        "automation",
+        "dag",
+        "data-engineering",
+        "data-integration",
+        "data-orchestrator",
+        "data-pipelines",
+        "data-science",
+        "elt",
+        "etl",
+        "machine-learning",
+        "mlops",
+        "orchestration",
+        "python",
+        "scheduler",
+        "workflow",
+        "workflow-engine",
+        "workflow-orchestration"
+      ],
+      "stars": 44994,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "service-bot/servicebot",
+      "name": "servicebot",
+      "url": "https://github.com/service-bot/servicebot",
+      "description": "Open-source subscription management & billing automation system",
+      "readme": "",
+      "language": "JavaScript",
+      "topics": [
+        "billing-application",
+        "nodejs",
+        "payments",
+        "postgresql",
+        "react",
+        "redux",
+        "servicebot",
+        "stripe"
+      ],
+      "stars": 950,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    }
+  ],
+  "baselineOutput": [
+    {
+      "title": "Natural-Language Workflow Ops for n8n",
+      "thesis": "Combine n8n, n8n-workflow-builder, and goose to let non-technical operators describe automations in plain English, have workflows generated in n8n, and use a local agent to test and refine them safely.",
+      "formula": "n8n + n8n-workflow-builder + goose",
+      "repo_slugs": [
+        "n8n-io/n8n",
+        "makafeli/n8n-workflow-builder",
+        "aaif-goose/goose"
+      ],
+      "repo_roles": [
+        {
+          "repo": "n8n-io/n8n",
+          "role": "Core workflow automation runtime with visual builder, integrations, and execution environment"
+        },
+        {
+          "repo": "makafeli/n8n-workflow-builder",
+          "role": "Natural-language bridge from AI assistants into n8n workflow creation and management via MCP"
+        },
+        {
+          "repo": "aaif-goose/goose",
+          "role": "Local AI agent used to generate prompts/specs, edit configs, run tests, and validate workflow behavior"
+        }
+      ],
+      "steps": [
+        "User describes a business process in natural language.",
+        "n8n-workflow-builder translates the request into n8n workflow operations.",
+        "n8n hosts and executes the resulting workflow using its integrations.",
+        "goose runs locally to inspect workflow definitions, generate test payloads, execute validation steps, and suggest fixes.",
+        "Operator reviews the workflow in n8n's visual builder and deploys it."
+      ],
+      "recommended_shell": "cli",
+      "what_is_being_combined": "A production workflow engine, an AI control layer for that engine, and a local agent that can test and iterate on generated automations.",
+      "capabilities": [
+        "Visual workflow automation with integrations",
+        "Natural-language workflow creation/management for n8n",
+        "Local AI-assisted testing and editing of workflow artifacts",
+        "Human review loop before deployment"
+      ],
+      "supporting_primitives": [
+        "n8n workflow execution and integrations",
+        "MCP-based assistant integration from n8n-workflow-builder",
+        "Local agent execution, editing, and testing from goose"
+      ],
+      "why_fit": "The repos line up cleanly around one job: define, build, and validate automations. n8n provides the runtime, n8n-workflow-builder lowers workflow authoring friction through AI assistants, and goose adds a practical test-and-iterate loop on the user's machine before production rollout.",
+      "use_case": "An operations manager wants a lead-routing and Slack alert workflow without manually assembling nodes, and wants basic test coverage before turning it on.",
+      "why_better_than_single": "n8n alone still requires manual assembly; n8n-workflow-builder alone helps create flows but does not itself provide a local test harness; goose alone is not a full workflow platform. Together they cover authoring, execution, and iteration.",
+      "first_user": "Ops teams and SMB automation consultants building many internal automations for clients.",
+      "demo_72h": "Day 1: self-host n8n and connect n8n-workflow-builder; define 2-3 common workflow prompts. Day 2: use goose locally to generate sample inputs, call the assistant flow, and validate resulting n8n workflow behavior. Day 3: package a demo where a user types a request like 'When a form is submitted, enrich the lead and notify Slack', then show workflow generation, test execution, and final activation in n8n.",
+      "key_risks": [
+        "Natural-language generation may create incorrect or incomplete n8n workflows that still look plausible.",
+        "Testing via goose may validate happy paths but miss edge cases in external integrations.",
+        "There may be setup complexity across MCP, local agent tooling, and n8n hosting that hurts adoption.",
+        "Security review is required if prompts or workflow definitions include sensitive operational data."
+      ],
+      "novelty": 0.78,
+      "composable_fit": 0.94,
+      "accessibility_wedge": 0.88,
+      "time_to_demo": 0.84,
+      "category_upside": 0.8,
+      "narrative_clarity": 0.9
+    },
+    {
+      "title": "GitHub-to-Airflow Pipeline Generator for Data Teams",
+      "thesis": "Combine starter GitHub Actions workflows with Airflow to give teams a fast path from repo events to scheduled, monitorable data or ops pipelines.",
+      "formula": "starter-workflows + Airflow",
+      "repo_slugs": [
+        "actions/starter-workflows",
+        "apache/airflow"
+      ],
+      "repo_roles": [
+        {
+          "repo": "actions/starter-workflows",
+          "role": "Templates for quickly setting up GitHub-triggered automation in repositories"
+        },
+        {
+          "repo": "apache/airflow",
+          "role": "Programmatic workflow orchestration, scheduling, and monitoring for recurring or multi-step pipelines"
+        }
+      ],
+      "steps": [
+        "A team starts from a GitHub Actions template for repo events such as pushes or pull requests.",
+        "The action triggers a lightweight handoff event or artifact creation tied to a pipeline definition.",
+        "Airflow picks up the downstream pipeline for scheduled or multi-step execution and monitoring.",
+        "Teams observe runs in Airflow while keeping GitHub-native entry points for developers."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "Developer-facing GitHub automation templates with an operations-grade workflow scheduler and monitor.",
+      "capabilities": [
+        "Fast setup of GitHub event-driven automation",
+        "Scheduled and programmatic workflow orchestration",
+        "Pipeline monitoring beyond simple CI steps",
+        "Clear split between developer trigger surface and orchestrated backend jobs"
+      ],
+      "supporting_primitives": [
+        "Reusable workflow templates from starter-workflows",
+        "Airflow DAG authoring, scheduling, and monitoring"
+      ],
+      "why_fit": "These repos complement different parts of the workflow lifecycle: GitHub Actions is the natural place to react to code events, while Airflow is built for orchestrating longer-running, scheduled, and monitorable workflows. The combination is credible for teams whose automation starts in code repos but outgrows CI-only jobs.",
+      "use_case": "A data platform team wants PRs merged into a transformations repo to trigger validation in GitHub and then launch monitored Airflow jobs for downstream refreshes.",
+      "why_better_than_single": "Starter workflows alone are optimized for GitHub automation, not full pipeline scheduling and monitoring; Airflow alone lacks a ready-made developer trigger surface in repos. Together they bridge developer workflows and orchestrated backend pipelines.",
+      "first_user": "Data engineering teams and internal platform teams already centered on GitHub.",
+      "demo_72h": "Day 1: choose a starter GitHub Actions workflow and adapt it to emit a signal or file on repo activity. Day 2: stand up a simple Airflow DAG that consumes that signal and runs a multi-step pipeline with visible status. Day 3: demo a code push that triggers GitHub automation, then show the downstream Airflow run, monitoring view, and logs.",
+      "key_risks": [
+        "The handoff between GitHub Actions and Airflow requires custom glue not provided directly by these repos.",
+        "Teams may question why both systems are needed if pipelines remain simple.",
+        "Operational overhead of Airflow can be high for smaller teams.",
+        "Failure ownership can become unclear across GitHub Actions and Airflow boundaries."
+      ],
+      "novelty": 0.62,
+      "composable_fit": 0.86,
+      "accessibility_wedge": 0.72,
+      "time_to_demo": 0.76,
+      "category_upside": 0.74,
+      "narrative_clarity": 0.88
+    },
+    {
+      "title": "Subscription Ops Automation Hub",
+      "thesis": "Combine servicebot with n8n to automate subscription back-office workflows like billing follow-ups, customer notifications, and internal ops escalations without custom glue code.",
+      "formula": "servicebot + n8n",
+      "repo_slugs": [
+        "service-bot/servicebot",
+        "n8n-io/n8n"
+      ],
+      "repo_roles": [
+        {
+          "repo": "service-bot/servicebot",
+          "role": "System of record for subscription management and billing automation"
+        },
+        {
+          "repo": "n8n-io/n8n",
+          "role": "General workflow layer to connect billing events to communications, support tools, and internal processes through integrations"
+        }
+      ],
+      "steps": [
+        "Subscription or billing events occur inside Servicebot.",
+        "n8n receives those events or polls relevant data pathways.",
+        "n8n fans out actions such as customer messaging, internal notifications, CRM updates, or follow-up tasks using its integrations.",
+        "Operators monitor and refine the workflow in n8n while Servicebot remains the billing source system."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A domain-specific billing/subscription backend with a broad integration and workflow automation layer.",
+      "capabilities": [
+        "Subscription management and billing automation",
+        "Cross-system workflow automation using many integrations",
+        "Operational playbooks for failed payments, upgrades, renewals, and support coordination",
+        "Visual workflow editing for non-engineering ops staff"
+      ],
+      "supporting_primitives": [
+        "Servicebot billing/subscription workflows",
+        "n8n integrations and workflow execution"
+      ],
+      "why_fit": "Servicebot provides the domain events and state around subscriptions, while n8n expands what can happen around those events across the rest of the business stack. This is a strong fit because billing systems often need custom operational follow-through that a general automation platform is good at expressing.",
+      "use_case": "A SaaS company wants failed-payment events to trigger customer reminders, internal account-owner alerts, and a follow-up escalation path if no recovery happens after a set period.",
+      "why_better_than_single": "Servicebot alone focuses on billing/subscription operations but not broad downstream integrations; n8n alone is not a billing system. Together they create a practical revenue-ops automation layer.",
+      "first_user": "Small SaaS companies with manual subscription operations and limited engineering bandwidth.",
+      "demo_72h": "Day 1: stand up Servicebot and n8n; model 2-3 subscription events to automate. Day 2: build n8n workflows for failed payment, new subscription, and cancellation handling using available integrations. Day 3: run end-to-end demos showing an event in Servicebot causing customer comms, internal notification, and a tracked follow-up workflow in n8n.",
+      "key_risks": [
+        "Servicebot integration details into n8n may require custom connectors or polling depending on available interfaces.",
+        "Billing workflows are sensitive, so automation mistakes can affect revenue or customer trust.",
+        "Edge cases around retries, duplicate events, and payment-state timing can be hard to model correctly.",
+        "Teams may need auditability and approval checkpoints before fully automating revenue-impacting actions."
+      ],
+      "novelty": 0.69,
+      "composable_fit": 0.89,
+      "accessibility_wedge": 0.79,
+      "time_to_demo": 0.81,
+      "category_upside": 0.77,
+      "narrative_clarity": 0.91
+    }
+  ],
+  "candidateOutput": [
+    {
+      "title": "Natural-language workflow copilot for self-hosted ops teams",
+      "thesis": "Combine n8n’s production-grade automation runtime with n8n-workflow-builder and a local agent so non-developers can create, inspect, and repair real workflows from plain English instead of dragging nodes by hand.",
+      "formula": "n8n + n8n-workflow-builder + goose",
+      "repo_slugs": [
+        "n8n-io/n8n",
+        "makafeli/n8n-workflow-builder",
+        "aaif-goose/goose"
+      ],
+      "repo_roles": [
+        {
+          "repo": "n8n-io/n8n",
+          "role": "anchor"
+        },
+        {
+          "repo": "makafeli/n8n-workflow-builder",
+          "role": "enabling"
+        },
+        {
+          "repo": "aaif-goose/goose",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Deploy n8n as the workflow execution and integration layer.",
+        "Connect n8n-workflow-builder so an AI assistant can manage n8n through MCP-based natural language interactions.",
+        "Use goose locally to inspect workflow definitions, edit related code/config, test changes, and act as an operator-side agent.",
+        "Offer a flow where a user describes an automation goal in plain English, the assistant proposes or creates an n8n workflow, goose validates surrounding implementation details, and n8n runs it against real integrations.",
+        "Add a review-and-approve loop so generated workflows are checked before activation."
+      ],
+      "recommended_shell": "cli",
+      "what_is_being_combined": "A visual workflow runtime (n8n), a natural-language control layer specifically for n8n (n8n-workflow-builder), and a local agent that can execute, edit, and test supporting code and configs (goose).",
+      "capabilities": [
+        "Visual workflow automation with 400+ integrations",
+        "Natural-language management of n8n workflows through MCP-connected AI assistants",
+        "Local agent execution for editing, testing, and validating related automation assets",
+        "Self-hosted deployment path for internal operations teams"
+      ],
+      "supporting_primitives": [
+        "n8n visual workflow engine and integrations",
+        "MCP-based assistant connection from n8n-workflow-builder",
+        "goose local agent runtime across CLI/API/Desktop",
+        "Ability to execute and test changes locally before workflow activation"
+      ],
+      "why_fit": "The fit is tight because n8n is the actual automation substrate, n8n-workflow-builder is purpose-built to let AI assistants control n8n, and goose complements that by handling the non-visual parts of automation work such as local file edits, validation, and test execution.",
+      "use_case": "An internal RevOps or IT ops team wants to turn requests like 'when a support ticket is tagged enterprise, notify Slack, create a follow-up task, and log it in our system' into working automations without requiring a workflow specialist for every change.",
+      "why_better_than_single": "n8n alone still requires manual design; n8n-workflow-builder alone needs a real automation engine underneath; goose alone can automate locally but does not provide the integration-rich workflow runtime or visual orchestration layer. Together they cover request intake, generation, execution, and validation.",
+      "first_user": "A startup operations manager who owns many repetitive cross-tool workflows but lacks engineering bandwidth.",
+      "demo_72h": "Day 1: self-host n8n, connect n8n-workflow-builder, and configure goose locally. Day 2: implement 2-3 real workflows from plain-English prompts and show approval before activation. Day 3: demo a first user asking for a new workflow, the assistant creating it in n8n, goose validating any related config/scripts, and the workflow running end-to-end.",
+      "key_risks": [
+        "Natural-language workflow generation may create incorrect or over-broad automations without strong review gates.",
+        "MCP/assistant setup may be too technical for less technical users.",
+        "Value depends on the quality and coverage of the target integrations already available in n8n."
+      ],
+      "novelty": 0.74,
+      "composable_fit": 0.94,
+      "accessibility_wedge": 0.86,
+      "time_to_demo": 0.91,
+      "category_upside": 0.8,
+      "narrative_clarity": 0.92
+    },
+    {
+      "title": "From ad hoc GitHub automation to governed workflow migration",
+      "thesis": "Use a discovery layer from curated workflow sources to identify when teams should graduate from GitHub Actions templates into Airflow or n8n, creating a migration product for growing engineering organizations.",
+      "formula": "starter-workflows + awesome-workflow-engines + Airflow/n8n",
+      "repo_slugs": [
+        "actions/starter-workflows",
+        "meirwah/awesome-workflow-engines",
+        "apache/airflow",
+        "n8n-io/n8n"
+      ],
+      "repo_roles": [
+        {
+          "repo": "actions/starter-workflows",
+          "role": "anchor"
+        },
+        {
+          "repo": "meirwah/awesome-workflow-engines",
+          "role": "enabling"
+        },
+        {
+          "repo": "apache/airflow",
+          "role": "enabling"
+        },
+        {
+          "repo": "n8n-io/n8n",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Start from GitHub Actions starter workflows as the familiar entry point for teams already automating in repos.",
+        "Use the workflow-engines curated list as a knowledge base for engine options and migration recommendations.",
+        "Position Airflow for programmatic, scheduled, monitored data/engineering workflows and n8n for integration-heavy business automations.",
+        "Build a migration advisor that scans existing GitHub workflows, categorizes them, and recommends whether they should stay in Actions, move to Airflow, or move to n8n.",
+        "Generate a starter migration package: equivalent DAG outline for Airflow or integration workflow outline for n8n, plus a transition checklist."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "GitHub Actions starter patterns as the source of existing automation habits, a curated map of workflow engine options to structure migration logic, and two concrete target runtimes—Airflow and n8n—for different classes of automation.",
+      "capabilities": [
+        "GitHub workflow templates as common starting artifacts",
+        "Workflow engine landscape discovery from a curated repository",
+        "Programmatic authoring, scheduling, and monitoring with Airflow",
+        "Visual and integration-heavy workflow automation with n8n"
+      ],
+      "supporting_primitives": [
+        "GitHub Actions starter workflow templates",
+        "Airflow scheduling and monitoring model",
+        "n8n integration-rich workflow execution",
+        "Curated taxonomy of workflow engines from awesome-workflow-engines"
+      ],
+      "why_fit": "Many teams begin with GitHub Actions because it is close to code, then overload it with jobs better suited to orchestrators or integration platforms. The repos fit because one represents the starting state, one helps frame the decision space, and Airflow/n8n are credible destination runtimes with distinct technical strengths.",
+      "use_case": "A platform engineering team wants to reduce brittle GitHub Actions pipelines by identifying which automations belong in CI, which belong in data orchestration, and which belong in cross-SaaS ops tooling.",
+      "why_better_than_single": "Starter workflows alone do not tell teams when they are using the wrong substrate. Airflow alone or n8n alone cannot explain migration timing or compare alternatives. The combination creates a decision and transition product rather than just another execution engine.",
+      "first_user": "A platform engineer responsible for cleaning up a messy GitHub Actions estate across multiple repositories.",
+      "demo_72h": "Day 1: ingest several real GitHub Actions YAML files and classify them by trigger type, dependency pattern, and external-service usage. Day 2: build simple recommendation rules that map candidate workflows to stay in Actions, move to Airflow, or move to n8n. Day 3: show a first user uploading a repo’s workflows and receiving migration recommendations plus starter target artifacts for one Airflow DAG and one n8n workflow.",
+      "key_risks": [
+        "The curated list is not a machine-structured source, so recommendation quality may require manual heuristics.",
+        "Migration fidelity from GitHub Actions to other engines can be shallow in an MVP.",
+        "Teams may resist moving working automations even when the target fit is better."
+      ],
+      "novelty": 0.81,
+      "composable_fit": 0.84,
+      "accessibility_wedge": 0.72,
+      "time_to_demo": 0.79,
+      "category_upside": 0.83,
+      "narrative_clarity": 0.88
+    },
+    {
+      "title": "Automated subscription operations for small SaaS back offices",
+      "thesis": "Pair a billing automation core with a flexible workflow layer so small SaaS teams can automate subscription edge cases and customer lifecycle ops without building custom internal tooling.",
+      "formula": "servicebot + n8n + starter-workflows",
+      "repo_slugs": [
+        "service-bot/servicebot",
+        "n8n-io/n8n",
+        "actions/starter-workflows"
+      ],
+      "repo_roles": [
+        {
+          "repo": "service-bot/servicebot",
+          "role": "anchor"
+        },
+        {
+          "repo": "n8n-io/n8n",
+          "role": "enabling"
+        },
+        {
+          "repo": "actions/starter-workflows",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use Servicebot as the subscription management and billing automation system of record.",
+        "Use n8n to orchestrate surrounding business processes triggered by billing and subscription events across external tools.",
+        "Use GitHub Actions starter workflows for repository-side operational tasks such as syncing config, testing automation changes, or packaging internal ops scripts tied to the automation estate.",
+        "Create packaged workflows for common SaaS back-office cases: failed payment follow-up, trial-to-paid handoff, manual review queue notifications, and account lifecycle syncs.",
+        "Provide a lightweight admin UI or starter templates for activating these automations with minimal engineering work."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A billing/subscription system (Servicebot), a broad workflow automation layer for external integrations and process logic (n8n), and GitHub-hosted operational workflow templates for maintaining the automation project itself.",
+      "capabilities": [
+        "Subscription management and billing automation",
+        "Cross-system workflow orchestration with many integrations",
+        "Repository automation patterns for maintaining operational assets"
+      ],
+      "supporting_primitives": [
+        "Servicebot subscription and billing logic",
+        "n8n visual workflows and integrations",
+        "GitHub Actions starter workflows for repeatable repo tasks"
+      ],
+      "why_fit": "Servicebot provides a concrete business domain with operational pain, while n8n fills the gap around surrounding SaaS process automation. Starter GitHub workflows are a pragmatic addition for teams that want the automation definitions and support scripts maintained through a lightweight engineering workflow.",
+      "use_case": "A bootstrapped SaaS company wants to automate failed payment recovery notifications, internal escalation for high-value customers, and downstream account provisioning tasks tied to subscription lifecycle events.",
+      "why_better_than_single": "Servicebot alone handles billing concerns but not the broad surrounding ops fabric; n8n alone lacks a subscription-management core; starter workflows alone only help manage repo tasks. Combined, they create a domain-specific automation stack for revenue operations.",
+      "first_user": "An operations lead at a 5-50 person SaaS company who currently coordinates billing exceptions and customer lifecycle tasks manually.",
+      "demo_72h": "Day 1: stand up Servicebot and n8n, model one subscription lifecycle event, and connect one notification endpoint. Day 2: build 2-3 canned automations around failed payment and trial conversion handling. Day 3: show a first user triggering a subscription event in Servicebot, n8n executing the follow-up process, and a GitHub Actions starter workflow validating or packaging the automation project changes.",
+      "key_risks": [
+        "The exact event/connectivity surface between Servicebot and n8n may need custom glue in practice.",
+        "Small SaaS teams may prefer hosted billing tools with built-in automations over assembling an open stack.",
+        "GitHub Actions is only ancillary here, so the third repo adds maintenance leverage more than core product value."
+      ],
+      "novelty": 0.69,
+      "composable_fit": 0.78,
+      "accessibility_wedge": 0.76,
+      "time_to_demo": 0.82,
+      "category_upside": 0.75,
+      "narrative_clarity": 0.85
+    }
+  ],
+  "judgment": {
+    "verdict": "baseline_wins",
+    "baseline": {
+      "repo_fit": 5,
+      "novelty": 4,
+      "clarity": 5,
+      "theoretical_plausibility": 5,
+      "signal_value": 5
+    },
+    "candidate": {
+      "repo_fit": 4,
+      "novelty": 4,
+      "clarity": 4,
+      "theoretical_plausibility": 4,
+      "signal_value": 4
+    },
+    "rationale": "Both outputs are strong and clearly grounded in the provided repo set, but the baseline is more consistently aligned with the query’s goal of composable workflow automation ideas with clear user value. On repo fit, the baseline uses the repos in tighter, more product-like combinations: n8n + n8n-workflow-builder + goose is especially strong, starter-workflows + Airflow is straightforward and credible, and servicebot + n8n is domain-specific without unnecessary extra pieces. The candidate’s first idea is similarly strong, but the second leans on awesome-workflow-engines as a knowledge source rather than an operational building block, which makes it feel less like a workflow automation repo combo and more like an advisory/meta product. The third candidate idea also weakens fit by adding starter-workflows in an ancillary role rather than core user-facing value. On novelty, both are comparable: candidate’s migration-advisor concept is somewhat more original, but baseline’s ideas are still differentiated and practical. On clarity, baseline is better because repo roles and workflows are more concrete and directly explain the end-user automation; candidate sometimes uses abstract labels like anchor/enabling/amplification, which are less informative than functional roles. On theoretical plausibility, baseline’s combinations require less inferred glue and map more directly onto known repo capabilities, whereas candidate’s migration advisor depends on extracting structured guidance from a curated list and its third combo includes a less essential GitHub Actions component. On signal value, baseline gives stronger evidence of good retrieval and judgment because it prioritizes credible, implementable combinations over broader but less grounded framing."
+  }
+}

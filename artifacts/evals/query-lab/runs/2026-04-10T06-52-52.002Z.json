@@ -1,0 +1,67 @@
+{
+  "runId": "2026-04-10T06-52-52.002Z",
+  "generatedAt": "2026-04-10T06:53:07.169Z",
+  "queryFile": "/Users/bogdan/Desktop/projects/GitHub/category-forge-v2/evals/query-lab/queries.jsonl",
+  "queryCount": 2,
+  "summary": {
+    "queryCount": 2,
+    "avgPrecisionAt5": 0,
+    "avgPrecisionAt10": 0,
+    "avgMRR": 0,
+    "avgNdcgAt10": 0,
+    "avgBadInTop5": 0,
+    "queriesWithoutRelevant": 2
+  },
+  "items": [
+    {
+      "id": "q_specific_nextjs",
+      "query": "next.js app router framework",
+      "queryType": "specific_tool",
+      "topSlugs": [
+        "microsoft/playwright",
+        "fastapi/fastapi",
+        "DioxusLabs/dioxus",
+        "yewstack/yew",
+        "rwf2/Rocket",
+        "actix/actix-web",
+        "seanmonstar/warp",
+        "zszszszsz/.config",
+        "Sfedfcv/redesigned-pancake",
+        "testingisdocumenting/webtau"
+      ],
+      "precisionAt5": 0,
+      "precisionAt10": 0,
+      "reciprocalRank": 0,
+      "firstRelevantRank": null,
+      "ndcgAt10": 0,
+      "badInTop5": 0,
+      "relevantInTop5": 0,
+      "relevantInTop10": 0
+    },
+    {
+      "id": "q_specific_prisma",
+      "query": "prisma orm for postgres",
+      "queryType": "specific_tool",
+      "topSlugs": [
+        "affaan-m/everything-claude-code",
+        "souzatharsis/podcastfy",
+        "farion1231/cc-switch",
+        "n8n-io/n8n",
+        "vercel/platforms",
+        "casibase/casibase",
+        "aptyp78/JSON_EVO",
+        "fastapi/fastapi",
+        "fighting41love/funNLP",
+        "BerriAI/litellm"
+      ],
+      "precisionAt5": 0,
+      "precisionAt10": 0,
+      "reciprocalRank": 0,
+      "firstRelevantRank": null,
+      "ndcgAt10": 0,
+      "badInTop5": 0,
+      "relevantInTop5": 0,
+      "relevantInTop10": 0
+    }
+  ]
+}

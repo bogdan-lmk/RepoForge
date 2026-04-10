@@ -1,0 +1,632 @@
+{
+  "query": {
+    "id": "c_specific_supabase",
+    "query": "supabase open source backend platform",
+    "notes": "Should produce backend product ideas grounded in auth, storage, and DB primitives."
+  },
+  "repos": [
+    {
+      "slug": "lyqht/awesome-supabase",
+      "name": "awesome-supabase",
+      "url": "https://github.com/lyqht/awesome-supabase",
+      "description": "Official awesome-list of Supabase Starters & Resources ⚡️ ",
+      "readme": "# Awesome Supabase [![Awesome](https://awesome.re/badge-flat.svg)](https://awesome.re)\n\n[Supabase](https://supabase.com/) is an awesome open source alternative to Firebase, where it provides you with a PostgreSQL database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, and Storage.\n\nThis list tries to cover what is awesome about the product and its community! 👁⚡️👁\n\nTo **enhance** this list, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).\n\n## Contents\n\n- [Official Starters](#official-starters)\n- [Community Starters](#community-starters)\n- [Data Migration Tools](#data-migration-tools)\n- [Supabase DX Tools](#supabase-dx-tools)\n- [Community Tools](#community-tools)\n- [Online Courses](#online-courses)\n- [Videos, Podcasts, Livestreams, Talks](#videos-podcasts-livestreams-talks)\n- [Integration Guides](#integration-guides)\n- [Other interesting articles](#other-interesting-articles)\n\n## Official Starters\n\nThe following starters supports the `@supabase/supabase-js` v2 library.\n\n- [Angular](https://github.com/supabase/supabase/tree/master/examples/user-management/angular-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Expo](https://github.com/supabase/supabase/tree/master/examples/user-management/expo-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Flutter](https://github.com/supabase/supabase/tree/master/examples/user-management/flutter-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Next.js (TS)](https://github.com/supabase/supabase/tree/master/examples/user-management/nextjs-ts-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Nuxt](https://github.com/supabase/supabase/tree/master/examples/user-management/nuxtjs-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Nuxt3](https://github.com/supabase/supabase/tree/master/examples/user-management/nuxt3-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [React](https://github.com/supabase/supabase/tree/master/examples/user-management/react-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Solid](https://github.com/supabase/supabase/tree/master/examples/user-management/solid-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Svelte](https://github.com/supabase/supabase/tree/master/examples/user-management/svelte-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Svelte Kit](https://github.com/supabase/supabase/tree/master/examples/user-management/sveltekit-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Vue 3](https://github.com/supabase/supabase/tree/master/examples/user-management/vue3-user-management) - ![auth](https://img.shields.io/badge/-auth-informational)\n- [Next.js, Slack Clone](https://github.com/supabase/supabase/tree/master/examples/slack-clone/nextjs-slack-clone) - ![realtime](https://img.shields.io/badge/-realtime-orange)\n- [Svelte, Todo list](https://github.com/supabase/supabase/tree/master/examples/todo-list/sveltejs-todo-list) - ![database](https://img.shields.io/badge/-database-9cf)\n- [React Native, Stripe Payments](https://github.com/supabase-community/expo-stripe-payments-with-supabase-functions) - ![edge functions](https://img.shields.io/badge/-edge%20functions-darkgreen)\n- [Flutter, Stripe Payments](https://github.com/supabase-community/flutter-stripe-payments-with-supabase-functions) - ![edge functions](https://img.shields.io/badge/-edge%20functions-darkgreen)\n\n## Community Starters\n\n- [Vuepabase](https://github.com/JMaylor/vuepabase) - Vue3 Supabase starter, with Pinia, Vue-router 4, Tailwind CSS, Vitest, Cypress and more.\n- [Supastarter](https://supastarter.dev) - Supabase starter with Next.js, authentication, mail templates, landing page, dashboard and blog.\n- [RedwoodJS Supabase Quickstart](https://github.com/redwoodjs/redwoodjs-supabase-quickstart) - Supabase Quickstart example app with RedwoodJS.\n- [Basejump](https://usebasejump.com) - Open source Next.js starter with teams, personal accounts, invitations, Tailwind, i18n. Fully tested schema.\n- [Supanext](https://www.supanext.com/) - Supabase starter with Next.js, including AI app examples, auth, billing, settings, landing page, blog, and more.\n- [SupaSasS Lite](https://github.com/Razikus/supabase-nextjs-template) - Open source Next.js SasS template (with 2FA, and example app)\n- [SupaSocial](https://github.com/koji0701/supabase-react-social-media-starter/tree/main) - React social media starter with auth, friend requests, profile pics, and example app (profile, friends, signin, leaderboard, and more pages).\n- [Extro](https://github.com/turbostarter/extro) - Open source browser extension starter kit.\n\n## Data Migration Tools\n\n- [Supabase Schema](https://supabase-schema.vercel.app/) - Generate SQL scripts and database diagram with this handy tool. No sensitive information is required, only need the project url + anonymous key.\n- [Heroku to Supabase Importer](https://migrate.supabase.com/) - Given Heroku is ending free-tier support soon, if you have any PostgreSQL DB that you want to continue supporting on your projects, migrating to Supabase will be a good choice. With this tool, it will be a breeze to migrate over. Here's [a guide](https://supabase.com/docs/guides/migrations/heroku) with a video for this migration process.\n- [Supabase DB to Google Sheets](https://github.com/jadynekena/supabase-googlesheet) - Tool to pull Supabase data into Google Sheets.\n- [Retool REST API data generator](https://retool.com/api-generator) - Tool to generate structured data to be inserted into your PostgresDB.\n- [Lovable Cloud to Supabase Exporter](https://github.com/dreamlit-ai/lovable-cloud-to-supabase-exporter) - Migrate tables, users, and storage from Lovable Cloud to your own Supabase backend without password resets or manual CSV work.\n\n## Supabase DX Tools\n\n- [Supabase CLI](https://supabase.com/docs/reference/cli) - The Supabase CLI provides tools to develop your project locally and deploy to the Supabase Platform.\n- [Supabase SQL](https://database.dev/) - Find common use case SQL scripts easily for copy pasting.\n- [Supabase Plus](https://github.com/dsplce-co/supabase-plus) - An extra set of tools for managing Supabase projects, going beyond the possibilities of the regular Supabase CLI.\n\n## Community Tools\n\n- [MadeWithSupabase](https://www.madewithsupabase.com/) - App to explore projects made with Supabase. Users can find by specific Supabase functionality used or via user-given tags, and also find projects submitted in specific calendar months.\n- [Octokit-lite](https://github.com/lyqht/Octokit-lite) - App to perform common use case GitHub operations on multiple repositories efficiently. Uses Supabase Auth and DB.\n- [Generate Supabase Database Types GitHub Action](https://github.com/lyqht/generate-supabase-db-types-github-action) - GitHub action to generate types based on your Supabase database.\n- [Supabase Cache Helpers](https://github.com/psteinroe/supabase-cache-helpers) - Collection of framework specific Cache utilities for working with Supabase.\n- [PostgreSQL WebAssembly by Snaplet and Supabase](https://supabase.com/blog/postgres-wasm) - Tool to run PostgreSQL in the browser.\n- [Bemi for Supabase JS](https://github.com/BemiHQ/bemi-supabase-js) - Open-source platform for automatic data change tracking.\n- [Supabase automated self host](https://github.com/singh-inder/supabase-automated-self-host) - Self-host Supabase with Caddy and Authelia. Just run ONE script.\n- [Edge Worker](https://pgflow.dev) - Open-source serverless task queue worker that runs on Supabase Edge Functions (Background Tasks) and Supabase Queues. It simplifies consuming the queues and adds useful features like concurrency control, retries, and observability.\n\n## Online Courses\n\n- [Build a Full-Stack App with Next.js, Supabase & Prisma](https://themode",
+      "language": null,
+      "topics": [
+        "awesome",
+        "awesome-list",
+        "supabase"
+      ],
+      "stars": 450,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "supabase/supabase",
+      "name": "supabase",
+      "url": "https://github.com/supabase/supabase",
+      "description": "The Postgres development platform. Supabase gives you a dedicated Postgres database to build your web, mobile, and AI applications.",
+      "readme": "<p align=\"center\">\n<img src=\"https://user-images.githubusercontent.com/8291514/213727234-cda046d6-28c6-491a-b284-b86c5cede25d.png#gh-light-mode-only\">\n<img src=\"https://user-images.githubusercontent.com/8291514/213727225-56186826-bee8-43b5-9b15-86e839d89393.png#gh-dark-mode-only\">\n</p>\n\n# Supabase\n\n[Supabase](https://supabase.com) is the Postgres development platform. We're building the features of Firebase using enterprise-grade open source tools.\n\n- [x] Hosted Postgres Database. [Docs](https://supabase.com/docs/guides/database)\n- [x] Authentication and Authorization. [Docs](https://supabase.com/docs/guides/auth)\n- [x] Auto-generated APIs.\n  - [x] REST. [Docs](https://supabase.com/docs/guides/api)\n  - [x] GraphQL. [Docs](https://supabase.com/docs/guides/graphql)\n  - [x] Realtime subscriptions. [Docs](https://supabase.com/docs/guides/realtime)\n- [x] Functions.\n  - [x] Database Functions. [Docs](https://supabase.com/docs/guides/database/functions)\n  - [x] Edge Functions [Docs](https://supabase.com/docs/guides/functions)\n- [x] File Storage. [Docs](https://supabase.com/docs/guides/storage)\n- [x] AI + Vector/Embeddings Toolkit. [Docs](https://supabase.com/docs/guides/ai)\n- [x] Dashboard\n\n![Supabase Dashboard](https://raw.githubusercontent.com/supabase/supabase/master/apps/www/public/images/github/supabase-dashboard.png)\n\nWatch \"releases\" of this repo to get notified of major updates.\n\n<kbd><img src=\"https://raw.githubusercontent.com/supabase/supabase/d5f7f413ab356dc1a92075cb3cee4e40a957d5b1/web/static/watch-repo.gif\" alt=\"Watch this repo\"/></kbd>\n\n## Documentation\n\nFor full documentation, visit [supabase.com/docs](https://supabase.com/docs)\n\nTo see how to Contribute, visit [Getting Started](./DEVELOPERS.md)\n\n## Community & Support\n\n- [Community Forum](https://github.com/supabase/supabase/discussions). Best for: help with building, discussion about database best practices.\n- [GitHub Issues](https://github.com/supabase/supabase/issues). Best for: bugs and errors you encounter using Supabase.\n- [Email Support](https://supabase.com/docs/support#business-support). Best for: problems with your database or infrastructure.\n- [Discord](https://discord.supabase.com). Best for: sharing your applications and hanging out with the community.\n\n## How it works\n\nSupabase is a combination of open source tools. We’re building the features of Firebase using enterprise-grade, open source products. If the tools and communities exist, with an MIT, Apache 2, or equivalent open license, we will use and support that tool. If the tool doesn't exist, we build and open source it ourselves. Supabase is not a 1-to-1 mapping of Firebase. Our aim is to give developers a Firebase-like developer experience using open source tools.\n\n**Architecture**\n\nSupabase is a [hosted platform](https://supabase.com/dashboard). You can sign up and start using Supabase without installing anything.\nYou can also [self-host](https://supabase.com/docs/guides/hosting/overview) and [develop locally](https://supabase.com/docs/guides/local-development).\n\n![Architecture](apps/docs/public/img/supabase-architecture.svg)\n\n- [Postgres](https://www.postgresql.org/) is an object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.\n- [Realtime](https://github.com/supabase/realtime) is an Elixir server that allows you to listen to PostgreSQL inserts, updates, and deletes using websockets. Realtime polls Postgres' built-in replication functionality for database changes, converts changes to JSON, then broadcasts the JSON over websockets to authorized clients.\n- [PostgREST](http://postgrest.org/) is a web server that turns your PostgreSQL database directly into a RESTful API.\n- [GoTrue](https://github.com/supabase/gotrue) is a JWT-based authentication API that simplifies user sign-ups, logins, and session management in your applications.\n- [Storage](https://github.com/supabase/storage-api) a RESTful API for managing files in S3, with Postgres handling permissions.\n- [pg_graphql](http://github.com/supabase/pg_graphql/) a PostgreSQL extension that exposes a GraphQL API.\n- [postgres-meta](https://github.com/supabase/postgres-meta) is a RESTful API for managing your Postgres, allowing you to fetch tables, add roles, and run queries, etc.\n- [Kong](https://github.com/Kong/kong) is a cloud-native API gateway.\n\n#### Client libraries\n\nOur approach for client libraries is modular. Each sub-library is a standalone implementation for a single external system. This is one of the ways we support existing tools.\n\n<table style=\"table-layout:fixed; white-space: nowrap;\">\n  <tr>\n    <th>Language</th>\n    <th>Client</th>\n    <th colspan=\"5\">Feature-Clients (bundled in Supabase client)</th>\n  </tr>\n  <!-- notranslate -->\n  <tr>\n    <th></th>\n    <th>Supabase</th>\n    <th><a href=\"https://github.com/postgrest/postgrest\" target=\"_blank\" rel=\"noopener noreferrer\">PostgREST</a></th>\n    <th><a href=\"https://github.com/supabase/gotrue\" target=\"_blank\" rel=\"noopener noreferrer\">GoTrue</a></th>\n    <th><a href=\"https://github.com/supabase/realtime\" target=\"_blank\" rel=\"noopener noreferrer\">Realtime</a></th>\n    <th><a href=\"https://github.com/supabase/storage-api\" target=\"_blank\" rel=\"noopener noreferrer\">Storage</a></th>\n    <th>Functions</th>\n  </tr>\n  <!-- TEMPLATE FOR NEW ROW -->\n  <!-- START ROW\n  <tr>\n    <td>lang</td>\n    <td><a href=\"https://github.com/supabase-community/supabase-lang\" target=\"_blank\" rel=\"noopener noreferrer\">supabase-lang</a></td>\n    <td><a href=\"https://github.com/supabase-community/postgrest-lang\" target=\"_blank\" rel=\"noopener noreferrer\">postgrest-lang</a></td>\n    <td><a href=\"https://github.com/supabase-community/gotrue-lang\" target=\"_blank\" rel=\"noopener noreferrer\">gotrue-lang</a></td>\n    <td><a href=\"https://github.com/supabase-community/realtime-lang\" target=\"_blank\" rel=\"noopener noreferrer\">realtime-lang</a></td>\n    <td><a href=\"https://github.com/supabase-community/storage-lang\" target=\"_blank\" rel=\"noopener noreferrer\">storage-lang</a></td>\n  </tr>\n  END ROW -->\n  <!-- /notranslate -->\n  <th colspan=\"7\">⚡️ Official ⚡️</th>\n  <!-- notranslate -->\n  <tr>\n    <td>JavaScript (TypeScript)</td>\n    <td><a href=\"https://github.com/supabase/supabase-js\" target=\"_blank\" rel=\"noopener noreferrer\">supabase-js</a></td>\n    <td><a href=\"https://github.com/supabase/supabase-js/tree/master/packages/core/postgrest-js\" target=\"_blank\" rel=\"noopener noreferrer\">postgrest-js</a></td>\n    <td><a href=\"https://github.com/supabase/supabase-js/tree/master/packages/core/auth-js\" target=\"_blank\" rel=\"noopener noreferrer\">auth-js</a></td>\n    <td><a href=\"https://github.com/supabase/supabase-js/tree/master/packages/core/realtime-js\" target=\"_blank\" rel=\"noopener noreferrer\">realtime-js</a></td>\n    <td><a href=\"https://github.com/supabase/supabase-js/tree/master/packages/core/storage-js\" target=\"_blank\" rel=\"noopener noreferrer\">storage-js</a></td>\n    <td><a href=\"https://github.com/supabase/supabase-js/tree/master/packages/core/functions-js\" target=\"_blank\" rel=\"noopener noreferrer\">functions-js</a></td>\n  </tr>\n    <tr>\n    <td>Flutter</td>\n    <td><a href=\"https://github.com/supabase/supabase-flutter\" target=\"_blank\" rel=\"noopener noreferrer\">supabase-flutter</a></td>\n    <td><a href=\"https://github.com/supabase/postgrest-dart\" target=\"_blank\" rel=\"noopener noreferrer\">postgrest-dart</a></td>\n    <td><a href=\"https://github.com/supabase/gotrue-dart\" target=\"_blank\" rel=\"noopener noreferrer\">gotrue-dart</a></td>\n    <td><a href=\"https://github.com/supabase/realtime-dart\" target=\"_blank\" rel=\"noopener noreferrer\">realtime-dart</a></td>\n    <td><a href=\"https://github.com/supabase/storage-dart\" target=\"_blank\" rel=\"noopener noreferrer\">storage-dart</a></td>\n    <td><a href=\"https://github.com/supabase/functions-dart\" target=\"_blank\" rel=\"noopener noreferrer\">functions-dart</a></td>\n  </tr>\n  <tr>\n    <td>Swift</td>\n    <td><",
+      "language": "TypeScript",
+      "topics": [
+        "ai",
+        "alternative",
+        "auth",
+        "database",
+        "deno",
+        "embeddings",
+        "example",
+        "firebase",
+        "nextjs",
+        "oauth2",
+        "pgvector",
+        "postgis",
+        "postgres",
+        "postgresql",
+        "postgrest",
+        "realtime",
+        "supabase",
+        "vectors",
+        "websockets"
+      ],
+      "stars": 100589,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "supabase/supabase-js",
+      "name": "supabase-js",
+      "url": "https://github.com/supabase/supabase-js",
+      "description": "An isomorphic Javascript client for Supabase. Query your Supabase database, subscribe to realtime events, upload and download files, browse typescript examples, invoke postgres functions via rpc, invoke supabase edge functions, query pgvector.",
+      "readme": "<br />\n<p align=\"center\">\n  <a href=\"https://supabase.io\">\n        <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/supabase/supabase/master/packages/common/assets/images/supabase-logo-wordmark--dark.svg\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/supabase/supabase/master/packages/common/assets/images/supabase-logo-wordmark--light.svg\">\n      <img alt=\"Supabase Logo\" width=\"300\" src=\"https://raw.githubusercontent.com/supabase/supabase/master/packages/common/assets/images/logo-preview.jpg\">\n    </picture>\n  </a>\n\n  <h1 align=\"center\">Supabase JS SDK</h1>\n\n  <p align=\"center\">\n    <a href=\"https://supabase.com/docs/guides/getting-started\">Guides</a>\n    ·\n    <a href=\"https://supabase.com/docs/reference/javascript/introduction\">Reference Docs</a>\n  </p>\n</p>\n\n<div align=\"center\">\n\n[![Build](https://github.com/supabase/supabase-js/workflows/CI/badge.svg)](https://github.com/supabase/supabase-js/actions?query=branch%3Amaster)\n[![Package](https://img.shields.io/npm/v/@supabase/supabase-js)](https://www.npmjs.com/package/@supabase/postgrest-js)\n[![License: MIT](https://img.shields.io/npm/l/@supabase/supabase-js)](#license)\n[![pkg.pr.new](https://pkg.pr.new/badge/supabase/supabase-js)](https://pkg.pr.new/~/supabase/supabase-js)\n\n</div>\n\n> **For contributors: Repository Structure Changed**\n>\n> This repository has been restructured as a monorepo. All libraries, including `supabase-js` itself, have moved to `packages/core/`:\n>\n> | What You're Looking For | Where It Is Now              |\n> | ----------------------- | ---------------------------- |\n> | Main supabase-js code   | `packages/core/supabase-js/` |\n> | Other libraries         | `packages/core/*/`           |\n>\n> Read the **[Migration Guide](./docs/MIGRATION.md)** to learn more.\n\n## 📦 Libraries\n\nThis monorepo contains the complete suite of Supabase JavaScript SDK:\n\n| Library                                                    | Description                           |\n| ---------------------------------------------------------- | ------------------------------------- |\n| **[@supabase/supabase-js](./packages/core/supabase-js)**   | Main isomorphic SDK for Supabase      |\n| **[@supabase/auth-js](./packages/core/auth-js)**           | Authentication SDK                    |\n| **[@supabase/postgrest-js](./packages/core/postgrest-js)** | PostgREST SDK for database operations |\n| **[@supabase/realtime-js](./packages/core/realtime-js)**   | Real-time subscriptions SDK           |\n| **[@supabase/storage-js](./packages/core/storage-js)**     | File storage SDK                      |\n| **[@supabase/functions-js](./packages/core/functions-js)** | Edge Functions SDK                    |\n\n## Support Policy\n\nThis section outlines the scope of support for various runtime environments in Supabase JavaScript client.\n\n### Node.js\n\nWe only support Node.js versions that are in **Active LTS** or **Maintenance** status as defined by the [official Node.js release schedule](https://nodejs.org/en/about/previous-releases#release-schedule). This means we support versions that are currently receiving long-term support and critical bug fixes.\n\nWhen a Node.js version reaches end-of-life and is no longer in Active LTS or Maintenance status, Supabase will drop it in a **minor release**, and **this won't be considered a breaking change**.\n\n> ⚠️ **Node.js 18 Deprecation Notice**\n>\n> Node.js 18 reached end-of-life on April 30, 2025. As announced in [our deprecation notice](https://github.com/orgs/supabase/discussions/37217), support for Node.js 18 was dropped in version `2.79.0`.\n>\n> If you must use Node.js 18, please use version `2.78.0`, which is the last version that supported Node.js 18.\n\n### Deno\n\nWe support Deno versions that are currently receiving active development and security updates. We follow the [official Deno release schedule](https://docs.deno.com/runtime/fundamentals/stability_and_releases/) and only support versions from the `stable` and `lts` release channels.\n\nWhen a Deno version reaches end-of-life and is no longer receiving security updates, Supabase will drop it in a **minor release**, and **this won't be considered a breaking change**.\n\n### Browsers\n\nAll modern browsers are supported. We support browsers that provide native `fetch` API. For Realtime features, browsers must also support native `WebSocket` API.\n\n### Bun\n\nWe support Bun runtime environments. Bun provides native fetch support and is compatible with Node.js APIs. Since Bun does not follow a structured release schedule like Node.js or Deno, we support current stable versions of Bun and may drop support for older versions in minor releases without considering it a breaking change.\n\n### React Native\n\nWe support React Native environments with fetch polyfills provided by the framework. Since React Native does not follow a structured release schedule, we support current stable versions and may drop support for older versions in minor releases without considering it a breaking change.\n\n### Cloudflare Workers\n\nWe support Cloudflare Workers runtime environments. Cloudflare Workers provides native fetch support. Since Cloudflare Workers does not follow a structured release schedule, we support current stable versions and may drop support for older versions in minor releases without considering it a breaking change.\n\n### Important Notes\n\n- **Experimental features**: Features marked as experimental may be removed or changed without notice\n- **Build warnings**: If you see `UNUSED_EXTERNAL_IMPORT` warnings from Vite/Nuxt, see the [supabase-js README](./packages/core/supabase-js/README.md#known-build-warnings) — these are false positives\n\n## 🚀 Quick Start\n\n### Installation\n\n```bash\nnpm install @supabase/supabase-js\n```\n\nRead more in each package's README file.\n\n## 🤝 Contributing\n\nWe welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.\n\n### Quick Contribution Steps\n\n1. **Fork the repository**\n2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)\n3. **Make your changes** and add tests\n4. **Run tests** (`npx nx affected --target=test`)\n5. **Commit your changes** (`npm run commit`)\n6. **Push to your branch** (`git push origin feature/amazing-feature`)\n7. **Open a Pull Request**\n\n### Development Guidelines\n\n- Follow [conventional commits](https://www.conventionalcommits.org/) for commit messages\n- Add tests for new functionality\n- Update documentation for API changes\n- Run `npx nx format` before committing\n- Ensure all tests pass with `npx nx affected --target=test`\n\n## 🧪 Testing\n\nTesting varies per package. See the top-level [TESTING.md](docs/TESTING.md) for an overview and links to package-specific guides.\n\n## 📚 Documentation\n\n### API Documentation\n\n- **[Auth SDK](./packages/core/auth-js/README.md)** - Authentication and user management\n- **[Database SDK](./packages/core/postgrest-js/README.md)** - Database queries and operations\n- **[Realtime SDK](./packages/core/realtime-js/README.md)** - Real-time subscriptions\n- **[Storage SDK](./packages/core/storage-js/README.md)** - File upload and management\n- **[Functions SDK](./packages/core/functions-js/README.md)** - Edge Functions invocation\n- **[Main SDK](./packages/core/supabase-js/README.md)** - Combined SDK\n\n### Architecture Documentation\n\n- **[Contributing](./CONTRIBUTING.md)** - Development guidelines\n- **[Release Workflows](./docs/RELEASE.md)** - Release and publishing process\n- **[Migration Guide](./docs/MIGRATION.md)** - Migrating to the monorepo structure\n- **[Security Policy](./docs/SECURITY.md)** - Security guidelines and reporting\n\n## 🔐 Verifying provenance attestations\n\nYou can verify registry signatures and provenance attestations for installed packages using the npm CLI:\n\n```bash\nnpm audit signatures\n```\n\nQuick example for a single package install:\n\n```bash\nnpm install @supabase/auth-js\nnpm audit signatures\n```\n\nExample output:\n\n```text\naud",
+      "language": "TypeScript",
+      "topics": [
+        "client-library",
+        "database",
+        "isomorphic",
+        "javascript",
+        "js",
+        "mit-license",
+        "node-js",
+        "nuxt",
+        "orm",
+        "postgres",
+        "postgresql",
+        "postgrest",
+        "supabase",
+        "svelte",
+        "ts",
+        "typescript"
+      ],
+      "stars": 4388,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "supabase/supabase-py",
+      "name": "supabase-py",
+      "url": "https://github.com/supabase/supabase-py",
+      "description": "Python Client for Supabase. Query Postgres from Flask, Django, FastAPI. Python user authentication, security policies, edge functions, file storage, and realtime data streaming. Good first issue.",
+      "readme": "# `supabase-py`\n\n[![CI](https://github.com/supabase/supabase-py/actions/workflows/ci.yml/badge.svg)](https://github.com/supabase/supabase-py/actions/workflows/ci.yml)\n[![Version](https://img.shields.io/pypi/v/supabase?color=%2334D058)](https://pypi.org/project/supabase)\n[![Coverage Status](https://coveralls.io/repos/github/supabase/supabase-py/badge.svg?branch=main)](https://coveralls.io/github/supabase/supabase-py?branch=main)\n\nPython monorepo for all [Supabase](https://supabase.com) libraries.\n\n- [supabase](src/supabase/README.md)\n- [realtime-py](src/realtime/README.md)\n- [supabase_functions](src/functions/README.md)\n- [storage3](src/storage/README.md)\n- [postgrest](src/postgrest/README.md)\n- [supabase_auth](src/auth/README.md)\n\nRelevant links:\n\n- Documentation: [supabase.com/docs](https://supabase.com/docs/reference/python/introduction)\n- Usage:\n  - [GitHub OAuth in your Python Flask app](https://supabase.com/blog/oauth2-login-python-flask-apps)\n  - [Python data loading with Supabase](https://supabase.com/blog/loading-data-supabase-python)\n\n## Local Development\n\n### Clone the Repository\n\n```bash\ngit clone https://github.com/supabase/supabase-py.git\ncd supabase-py\n```\n\n### Dependencies\n\nThis repository relies on the following dependencies for development: \n- `uv` for python project management.\n- `make` for running project commands.\n- `docker` for both `postgrest` and `auth` test containers.\n- `supabase-cli` for both `storage` and `realtime` test containers.\n\nAll of these dependencies are included in the nix shell environment, through `flake.nix`. If you've got `nix` installed, you may prefer to use it through `nix develop`.\n\n### Use a Virtual Environment\n\nWe recommend using a virtual environment, preferably through `uv`, given it is currently the only tool that understands the workspace setup (you can read more about it in [the uv docs](https://docs.astral.sh/uv/concepts/projects/workspaces/)).\n\n```\nuv venv supabase-py\nsource supabase-py/bin/activate\nuv sync\n```\n\nIf you're using nix, the generated `python` executable should have the correct dependencies installed for the whole workspace, given it is derived from the root's `pyproject.toml` using [uv2nix](https://github.com/pyproject-nix/uv2nix).\n\n### Running tests and other commands\n\nWe use `make` to store and run the relevant commands. The structure is set up such that each sub package can individually set its command in its own `Makefile`, and the job of the main `Makefile` is just coordinate calling each of them.\n\nFor instance, in order to run all tests of all packages, you should use the following root command\n```bash\nmake ci\n```\nWhich internally dispatches `make -C src/{package} tests` calls to each package in the monorepo.\n\nYou should also consider using\n```bash\nmake ci -jN # where N is the number of max concurrent jobs, or just -j for infinite jobs\n```\nTo run each of the packages' tests in parallel. This should be generally faster than running in 1 job, but has the downside of messing up the CLI output, so parsing error messages might not be easy.\n\nOther relevant commands include\n```bash\nmake install-hooks # install all commit hooks into the local .git folder\nmake stop-infra    # stops all running containers from all packages\nmake clean         # delete all intermediary files created by testing\n```\nAll the subpackages command are available from the main root by prefixing the command with `{package_name}.`. Examples:\n```bash\nmake realtime.tests # run only realtime tests\nmake storage.clean  # delete temporary files only in the storage package\n```\n",
+      "language": "Python",
+      "topics": [
+        "auth",
+        "authentication",
+        "authorization",
+        "community",
+        "data-science",
+        "databases",
+        "django",
+        "fastapi",
+        "flask",
+        "good-first-issue",
+        "machine-learning",
+        "postgres",
+        "postgresql",
+        "python",
+        "supabase"
+      ],
+      "stars": 2488,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "zserge/pennybase",
+      "name": "pennybase",
+      "url": "https://github.com/zserge/pennybase",
+      "description": "Poor man's Backend-as-a-Service (BaaS), similar to Firebase/Supabase/Pocketbase",
+      "readme": "# Pennybase\n\nPoor man's Backend-as-a-Service (BaaS), similar to Firebase/Supabase/Pocketbase\n\nIt implements core backend features in less than 1000 lines of Go code, using only standard library and no external dependencies:\n\n- **File-based storage** using CSV with versioned records\n- **REST API** with JSON responses\n- **Authentication** with session cookies and Basic Auth\n- **RBAC & ownership-based permissions**\n- **Real-time updates** via SSE\n- **Schema validation** for numbers/text/lists\n- **Template rendering** with Go templates\n\n## How it Works\n\nData stored in human-readable CSVs, one row per record. Data storage is append-only, with each update creating a new version of the record. The latest version is always used for reads. For faster lookups and updates, Pennybase maintains an in-memory index of the latest versions (offsets from the beginning of the CSV file).\n\nWe agree that the first column in CSV is always the record ID, and the second column is the version number. The rest of the columns are data fields.\n\nTo put JSON resources into such CSV format, Pennybase uses a simple schema definition in `_schemas.csv` that maps JSON fields to CSV columns. Typically it looks like this:\n\n```csv\ns1,1,_permissions,_id,text,,,^.+$\ns2,1,_permissions,_v,number,1,,\ns3,1,_permissions,resource,text,,,^.+$\ns4,1,_permissions,action,text,,,^.+$\ns5,1,_permissions,field,text,,,^.*$\ns6,1,_permissions,role,text,,,^.*$\ns7,1,_users,_id,text,,,^.+$\ns8,1,_users,_v,number,1,,\ns9,1,_users,salt,text,,,\ns10,1,_users,password,text,,,^.+$\ns11,1,_users,roles,list,,,\ns12,1,todo,_id,text,,,^.+$\ns13,1,todo,_v,number,1,,\ns14,1,todo,description,text,0,0,\".+\"\ns15,1,todo,completed,number,0,1,\"\"\n```\n\nHere first column is ID, second is version number (schemas are immutable), then comes the resource/collection name, followed by field name, field type, min/max value for numbers, and validation regex for strings.\n\nFor simplicity only text, number and list field type are supported.\n\nAnother important file is `_users.csv` which contains user credentials and roles. It has the same format as other resources, but with a special `_users` collection name. There is no way to add new users via API, they must be created manually by editing this file:\n\n```csv\nadmin,1,salt,5V5R4SO4ZIFMXRZUL2EQMT2CJSREI7EMTK7AH2ND3T7BXIDLMNVQ====,\"admin\"\nalice,1,salt,PXHQWNPTZCBORTO5ASIJYVVAINQLQKJSOAQ4UXIAKTR55BU4HGRQ====,\n```\n\nHere we have user ID which is user name, version number (always 1), salt for password hashing, and the password itself (hashed with SHA-256 and encoded as Base32). The last column is a list of roles assigned to the user.\n\nOne last special file is `_permissions.csv` which defines access control rules for resources. Each row defines a rule that allows access to a resource:\n\n```csv\np1,1,todo,read,,*,\"Anyone authenticated can read todos\"\np2,1,todo,create,,*,\"Anyone authenticated can add new todos\"\np3,1,todo,update,owner,\"admin,editor\",\"Only owners and users with admin or editor role can update todos\"\np4,1,todo,delete,owner,\"admin,editor\",\"Only owners and users with admin or editor role can delete todos\"\n```\n\nIt's very basic role-based access control: when the system needs to perform an action on a resource it checks the matching permission rule (there may be more then one). If the user has one of the roles in the list - permission is granted. Alternatively, if the resource field specified in the rule matches user ID - permission is granted as well (in the example above \"owner\" is the field of \"todo\" resource that contains owner user ID). If no rules match - access is denied.\n\n## REST API\n\nBased on the resources defined in `_schemas.csv`, Pennybase provides a REST API with the following endpoints:\n\n- `GET /api/{resource}?sort_by={field}` - list all records in the resource, optionally sorting them\n- `GET /api/{resource}/{id}` - get a single record by ID\n- `POST /api/{resource}` - create a new record (requires \"create\" permission)\n- `PUT /api/{resource}/{id}` - update an existing record (requires \"update\" permission)\n- `DELETE /api/{resource}/{id}` - delete a record (requires \"delete\" permission)\n- `GET /api/events/{resource}` - stream server-side events for a resource (requires \"read\" permission)\n\nOne may use basic auth to authenticate requests, or use session cookies. Session cookies are created by sending a POST request to `/api/login` with `username` and `password` fields in the body. The response will contain a session cookie that can be used for subsequent requests. Calling `/api/logout` will invalidate the session and remove the cookie.\n\n## Static assets\n\nPennybase can also serve static assets from the `static` directory. You can place your HTML, CSS, JavaScript files there and access them via `/{filename}` URL.\n\nAdditionally, Pennybase supports rendering HTML templates using Go's `html/template` package. You can create a template file in the `templates` directory and access it via `/{filename}` URL as well. The following data is available in the templates:\n\n* `.User` - the currently authenticated user (or `nil` if not authenticated)\n* `.Store` - the Pennybase store instance, for reading or listing resources\n* `.Request` - the current HTTP request\n* `.ID` - the ID of the resource being accessed (if applicable)\n* `.Authorize` - a function to check if the user has permission to perform an action on a resource:\n\n```html\n{{ if .User }}\n{{ if call .Authorize \"my-resource\" \"read\" .ID }}\n<div>{{ .Store.Get \"my-resource\" .ID }}</div>\n{{ else }}\n<div>You do not have permission to read this resource.</div>\n{{ end }}\n{{ else }}\n<div>Please log in to access this resource.</div>\n{{ end }}\n```\n\n## Hooks\n\nExtending Pennybase functionality is possible via hooks. Or, technically, one hook function:\n\n```go\nserver, err := pennybase.NewServer(\"data\", \"templates\", \"static\")\nif err != nil {\n    log.Fatal(err)\n}\nserver.Hook = func(trigger, resource string, user pennybase.Resource, res pennybase.Resource) error {\n    log.Printf(\"Hook triggered: %s on %s by user %v: %v\", trigger, resource, user, res)\n    if trigger == \"create\" && resource == \"messages\" {\n        r[\"author\"] = user[\"_id\"]\n        r[\"created_at\"] = time.Now().UTC().Format(\"2006-01-02T15:04:05Z07:00\")\n    }\n    return nil\n}\nlog.Fatal(http.ListenAndServe(\":8000\", server))\n```\n\nThis hook will be called on every create/update/delete action on any resource. The `trigger` parameter indicates the action type, `resource` is the name of the resource being modified, `user` is the user performing the action, and `res` is the resource data being modified.\n\nYou may perform additional validation or modify the resource data before it is saved. If you return an error from the hook, the action will be aborted and an error response will be sent to the client.\n\n## Contributions\n\nContributions are welcome, but please make sure the code remains small, clear and correct.\nLikely, no new features would be added, except for bug fixes, tests and examples.\n\nThe code is distributed under MIT license, so feel free to play with it, fork it, do anything you want!\n",
+      "language": "Go",
+      "topics": [],
+      "stars": 825,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "nuxt-modules/supabase",
+      "name": "supabase",
+      "url": "https://github.com/nuxt-modules/supabase",
+      "description": "Supabase module for Nuxt.",
+      "readme": "[![@nuxtjs/supabase](https://supabase.nuxtjs.org/social-card.png)](https://supabase.nuxtjs.org)\n\n# Nuxt Supabase\n\n[![npm version][npm-version-src]][npm-version-href]\n[![npm downloads][npm-downloads-src]][npm-downloads-href]\n[![License][license-src]][license-href]\n[![Nuxt][nuxt-src]][nuxt-href]\n[![Volta][volta-src]][volta-href]\n\n> [Supabase](https://supabase.com) module for [Nuxt](https://v3.nuxtjs.org)\n\n- [✨ &nbsp;Changelog](https://supabase.nuxtjs.org/changelog)\n- [📖 &nbsp;Read the documentation](https://supabase.nuxtjs.org)\n- [▶ &nbsp;Video](https://www.youtube.com/watch?v=jIyiRT6zT8Q)\n- [👾 &nbsp;Demo](./demo)\n\n## Features\n\n- Nuxt 3 and 4 ready\n- Vue 3 composables\n- Usage in API server routes\n- Authentication support\n- Use supabase-js isomorphic client\n- TypeScript support\n\n## Usage\n\nCheck out https://supabase.nuxtjs.org\n\n## Nuxt 2\n\nIf you are looking for a solution with Nuxt 2, check out https://github.com/supabase-community/nuxt-supabase\n\n## Development\n\n1. Clone this repository\n2. Install dependencies using `pnpm install`\n3. Prepare development server using `pnpm dev:prepare`\n4. Build module using `pnpm build`\n5. Launch playground using `pnpm dev`\n\n## License\n\n[MIT License](./LICENSE)\n\n<!-- Badges -->\n[npm-version-src]: https://img.shields.io/npm/v/@nuxtjs/supabase/latest.svg?style=flat&colorA=18181B&colorB=28CF8D\n[npm-version-href]: https://npmjs.com/package/@nuxtjs/supabase\n\n[npm-downloads-src]: https://img.shields.io/npm/dt/@nuxtjs/supabase.svg?style=flat&colorA=18181B&colorB=28CF8D\n[npm-downloads-href]: https://npm.chart.dev/@nuxtjs/supabase\n\n[github-actions-ci-src]: https://github.com/nuxt-community/supabase-module/workflows/ci-main/badge.svg\n[github-actions-ci-href]: https://github.com/nuxt-community/supabase-module/actions?query=workflow%3Aci\n\n[codecov-src]: https://img.shields.io/codecov/c/github/nuxt-community/supabase-module.svg?style=flat&colorA=18181B&colorB=28CF8D\n[codecov-href]: https://codecov.io/gh/nuxt-community/supabase-module\n\n[license-src]: https://img.shields.io/npm/l/@nuxtjs/supabase.svg?style=flat&colorA=18181B&colorB=28CF8D\n[license-href]: https://npmjs.com/package/@nuxtjs/supabase\n\n[nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js\n[nuxt-href]: https://nuxt.com\n\n[volta-src]: https://user-images.githubusercontent.com/904724/209143798-32345f6c-3cf8-4e06-9659-f4ace4a6acde.svg\n[volta-href]: https://volta.net/nuxt-modules/supabase?utm_source=readme_nuxt_supabase\n",
+      "language": "TypeScript",
+      "topics": [
+        "nuxt",
+        "nuxt-module",
+        "supabase"
+      ],
+      "stars": 928,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "kontenbase/kontenbase",
+      "name": "kontenbase",
+      "url": "https://github.com/kontenbase/kontenbase",
+      "description": "Kontenbase is a no code backend API platform / Backend as a Service (BaaS)",
+      "readme": "",
+      "language": "TypeScript",
+      "topics": [
+        "backend",
+        "database",
+        "javascript",
+        "kontenbase",
+        "mongodb",
+        "nodejs",
+        "orm",
+        "restful-api",
+        "server",
+        "typescript"
+      ],
+      "stars": 128,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "n8n-io/self-hosted-ai-starter-kit",
+      "name": "self-hosted-ai-starter-kit",
+      "url": "https://github.com/n8n-io/self-hosted-ai-starter-kit",
+      "description": "The Self-hosted AI Starter Kit is an open-source template that quickly sets up a local AI environment. Curated by n8n, it provides essential tools for creating secure, self-hosted AI workflows.",
+      "readme": "",
+      "language": null,
+      "topics": [
+        "ai",
+        "ai-agents",
+        "low-code",
+        "self-hosted",
+        "starter-kit"
+      ],
+      "stars": 14553,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    }
+  ],
+  "baselineOutput": [
+    {
+      "title": "Supabase AI Backoffice for Internal Workflow Apps",
+      "thesis": "Combine Supabase as the system of record with n8n’s self-hosted AI workflow stack and Supabase clients to create a secure internal backoffice where business events trigger automated AI-assisted workflows over operational data.",
+      "formula": "supabase/supabase + n8n-io/self-hosted-ai-starter-kit + supabase/supabase-js + supabase/supabase-py",
+      "repo_slugs": [
+        "supabase/supabase",
+        "n8n-io/self-hosted-ai-starter-kit",
+        "supabase/supabase-js",
+        "supabase/supabase-py"
+      ],
+      "repo_roles": [
+        {
+          "repo": "supabase/supabase",
+          "role": "Core backend platform with dedicated Postgres database for app data and backend services."
+        },
+        {
+          "repo": "n8n-io/self-hosted-ai-starter-kit",
+          "role": "Self-hosted AI workflow environment for orchestrating local AI automations around backend events."
+        },
+        {
+          "repo": "supabase/supabase-js",
+          "role": "Web/frontend and server-side JavaScript client for querying data, realtime subscriptions, storage access, RPC, edge functions, and pgvector access."
+        },
+        {
+          "repo": "supabase/supabase-py",
+          "role": "Python service client for admin jobs, FastAPI integrations, and realtime/data operations from Python workers."
+        }
+      ],
+      "steps": [
+        "Stand up Supabase as the primary backend and model a simple internal workflow domain such as support tickets or sales lead reviews.",
+        "Use supabase-js to build a minimal operator dashboard that lists records, listens for realtime updates, and lets users trigger actions.",
+        "Connect n8n self-hosted AI workflows to poll or receive business events from the app layer, then run local AI steps for summarization, classification, or drafting.",
+        "Use supabase-py in a lightweight Python worker or API to sync AI workflow outputs back into Postgres tables and storage.",
+        "Expose selected backend actions through RPC or edge functions and surface workflow state in the dashboard.",
+        "Add audit tables in Postgres so every AI-generated action and human override is recorded."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A production-oriented Postgres backend, official JS/Python clients, and a self-hosted AI workflow runner to turn operational data into human-in-the-loop AI automations.",
+      "capabilities": [
+        "Managed application data in Postgres",
+        "Realtime UI updates from backend changes",
+        "File storage for workflow artifacts",
+        "RPC and edge-function invocation from clients",
+        "Python and JavaScript access to the same backend",
+        "Self-hosted AI workflow orchestration"
+      ],
+      "supporting_primitives": [
+        "Postgres database",
+        "Realtime subscriptions",
+        "Storage",
+        "RPC",
+        "Edge functions",
+        "Python client auth/data access",
+        "JavaScript client auth/data access",
+        "Self-hosted AI workflow template"
+      ],
+      "why_fit": "The fit is strong because Supabase already provides the operational backend and official clients, while the n8n starter kit adds a self-hosted way to automate and enrich those records with AI-driven workflows without introducing a separate proprietary backend.",
+      "use_case": "An operations team tool where new customer issues, uploaded documents, or lead notes are stored in Supabase and automatically routed through AI-assisted review flows before humans approve the outcome.",
+      "why_better_than_single": "Supabase alone gives the backend but not packaged AI workflow orchestration; the n8n stack alone can automate tasks but needs a durable application database and app-facing backend. Together they form a usable internal product stack.",
+      "first_user": "A startup ops or support team that wants AI assistance on internal processes but needs self-hosted control over data.",
+      "demo_72h": "Day 1: deploy Supabase, create schema for tickets/documents/actions, and ship a small Next/Nuxt-style dashboard using supabase-js. Day 2: wire n8n starter kit to process new records and generate summaries/classifications, then write results back using supabase-py. Day 3: add realtime status updates, file attachments in storage, and an audit trail showing human approval vs AI suggestion.",
+      "key_risks": [
+        "The n8n starter kit is a template for local AI workflows, so production hardening and scaling may require extra work.",
+        "Event triggering between Supabase and workflows may need glue code beyond the repos listed.",
+        "Security boundaries between AI automations and privileged database operations must be designed carefully.",
+        "AI output quality may be inconsistent for business-critical decisions, requiring explicit human review."
+      ],
+      "novelty": 0.64,
+      "composable_fit": 0.9,
+      "accessibility_wedge": 0.73,
+      "time_to_demo": 0.86,
+      "category_upside": 0.79,
+      "narrative_clarity": 0.89
+    },
+    {
+      "title": "Nuxt + Supabase Starter Factory for Vertical SaaS MVPs",
+      "thesis": "Use Supabase, the Nuxt Supabase module, and the awesome-supabase resource catalog to productize a rapid-launch factory for vertical SaaS MVPs with authentication, database, storage, and realtime built in.",
+      "formula": "supabase/supabase + nuxt-modules/supabase + lyqht/awesome-supabase",
+      "repo_slugs": [
+        "supabase/supabase",
+        "nuxt-modules/supabase",
+        "lyqht/awesome-supabase"
+      ],
+      "repo_roles": [
+        {
+          "repo": "supabase/supabase",
+          "role": "Backend platform providing Postgres-centered app backend services."
+        },
+        {
+          "repo": "nuxt-modules/supabase",
+          "role": "Nuxt integration layer for wiring Supabase into a Nuxt application."
+        },
+        {
+          "repo": "lyqht/awesome-supabase",
+          "role": "Curated discovery layer for starters, examples, and implementation resources to accelerate template assembly."
+        }
+      ],
+      "steps": [
+        "Define one narrow vertical template such as client portals, job boards, or member directories.",
+        "Use Supabase as the backend for core entities, authentication-linked records, and file assets.",
+        "Integrate the Nuxt module to handle client-side and server-side access patterns inside a Nuxt app.",
+        "Use the awesome-supabase list to select proven starter patterns, UI examples, and deployment references that reduce build time.",
+        "Package the result as a reusable boilerplate with environment setup, schema migrations, and a sample admin/user experience.",
+        "Document a repeatable process for swapping the schema and branding to launch new MVPs quickly."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A backend platform, a framework-native integration module, and a curated starter/resource directory to create a repeatable app-launch product rather than a one-off build.",
+      "capabilities": [
+        "Postgres-backed application backend",
+        "Nuxt-native Supabase integration",
+        "Starter and resource discovery for implementation speed",
+        "Potential auth/data/storage/realtime support via Supabase-backed app architecture"
+      ],
+      "supporting_primitives": [
+        "Postgres database",
+        "Nuxt module integration",
+        "Starter/resource catalog"
+      ],
+      "why_fit": "These repos naturally stack: Supabase is the backend, the Nuxt module is the application integration path, and the awesome list shortens productization by surfacing existing examples and starter assets.",
+      "use_case": "A small agency or solo founder offering 1-week launches for customer portals, internal dashboards, or niche SaaS tools built on a consistent Supabase + Nuxt stack.",
+      "why_better_than_single": "Supabase alone is infrastructure; the Nuxt module makes it framework-usable; the awesome list reduces implementation search costs. The combination becomes a serviceable MVP factory instead of just a backend choice.",
+      "first_user": "Indie hackers and agencies who repeatedly ship CRUD-heavy web apps and want a standard stack.",
+      "demo_72h": "Day 1: choose a vertical, scaffold a Nuxt app with the Supabase module, and create a minimal schema in Supabase. Day 2: implement auth-aware pages, CRUD for one main entity, and file upload/download. Day 3: turn the build into a reusable starter with setup docs, seeded data, and a checklist referencing relevant awesome-supabase resources.",
+      "key_risks": [
+        "The awesome list is a resource directory, not executable functionality, so value depends on curation quality.",
+        "Differentiation may be weak because many teams can assemble similar starter kits.",
+        "Template businesses can suffer from edge-case customization demands that reduce repeatability.",
+        "The repo set does not itself guarantee billing, analytics, or multi-tenant admin features."
+      ],
+      "novelty": 0.46,
+      "composable_fit": 0.93,
+      "accessibility_wedge": 0.88,
+      "time_to_demo": 0.94,
+      "category_upside": 0.67,
+      "narrative_clarity": 0.92
+    },
+    {
+      "title": "BaaS Evaluation Lab: Supabase vs Lightweight Alternatives",
+      "thesis": "Create a developer-facing evaluation lab that benchmarks and demonstrates Supabase against Pennybase and Kontenbase across common backend tasks using the official JS and Python clients where applicable.",
+      "formula": "supabase/supabase + supabase/supabase-js + supabase/supabase-py + zserge/pennybase + kontenbase/kontenbase",
+      "repo_slugs": [
+        "supabase/supabase",
+        "supabase/supabase-js",
+        "supabase/supabase-py",
+        "zserge/pennybase",
+        "kontenbase/kontenbase"
+      ],
+      "repo_roles": [
+        {
+          "repo": "supabase/supabase",
+          "role": "Reference full-featured Postgres backend platform under evaluation."
+        },
+        {
+          "repo": "supabase/supabase-js",
+          "role": "JavaScript test client for exercising Supabase data, realtime, storage, RPC, edge functions, and pgvector-related flows."
+        },
+        {
+          "repo": "supabase/supabase-py",
+          "role": "Python test client for backend and framework integration scenarios against Supabase."
+        },
+        {
+          "repo": "zserge/pennybase",
+          "role": "Lightweight BaaS alternative included for comparison on simplicity and setup experience."
+        },
+        {
+          "repo": "kontenbase/kontenbase",
+          "role": "No-code backend API platform included for comparison on low-code backend ergonomics."
+        }
+      ],
+      "steps": [
+        "Define a fixed suite of tasks: create records, query data, authenticate users where supported, upload files where supported, and subscribe to changes where supported.",
+        "Implement the Supabase path using supabase-js and supabase-py so both frontend and backend developer workflows are represented.",
+        "Stand up Pennybase and Kontenbase with equivalent sample data models where feasible.",
+        "Build a comparison dashboard that records setup time, API ergonomics notes, feature coverage, and observed limitations.",
+        "Publish reproducible scripts and setup docs so teams can rerun the evaluation on their own infrastructure.",
+        "Optionally package the lab as a lead-generation tool for consulting or migration services into Supabase."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A feature-rich backend platform, its official clients, and two simpler BaaS alternatives to produce a practical comparison product for teams deciding what backend stack to adopt.",
+      "capabilities": [
+        "Backend feature comparison across platforms",
+        "JavaScript and Python developer experience testing for Supabase",
+        "Repeatable evaluation scripts",
+        "Migration/adoption decision support"
+      ],
+      "supporting_primitives": [
+        "Postgres development platform",
+        "JavaScript client",
+        "Python client",
+        "Alternative BaaS implementations"
+      ],
+      "why_fit": "The repos are directly adjacent in category: Supabase is the likely target platform, while Pennybase and Kontenbase provide meaningful contrast on simplicity and no-code-style backend positioning. That makes the combination useful as an evaluation product rather than as a runtime stack.",
+      "use_case": "A consultancy or platform team needs a hands-on lab to decide whether to adopt Supabase or a simpler BaaS for a new product, with evidence instead of marketing claims.",
+      "why_better_than_single": "Using only Supabase repos would not help buyers evaluate tradeoffs; adding Pennybase and Kontenbase creates a concrete decision framework that can lead into implementation or migration work.",
+      "first_user": "CTOs, staff engineers, and dev agencies evaluating backend platforms for new apps.",
+      "demo_72h": "Day 1: define the benchmark matrix and stand up all three backends with one common sample app domain. Day 2: script Supabase flows in JS and Python, then manually or programmatically document equivalent flows in Pennybase and Kontenbase where possible. Day 3: build a small comparison site showing setup steps, feature matrix, caveats, and recommendation rules by team size/use case.",
+      "key_risks": [
+        "Feature parity across the compared platforms may be poor, making comparisons uneven.",
+        "The available repo descriptions do not confirm identical support for auth, storage, or realtime in the alternative backends.",
+        "Keeping the evaluation fair and up to date may become labor-intensive.",
+        "This is more of a decision-support product than a standalone software business unless paired with services or content."
+      ],
+      "novelty": 0.58,
+      "composable_fit": 0.81,
+      "accessibility_wedge": 0.78,
+      "time_to_demo": 0.84,
+      "category_upside": 0.62,
+      "narrative_clarity": 0.9
+    }
+  ],
+  "candidateOutput": [
+    {
+      "title": "Realtime Ops Console for AI Workflows",
+      "thesis": "Combine Supabase as the system-of-record with n8n’s self-hosted AI workflows to create a realtime operations console for teams that need auditable, self-hosted AI automations instead of black-box agents.",
+      "formula": "supabase/supabase (anchor) + n8n-io/self-hosted-ai-starter-kit (enabling) + supabase/supabase-js (amplification)",
+      "repo_slugs": [
+        "supabase/supabase",
+        "n8n-io/self-hosted-ai-starter-kit",
+        "supabase/supabase-js"
+      ],
+      "repo_roles": [
+        {
+          "repo": "supabase/supabase",
+          "role": "anchor"
+        },
+        {
+          "repo": "n8n-io/self-hosted-ai-starter-kit",
+          "role": "enabling"
+        },
+        {
+          "repo": "supabase/supabase-js",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use supabase/supabase as the backend foundation: Postgres for workflow state, auth for operators, storage for artifacts, and realtime subscriptions for job status.",
+        "Run n8n-io/self-hosted-ai-starter-kit as the execution layer for local AI workflows and secure self-hosted automation.",
+        "Build a web console with supabase/supabase-js to query job records, stream status changes, upload inputs, invoke edge functions/RPC, and monitor outputs in realtime.",
+        "Persist every workflow run, prompt, tool call summary, and artifact reference into Supabase tables so the console becomes an operational ledger rather than just a trigger UI.",
+        "Expose a simple queue/dispatcher pattern where n8n writes run updates back into Supabase and operators subscribe to those updates live."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A self-hosted AI workflow runner is being paired with a Postgres-native backend platform and realtime JS client so that AI automations become observable, permissioned, and reviewable by human operators.",
+      "capabilities": [
+        "Dedicated Postgres backend for durable workflow state",
+        "Realtime status streaming to operators",
+        "Auth and security policies for internal access control",
+        "File storage for prompts, input files, and generated artifacts",
+        "JS client support for querying data and invoking functions",
+        "Self-hosted AI workflow execution"
+      ],
+      "supporting_primitives": [
+        "Postgres database in supabase/supabase",
+        "Auth and security policies in Supabase",
+        "Storage in Supabase",
+        "Realtime subscriptions in supabase-js",
+        "RPC and edge function invocation in supabase-js",
+        "Secure self-hosted AI workflow environment in n8n self-hosted AI starter kit"
+      ],
+      "why_fit": "The fit is strong because n8n provides execution/orchestration while Supabase provides durable state, auth, storage, and operator-facing realtime data access; supabase-js closes the loop with a thin console that can subscribe to workflow changes without inventing extra infrastructure.",
+      "use_case": "An internal AI operations team wants to run document-processing or support-assist workflows locally while keeping approval status, artifacts, and operator actions in a governed backend.",
+      "why_better_than_single": "n8n alone executes workflows but does not itself become a full Postgres-native product backend with auth, storage, and app-grade realtime UI patterns; Supabase alone provides the backend substrate but not the packaged self-hosted AI workflow environment. Together they form an auditable AI ops product rather than a generic automation stack.",
+      "first_user": "An IT or operations lead at a mid-sized company piloting self-hosted AI workflows for internal document handling.",
+      "demo_72h": "Day 1: stand up Supabase and the n8n self-hosted AI starter kit; create tables for workflows, runs, events, and artifacts. Day 2: build a small web console with supabase-js for login, run submission, and live run monitoring. Day 3: wire one n8n workflow that accepts a file, processes it, writes status/events back to Supabase, and shows artifact links plus approval state in realtime for the first user.",
+      "key_risks": [
+        "Workflow-state modeling may become messy if n8n executions are not normalized cleanly into Postgres tables.",
+        "Operational complexity rises because two self-hosted systems must be configured and secured.",
+        "The exact integration path between n8n workflows and Supabase writebacks must be implemented by the builder rather than assumed as turnkey."
+      ],
+      "novelty": 0.78,
+      "composable_fit": 0.94,
+      "accessibility_wedge": 0.71,
+      "time_to_demo": 0.86,
+      "category_upside": 0.83,
+      "narrative_clarity": 0.9
+    },
+    {
+      "title": "Nuxt Launchpad for Multi-Tenant SaaS Backends",
+      "thesis": "Pair Supabase with the Nuxt module to ship a multi-tenant SaaS launchpad where auth, database, storage, and realtime are pre-wired into a production-style frontend stack from day one.",
+      "formula": "supabase/supabase (anchor) + nuxt-modules/supabase (enabling) + supabase/supabase-js (amplification) + lyqht/awesome-supabase (amplification)",
+      "repo_slugs": [
+        "supabase/supabase",
+        "nuxt-modules/supabase",
+        "supabase/supabase-js",
+        "lyqht/awesome-supabase"
+      ],
+      "repo_roles": [
+        {
+          "repo": "supabase/supabase",
+          "role": "anchor"
+        },
+        {
+          "repo": "nuxt-modules/supabase",
+          "role": "enabling"
+        },
+        {
+          "repo": "supabase/supabase-js",
+          "role": "amplification"
+        },
+        {
+          "repo": "lyqht/awesome-supabase",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use supabase/supabase as the backend foundation for tenant data, user accounts, storage-backed assets, and realtime collaborative surfaces.",
+        "Use nuxt-modules/supabase to integrate Supabase directly into a Nuxt app so auth flows and server/client usage are scaffolded into the application shell.",
+        "Use supabase/supabase-js where direct JS client usage is needed for queries, subscriptions, storage access, RPC, and edge function invocation patterns.",
+        "Leverage lyqht/awesome-supabase as a curated implementation accelerant for starters, templates, and resources that shorten time-to-first-product.",
+        "Package the result as a reusable SaaS starter oriented around admin dashboards, customer portals, and internal tooling with tenant-aware schema conventions."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A Postgres backend platform is being combined with a Nuxt-native integration layer and ecosystem starter resources to create a concrete SaaS launchpad rather than a bare backend.",
+      "capabilities": [
+        "Postgres-backed application data",
+        "Authentication for end users and admins",
+        "Storage for uploaded customer assets",
+        "Realtime updates for collaborative or operational views",
+        "Nuxt integration for frontend/full-stack app setup",
+        "JS querying and function invocation patterns"
+      ],
+      "supporting_primitives": [
+        "Postgres in supabase/supabase",
+        "Auth in Supabase",
+        "Storage in Supabase",
+        "Realtime in supabase-js",
+        "RPC and edge function invocation in supabase-js",
+        "Nuxt module integration from nuxt-modules/supabase",
+        "Starter/resource catalog from awesome-supabase"
+      ],
+      "why_fit": "This combination fits because Supabase is already a backend platform, Nuxt needs a clean backend integration story, and the Supabase module is purpose-built to bridge that gap. The awesome list strengthens execution by reducing boilerplate decisions and surfacing proven starting points.",
+      "use_case": "A small agency or indie SaaS founder wants to launch a customer portal or admin product quickly with a modern frontend and a real backend platform, not just static templates.",
+      "why_better_than_single": "Supabase alone is infrastructure but not an opinionated Nuxt product shell; the Nuxt module alone is an integration layer without the backend platform; the awesome list alone is discovery. Together they reduce setup friction enough to become a productized launchpad with a practical wedge for Nuxt-centric teams.",
+      "first_user": "A Nuxt-focused freelance developer building the first version of a client portal for paying customers.",
+      "demo_72h": "Day 1: initialize a Nuxt app with the Supabase module and connect auth plus a tenant/projects schema in Supabase. Day 2: build dashboard pages for tenant switching, file uploads, and a realtime activity feed using supabase-js where needed. Day 3: package setup docs, include one vertical example from awesome-supabase-inspired patterns, and onboard the first user to create a live tenant and invite a teammate.",
+      "key_risks": [
+        "The differentiation can collapse into a starter template if multi-tenant opinionation is too thin.",
+        "Awesome-list content is a discovery aid, not a runtime dependency, so value must come from the assembled product conventions.",
+        "Tenant isolation and security policy design need careful implementation beyond generic scaffolding."
+      ],
+      "novelty": 0.61,
+      "composable_fit": 0.92,
+      "accessibility_wedge": 0.89,
+      "time_to_demo": 0.93,
+      "category_upside": 0.76,
+      "narrative_clarity": 0.91
+    },
+    {
+      "title": "Polyglot Internal Platform for JS and Python Teams",
+      "thesis": "Use Supabase with both its JS and Python clients to create a single backend product that lets frontend teams and Python service teams share one governed Postgres/auth/realtime core instead of fragmenting across separate stacks.",
+      "formula": "supabase/supabase (anchor) + supabase/supabase-js (enabling) + supabase/supabase-py (enabling)",
+      "repo_slugs": [
+        "supabase/supabase",
+        "supabase/supabase-js",
+        "supabase/supabase-py"
+      ],
+      "repo_roles": [
+        {
+          "repo": "supabase/supabase",
+          "role": "anchor"
+        },
+        {
+          "repo": "supabase/supabase-js",
+          "role": "enabling"
+        },
+        {
+          "repo": "supabase/supabase-py",
+          "role": "enabling"
+        }
+      ],
+      "steps": [
+        "Use supabase/supabase as the shared backend platform for Postgres data, auth, storage, and security policies.",
+        "Use supabase/supabase-js for the customer-facing web app, admin UI, or internal dashboards that need direct database queries, realtime subscriptions, storage access, and edge function/RPC calls.",
+        "Use supabase/supabase-py for Python services built with Flask, Django, or FastAPI so backend jobs and APIs operate against the same backend primitives.",
+        "Define a clear split: JS handles interactive product surfaces, Python handles batch jobs, domain-specific APIs, or data-processing tasks, with both clients reading/writing the same governed backend.",
+        "Package this as an internal platform pattern for companies that already have mixed frontend and Python teams and want one backend substrate instead of duplicated auth/data systems."
+      ],
+      "recommended_shell": "api",
+      "what_is_being_combined": "A single backend platform is being exposed through first-party JS and Python clients so product UIs and Python services can share one data/auth/storage/realtime backbone.",
+      "capabilities": [
+        "Shared Postgres across web and Python services",
+        "Authentication shared across app surfaces",
+        "Security policies for governed access",
+        "Storage accessible from both JS and Python stacks",
+        "Realtime data streaming to frontend clients",
+        "RPC and edge function invocation from JS",
+        "Python integrations with Flask, Django, and FastAPI"
+      ],
+      "supporting_primitives": [
+        "Dedicated Postgres in supabase/supabase",
+        "Auth and security policies in Supabase",
+        "Storage in Supabase",
+        "Realtime subscriptions in supabase-js",
+        "RPC and edge function invocation in supabase-js",
+        "Python client support for Flask/Django/FastAPI and realtime data streaming in supabase-py"
+      ],
+      "why_fit": "The fit is direct and technical: Supabase is the common backend, while supabase-js and supabase-py are official clients aimed at the two most common app/service environments. This creates a credible product pattern for mixed-language teams without forcing a custom backend abstraction layer.",
+      "use_case": "A startup has a React/Nuxt-style web app and a FastAPI-based operations or data service, and needs one auth/data plane for both without building separate internal APIs first.",
+      "why_better_than_single": "Using only supabase-js leaves Python services as second-class citizens; using only supabase-py weakens the frontend integration story. Supabase alone describes the platform, but the two clients make the polyglot operating model real and productizable for teams that ship across both environments.",
+      "first_user": "A technical founder whose product frontend is in JavaScript while analytics or workflow services are already written in FastAPI.",
+      "demo_72h": "Day 1: create Supabase schema for users, jobs, and files; set up auth and policies. Day 2: build a minimal web UI with supabase-js to submit jobs, watch status in realtime, and browse uploaded outputs. Day 3: add a FastAPI worker using supabase-py that polls or receives work, writes results and files back to Supabase, and demo the end-to-end loop to the first user.",
+      "key_risks": [
+        "This can feel like an architecture pattern rather than a product unless opinionated templates and operating conventions are strong.",
+        "Cross-client consistency around auth/session handling and policy assumptions must be carefully documented.",
+        "Without a concrete vertical workflow, perceived value may be lower than more specialized combos."
+      ],
+      "novelty": 0.57,
+      "composable_fit": 0.95,
+      "accessibility_wedge": 0.8,
+      "time_to_demo": 0.9,
+      "category_upside": 0.72,
+      "narrative_clarity": 0.88
+    }
+  ],
+  "judgment": {
+    "verdict": "candidate_wins",
+    "baseline": {
+      "repo_fit": 4,
+      "novelty": 3,
+      "clarity": 4,
+      "theoretical_plausibility": 4,
+      "signal_value": 4
+    },
+    "candidate": {
+      "repo_fit": 5,
+      "novelty": 4,
+      "clarity": 4,
+      "theoretical_plausibility": 5,
+      "signal_value": 5
+    },
+    "rationale": "The candidate is more tightly aligned with the query and repo context: all three ideas stay grounded in Supabase’s core primitives (auth, storage, Postgres, realtime, JS/Python clients) and frame them as backend product patterns rather than drifting into adjacent evaluation/content concepts. Its third idea, using supabase-js + supabase-py as a polyglot internal platform, is especially repo-native and makes strong use of the official client capabilities. The baseline has one solid Supabase+n8n concept and one decent Nuxt starter-factory concept, but its third idea is a BaaS comparison lab, which is less on-brief for “backend product ideas” and less grounded in auth/storage/DB primitives as a product wedge. Clarity is close overall, though the candidate’s role labels like anchor/enabling/amplification are slightly less informative than the baseline’s fuller repo-role descriptions. On plausibility and signal value, candidate wins because it proposes more implementable, repo-backed combinations with clearer productization paths and fewer generic ecosystem add-ons."
+  }
+}

@@ -5,82 +5,197 @@ import { searchVectors, upsertVectors } from "@/lib/qdrant";
 import { rerank } from "@/services/reranker";
 import { logger } from "@/lib/logger";
 import { sql, getTableColumns } from "drizzle-orm";
-import type { RepoDoc, ParsedQuery, QueryType } from "@/core/types";
+import type { RepoDoc, ParsedQuery, QueryType, SearchMode } from "@/core/types";
+
+type SearchOptions = {
+  comboLimit?: number;
+  generateCombos?: boolean;
+};
+
+export type SearchExecutionOptions = {
+  limit?: number;
+  rerankLimit?: number;
+  disableGithubFallback?: boolean;
+  persistGithubResults?: boolean;
+};
+
+export type SearchRunResult = {
+  parsed: ParsedQuery;
+  repos: RepoDoc[];
+  ftsRepos: RepoDoc[];
+  vectorRepos: RepoDoc[];
+  githubRepos: RepoDoc[];
+  mode: SearchMode;
+};
 
 export async function search(
   queryText: string,
-  comboLimit = 3,
+  options: number | SearchOptions = 3,
 ): Promise<{ parsed: ParsedQuery; repos: RepoDoc[]; combos: unknown[] }> {
-  const parsed = await parseQuery(queryText);
-  logger.info({ parsed }, "Query parsed");
+  const comboLimit =
+    typeof options === "number" ? options : (options.comboLimit ?? 3);
+  const shouldGenerateCombos =
+    typeof options === "number" ? true : (options.generateCombos ?? true);
 
+  const result = await runSearchMode(queryText, "hybrid+github-fallback");
+
+  const combos = shouldGenerateCombos && result.repos.length >= 2
+    ? await generateCombos(result.repos, queryText, comboLimit)
+    : [];
+
+  return { parsed: result.parsed, repos: result.repos, combos };
+}
+
+export async function runSearchMode(
+  queryText: string,
+  mode: SearchMode,
+  options: SearchExecutionOptions = {},
+): Promise<SearchRunResult> {
+  const parsed = await parseQuery(queryText);
+  logger.info({ parsed, mode }, "Query parsed");
+
+  const limit = options.limit ?? 12;
+  const rerankLimit = options.rerankLimit ?? 15;
+  const persistGithubResults = options.persistGithubResults ?? true;
   const enrichedVectorQuery = [
     ...parsed.anchorTerms,
     ...parsed.capabilityTerms,
   ].join(" ") || queryText;
 
+  const [ftsResult, vectorResult] = await Promise.allSettled([
+    lexicalSearch(parsed, limit),
+    searchVectors(enrichedVectorQuery, parsed, limit),
+  ]);
+
+  const ftsRepos = ftsResult.status === "fulfilled" ? ftsResult.value : [];
+  const vectorRepos = vectorResult.status === "fulfilled" ? vectorResult.value : [];
+
+  if (ftsResult.status === "rejected") {
+    logger.warn({ err: ftsResult.reason, mode }, "FTS search failed");
+  }
+  if (vectorResult.status === "rejected") {
+    logger.warn({ err: vectorResult.reason, mode }, "Vector search failed");
+  }
+
+  const needsGithub = shouldUseGithubFallback(parsed, ftsRepos, options);
+  const githubRepos = mode === "hybrid+github-fallback" && needsGithub && parsed.githubQueries.length > 0
+    ? rescoreGithubRepos(
+      await searchFromGithub(parsed.githubQueries, rerankLimit, {
+        persistResults: persistGithubResults,
+      }),
+      parsed,
+    )
+    : [];
+
+  const repos = await executeMode(queryText, parsed, mode, {
+    ftsRepos,
+    vectorRepos,
+    githubRepos,
+    limit,
+    rerankLimit,
+  });
+
+  logger.info(
+    {
+      mode,
+      fts: ftsRepos.length,
+      vector: vectorRepos.length,
+      github: githubRepos.length,
+      returned: repos.length,
+    },
+    "Search mode complete",
+  );
+
+  return {
+    parsed,
+    repos,
+    ftsRepos,
+    vectorRepos,
+    githubRepos,
+    mode,
+  };
+}
+
+function getSearchSelectColumns() {
+  const { fts, ...selectColumns } = getTableColumns(repos);
+  void fts;
+  return selectColumns;
+}
+
+type SearchSources = {
+  ftsRepos: RepoDoc[];
+  vectorRepos: RepoDoc[];
+  githubRepos: RepoDoc[];
+  limit: number;
+  rerankLimit: number;
+};
+
+async function executeMode(
+  queryText: string,
+  parsed: ParsedQuery,
+  mode: SearchMode,
+  sources: SearchSources,
+): Promise<RepoDoc[]> {
+  switch (mode) {
+    case "fts-only":
+      return sources.ftsRepos.slice(0, sources.rerankLimit);
+    case "vector-only":
+      return sources.vectorRepos.slice(0, sources.rerankLimit);
+    case "hybrid": {
+      const weights = computeAdaptiveWeights(parsed, sources.ftsRepos.length, avgScore(sources.ftsRepos));
+      return weightedRRF(
+        [
+          { repos: sources.ftsRepos, weight: weights.fts },
+          { repos: sources.vectorRepos, weight: weights.vector },
+        ],
+        { k: 20 },
+      ).slice(0, sources.rerankLimit);
+    }
+    case "hybrid+rerank": {
+      const hybridRepos = await executeMode(queryText, parsed, "hybrid", sources);
+      return rerankResults(queryText, hybridRepos, sources.rerankLimit);
+    }
+    case "hybrid+github-fallback": {
+      const weights = computeAdaptiveWeights(parsed, sources.ftsRepos.length, avgScore(sources.ftsRepos));
+      const mergedRepos = weightedRRF(
+        [
+          { repos: sources.ftsRepos, weight: weights.fts },
+          { repos: sources.vectorRepos, weight: weights.vector },
+          { repos: sources.githubRepos, weight: weights.github },
+        ],
+        { k: 20 },
+      ).slice(0, Math.max(sources.limit * 2, 30));
+      return rerankResults(queryText, mergedRepos, sources.rerankLimit);
+    }
+  }
+}
+
+async function rerankResults(
+  queryText: string,
+  repos: RepoDoc[],
+  rerankLimit: number,
+) {
+  try {
+    return await rerank(queryText, repos, rerankLimit);
+  } catch (e) {
+    logger.warn({ err: e }, "Re-ranking failed, using source order");
+    return repos.slice(0, rerankLimit);
+  }
+}
+
+function shouldUseGithubFallback(
+  parsed: ParsedQuery,
+  ftsRepos: RepoDoc[],
+  options: SearchExecutionOptions,
+) {
+  if (options.disableGithubFallback) {
+    return false;
+  }
+
   const intentNeedsGithub =
     parsed.intentType === "explore" || parsed.intentType === "build";
 
-  const [ftsResult, vectorResult] = await Promise.allSettled([
-    lexicalSearch(parsed, 12),
-    searchVectors(enrichedVectorQuery, parsed, 12),
-  ]);
-
-  const ftsRepos: RepoDoc[] =
-    ftsResult.status === "fulfilled" ? ftsResult.value : [];
-  const vectorRepos: RepoDoc[] =
-    vectorResult.status === "fulfilled" ? vectorResult.value : [];
-
-  if (ftsResult.status === "rejected")
-    logger.warn({ err: ftsResult.reason }, "FTS search failed");
-  if (vectorResult.status === "rejected")
-    logger.warn({ err: vectorResult.reason }, "Vector search failed");
-
-  const needsGithub =
-    intentNeedsGithub ||
-    ftsRepos.length < 4 ||
-    avgScore(ftsRepos) < 0.5;
-
-  let githubRepos: RepoDoc[] = [];
-  if (needsGithub && parsed.githubQueries.length > 0) {
-    githubRepos = await searchFromGithub(parsed.githubQueries, 15);
-    githubRepos = rescoreGithubRepos(githubRepos, parsed);
-  }
-
-  const weights = computeAdaptiveWeights(
-    parsed,
-    ftsRepos.length,
-    avgScore(ftsRepos),
-  );
-
-  const allRepos = weightedRRF(
-    [
-      { repos: ftsRepos, weight: weights.fts },
-      { repos: vectorRepos, weight: weights.vector },
-      { repos: githubRepos, weight: weights.github },
-    ],
-    { k: 20 },
-  ).slice(0, 30);
-
-  let reranked: RepoDoc[];
-  try {
-    reranked = await rerank(queryText, allRepos, 15);
-  } catch (e) {
-    logger.warn({ err: e }, "Re-ranking failed, using RRF order");
-    reranked = allRepos.slice(0, 15);
-  }
-
-  logger.info(
-    { fts: ftsRepos.length, vector: vectorRepos.length, github: githubRepos.length, merged: allRepos.length, reranked: reranked.length },
-    "Search pipeline complete",
-  );
-
-  const combos = reranked.length >= 2
-    ? await generateCombos(reranked, queryText, comboLimit)
-    : [];
-
-  return { parsed, repos: reranked, combos };
+  return intentNeedsGithub || ftsRepos.length < 4 || avgScore(ftsRepos) < 0.5;
 }
 
 /* ------------------------------------------------------------------ */
@@ -96,7 +211,7 @@ async function lexicalSearch(
 
   const rawQuery = terms.join(" ");
 
-  const { fts: _fts, ...selectColumns } = getTableColumns(repos);
+  const selectColumns = getSearchSelectColumns();
 
   const rows = await db
     .select({
@@ -120,7 +235,7 @@ async function ilikeFallback(
   terms: string[],
   limit: number,
 ): Promise<RepoDoc[]> {
-  const { fts: _fts, ...selectColumns } = getTableColumns(repos);
+  const selectColumns = getSearchSelectColumns();
 
   const conditions = terms.map((t) => {
     const escaped = t.replace(/[%_]/g, "\\$&");
@@ -171,6 +286,9 @@ function toRepoDoc(
 async function searchFromGithub(
   queries: string[],
   maxTotal: number,
+  options: {
+    persistResults?: boolean;
+  } = {},
 ): Promise<RepoDoc[]> {
   const docs = await searchMulti(queries, maxTotal);
   if (!docs.length) return [];
@@ -185,11 +303,13 @@ async function searchFromGithub(
     }),
   );
 
-  await persistRepos(enriched);
-  try {
-    await upsertVectors(enriched);
-  } catch (e) {
-    logger.warn({ err: e }, "Vector upsert failed after GitHub search");
+  if (options.persistResults ?? true) {
+    await persistRepos(enriched);
+    try {
+      await upsertVectors(enriched);
+    } catch (e) {
+      logger.warn({ err: e }, "Vector upsert failed after GitHub search");
+    }
   }
 
   return enriched.map((d) => ({ ...d, source: "github" }));
@@ -309,7 +429,7 @@ function rescoreGithubRepos(
 
 // ── Adaptive RRF Weights ────────────────────────────────────────────────────
 
-function computeAdaptiveWeights(
+export function computeAdaptiveWeights(
   parsed: ParsedQuery,
   ftsCount: number,
   ftsAvgScore: number,

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { EVENT_TYPES } from "@/core/types";
 
 export const comboDraftSchema = z.object({
   title: z.string(),
@@ -49,6 +50,21 @@ export const queryParseSchema = z.object({
   github_queries: z.array(z.string()),
 });
 
+export const eventInputSchema = z.object({
+  type: z.enum(EVENT_TYPES),
+  queryText: z.string().trim().min(1).nullable().optional(),
+  repoSlug: z.string().trim().min(1).nullable().optional(),
+  comboId: z.number().int().positive().nullable().optional(),
+  page: z.string().trim().min(1).nullable().optional(),
+  source: z.string().trim().min(1).nullable().optional(),
+  payload: z.record(z.string(), z.unknown()).default({}),
+});
+
+export const eventBatchSchema = z.object({
+  events: z.array(eventInputSchema).min(1).max(20),
+});
+
 export type ComboDraft = z.infer<typeof comboDraftSchema>;
 export type CapabilityExtraction = z.infer<typeof capabilityExtractionSchema>;
 export type QueryParse = z.infer<typeof queryParseSchema>;
+export type EventInputSchema = z.infer<typeof eventInputSchema>;

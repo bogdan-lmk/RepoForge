@@ -13,12 +13,44 @@ export interface RepoDoc {
   source?: string;
 }
 
+export const EVENT_TYPES = [
+  "search_started",
+  "results_rendered",
+  "search_failed",
+  "repo_opened",
+  "combo_expanded",
+  "combo_saved",
+  "query_retried",
+] as const;
+
+export type EventType = (typeof EVENT_TYPES)[number];
+
+export interface EventInput {
+  type: EventType;
+  queryText?: string | null;
+  repoSlug?: string | null;
+  comboId?: number | null;
+  page?: string | null;
+  source?: string | null;
+  payload?: Record<string, unknown>;
+}
+
 export type QueryType =
   | "specific_tool"
   | "capability_search"
   | "comparison"
   | "alternative"
   | "tutorial";
+
+export const SEARCH_MODES = [
+  "fts-only",
+  "vector-only",
+  "hybrid",
+  "hybrid+rerank",
+  "hybrid+github-fallback",
+] as const;
+
+export type SearchMode = (typeof SEARCH_MODES)[number];
 
 export interface ParsedQuery {
   text: string;

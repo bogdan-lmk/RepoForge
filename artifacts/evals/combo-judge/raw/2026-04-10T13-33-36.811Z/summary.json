@@ -1,0 +1,134 @@
+{
+  "runId": "2026-04-10T13-33-36.811Z",
+  "generatedAt": "2026-04-10T13:41:30.007Z",
+  "baseline": "baseline",
+  "candidate": "variant-a",
+  "summary": {
+    "queryCount": 5,
+    "baselineAverage": {
+      "repo_fit": 4.4,
+      "novelty": 3.6,
+      "clarity": 4.8,
+      "theoretical_plausibility": 4.2,
+      "signal_value": 4.4
+    },
+    "candidateAverage": {
+      "repo_fit": 4.4,
+      "novelty": 4,
+      "clarity": 4,
+      "theoretical_plausibility": 4.2,
+      "signal_value": 4.6
+    },
+    "pairwiseWinRate": 0.6,
+    "baselineClarityFloor": 4,
+    "candidateClarityFloor": 4,
+    "baselineRepoFitFloor": 4,
+    "candidateRepoFitFloor": 4,
+    "decision": "kill",
+    "notes": [
+      "Candidate drops repo fit or clarity below the allowed threshold."
+    ]
+  },
+  "items": [
+    {
+      "queryId": "c_specific_langchain",
+      "query": "langchain framework for ai agents",
+      "verdict": "candidate_wins",
+      "baseline": {
+        "repo_fit": 4,
+        "novelty": 3,
+        "clarity": 5,
+        "theoretical_plausibility": 4,
+        "signal_value": 4
+      },
+      "candidate": {
+        "repo_fit": 5,
+        "novelty": 4,
+        "clarity": 4,
+        "theoretical_plausibility": 4,
+        "signal_value": 5
+      },
+      "rationale": "Both outputs are strong and grounded in the provided repos, but the candidate better matches the query’s emphasis on LangChain-framework agent combinations around orchestration, memory, and execution surfaces. Baseline is clearer and very polished, especially the local LangGraph + LangChain + Next.js + Ollama concept, but one of its three ideas (Polymarket trading) is less aligned with the stated focus than with a domain-specific vertical. Candidate more consistently centers agent runtime design: LangGraph + Deer Flow + Ollama is a strong orchestration/memory/execution combo, and the PocketFlow -> LangChain -> LangGraph migration-path concept is notably more novel and high-signal for this repo set than baseline’s more standard stack proposals. Candidate loses some clarity because repo roles like anchor/enabling/amplification are less informative than baseline’s concrete role descriptions, and a few ideas feel slightly more packaging-oriented than directly build-ready. Still, candidate provides better differentiated, repo-aware combinations and stronger signal on how these repos relate across agent lifecycle, long-horizon execution, and deployable surfaces."
+    },
+    {
+      "queryId": "c_specific_supabase",
+      "query": "supabase open source backend platform",
+      "verdict": "candidate_wins",
+      "baseline": {
+        "repo_fit": 4,
+        "novelty": 3,
+        "clarity": 4,
+        "theoretical_plausibility": 4,
+        "signal_value": 4
+      },
+      "candidate": {
+        "repo_fit": 5,
+        "novelty": 4,
+        "clarity": 4,
+        "theoretical_plausibility": 5,
+        "signal_value": 5
+      },
+      "rationale": "The candidate is more tightly aligned with the query and repo context: all three ideas stay grounded in Supabase’s core primitives (auth, storage, Postgres, realtime, JS/Python clients) and frame them as backend product patterns rather than drifting into adjacent evaluation/content concepts. Its third idea, using supabase-js + supabase-py as a polyglot internal platform, is especially repo-native and makes strong use of the official client capabilities. The baseline has one solid Supabase+n8n concept and one decent Nuxt starter-factory concept, but its third idea is a BaaS comparison lab, which is less on-brief for “backend product ideas” and less grounded in auth/storage/DB primitives as a product wedge. Clarity is close overall, though the candidate’s role labels like anchor/enabling/amplification are slightly less informative than the baseline’s fuller repo-role descriptions. On plausibility and signal value, candidate wins because it proposes more implementable, repo-backed combinations with clearer productization paths and fewer generic ecosystem add-ons."
+    },
+    {
+      "queryId": "c_capability_rag",
+      "query": "python framework for rag chatbot",
+      "verdict": "baseline_wins",
+      "baseline": {
+        "repo_fit": 5,
+        "novelty": 4,
+        "clarity": 5,
+        "theoretical_plausibility": 4,
+        "signal_value": 5
+      },
+      "candidate": {
+        "repo_fit": 4,
+        "novelty": 3,
+        "clarity": 4,
+        "theoretical_plausibility": 4,
+        "signal_value": 4
+      },
+      "rationale": "Baseline is stronger overall because it stays more tightly grounded in the repo context and surfaces more credible RAG-specific combinations. Its top combo is especially strong: OneRAG + Verba + RagaAI-Catalyst + DeepEval is directly aligned to the query ('python framework for rag chatbot') and combines backend, RAG chatbot layer, observability, and evaluation without drifting into generic UI-first chatbot packaging. The second baseline combo also uses codefuse-chatbot in a repo-faithful way and keeps eval/observability attached, which raises signal. The third baseline combo is weaker, but still plausibly anchored on OneRAG’s OpenAI-compatible API.\n\nCandidate has one very solid entry (OneRAG + Catalyst + deepeval), but it is more of an observable RAG backend/API stack than a full chatbot framework answer. Its second combo is plausible but weaker than baseline’s equivalent because adding chatbot-ui to codefuse + OneRAG feels somewhat generic and less necessary than adding eval/observability. The third candidate combo is the weakest: Verba + deepeval + vercel/chatbot is less repo-grounded for a Python RAG chatbot request, since vercel/chatbot is a generic Next.js frontend and may duplicate what Verba already provides. Candidate also uses abstract repo roles like 'anchor/enabling/amplification,' which are less informative than baseline’s concrete repo-role descriptions. Overall, baseline delivers better repo fit, clearer practical stack composition, and higher signal for someone actually seeking credible Python RAG chatbot frameworks."
+    },
+    {
+      "queryId": "c_capability_realtime",
+      "query": "real time analytics dashboard stack",
+      "verdict": "candidate_wins",
+      "baseline": {
+        "repo_fit": 4,
+        "novelty": 4,
+        "clarity": 5,
+        "theoretical_plausibility": 4,
+        "signal_value": 4
+      },
+      "candidate": {
+        "repo_fit": 4,
+        "novelty": 5,
+        "clarity": 4,
+        "theoretical_plausibility": 4,
+        "signal_value": 5
+      },
+      "rationale": "Both outputs are strong and mostly repo-grounded. The baseline is clearer and more consistently uses all three layers the query asks for—in particular, its first idea cleanly combines ingestion (Plausible), storage (InfluxDB), UI/BI (Metabase), and an app shell (SaasyLand). It also stays practical and explains tradeoffs well. However, it is somewhat repetitive and conservative: two of its ideas are close variants on 'add InfluxDB + Metabase + SaasyLand around an existing analytics/observability product.' The candidate is slightly less crisp in places—e.g. role labels like 'anchor/enabling/amplification' are less informative than the baseline's explicit role descriptions, and references like 'Plausible/Vercel-style collection' are a bit looser than the actual listed repos. Still, the candidate provides stronger signal overall: its first stack is tightly aligned to the query, its second idea around DataHub + Metabase + InfluxDB is a more distinctive and credible governance-oriented dashboard stack, and its third idea offers a genuinely novel cross-domain AI-agent-plus-traffic analytics cockpit. So the candidate edges out the baseline on novelty and usefulness, while remaining plausible enough to win overall."
+    },
+    {
+      "queryId": "c_capability_workflows",
+      "query": "interesting workflow automation repos",
+      "verdict": "baseline_wins",
+      "baseline": {
+        "repo_fit": 5,
+        "novelty": 4,
+        "clarity": 5,
+        "theoretical_plausibility": 5,
+        "signal_value": 5
+      },
+      "candidate": {
+        "repo_fit": 4,
+        "novelty": 4,
+        "clarity": 4,
+        "theoretical_plausibility": 4,
+        "signal_value": 4
+      },
+      "rationale": "Both outputs are strong and clearly grounded in the provided repo set, but the baseline is more consistently aligned with the query’s goal of composable workflow automation ideas with clear user value. On repo fit, the baseline uses the repos in tighter, more product-like combinations: n8n + n8n-workflow-builder + goose is especially strong, starter-workflows + Airflow is straightforward and credible, and servicebot + n8n is domain-specific without unnecessary extra pieces. The candidate’s first idea is similarly strong, but the second leans on awesome-workflow-engines as a knowledge source rather than an operational building block, which makes it feel less like a workflow automation repo combo and more like an advisory/meta product. The third candidate idea also weakens fit by adding starter-workflows in an ancillary role rather than core user-facing value. On novelty, both are comparable: candidate’s migration-advisor concept is somewhat more original, but baseline’s ideas are still differentiated and practical. On clarity, baseline is better because repo roles and workflows are more concrete and directly explain the end-user automation; candidate sometimes uses abstract labels like anchor/enabling/amplification, which are less informative than functional roles. On theoretical plausibility, baseline’s combinations require less inferred glue and map more directly onto known repo capabilities, whereas candidate’s migration advisor depends on extracting structured guidance from a curated list and its third combo includes a less essential GitHub Actions component. On signal value, baseline gives stronger evidence of good retrieval and judgment because it prioritizes credible, implementable combinations over broader but less grounded framing."
+    }
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "query": {
+    "id": "c_capability_rag",
+    "query": "python framework for rag chatbot",
+    "notes": "Should surface credible RAG combinations, not generic chatbot fluff."
+  },
+  "repos": [
+    {
+      "slug": "notadev-iamaura/OneRAG",
+      "name": "OneRAG",
+      "url": "https://github.com/notadev-iamaura/OneRAG",
+      "description": "Production-ready RAG Framework (Python/FastAPI). 1-line config swaps: 6 Vector DBs (Weaviate, Pinecone, Qdrant, ChromaDB, pgvector, MongoDB), 5 LLMs (Gemini, OpenAI, Claude, Ollama, OpenRouter). OpenAI-compatible API. 2100+ tests.",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/logo.svg\" alt=\"OneRAG Logo\" width=\"400\"/>\n</p>\n\n<p align=\"center\">\n  <strong>5분 안에 시작하고, 설정 1줄로 컴포넌트를 교체하는 Production-ready RAG 백엔드</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/youngouk/OneRAG/actions/workflows/ci.yml\"><img src=\"https://github.com/youngouk/OneRAG/actions/workflows/ci.yml/badge.svg\" alt=\"CI\"></a>\n  <a href=\"https://opensource.org/licenses/MIT\"><img src=\"https://img.shields.io/badge/License-MIT-blue.svg\" alt=\"License: MIT\"></a>\n  <a href=\"https://www.python.org/downloads/\"><img src=\"https://img.shields.io/badge/Python-3.11+-blue.svg\" alt=\"Python 3.11+\"></a>\n  <a href=\"https://demo-frontend-production-3c93.up.railway.app\"><img src=\"https://img.shields.io/badge/Live_Demo-Railway-blueviolet.svg\" alt=\"Live Demo\"></a>\n  <a href=\"https://github.com/youngouk/OneRAG/stargazers\"><img src=\"https://img.shields.io/github/stars/youngouk/OneRAG?style=social\" alt=\"GitHub Stars\"></a>\n</p>\n\n<p align=\"center\">\n  <strong>한국어</strong> | <a href=\"README_EN.md\">English</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://demo-frontend-production-3c93.up.railway.app\">라이브 데모 체험하기</a> · 접근코드: <code>1127</code>\n</p>\n\n---\n\n## TL;DR\n\n```bash\ngit clone https://github.com/youngouk/OneRAG.git && cd OneRAG && uv sync\n```\n\n```bash\n# 🐳 Docker 있으면 → Full API 서버 (Weaviate + FastAPI + Swagger UI)\ncp quickstart/.env.quickstart .env   # GOOGLE_API_KEY만 설정\nmake start                            # → http://localhost:8000/docs\n\n# 💻 Docker 없으면 → 로컬 CLI 챗봇 (설치만으로 바로 실행)\nmake easy-start                       # → 터미널에서 바로 대화\n\n# 🔒 API 키 없이 → Ollama 로컬 LLM으로 완전 오프라인 동작\nollama pull llama3.2 && make easy-start\n```\n\n---\n\n## 데모\n\n<p align=\"center\">\n  <img src=\"assets/demo-cli.svg\" alt=\"OneRAG CLI Demo\" width=\"100%\"/>\n</p>\n\n---\n\n## 왜 OneRAG인가?\n\n**하나의 코드베이스로 모든 RAG 컴포넌트를 조립합니다.**\n\n- **설정만 바꾸면 끝** — Vector DB(6종), LLM(5종), Reranker(6종), Cache(3종) 모두 `.env` 또는 YAML로 교체\n- **API 키 없이 시작** — Ollama 로컬 LLM으로 인터넷 없이도 완전 동작\n- **OpenAI SDK 호환** — 기존 OpenAI 코드 그대로 OneRAG에 연결 (`/v1/chat/completions`)\n- **2,200+ 테스트** — 프로덕션 검증된 안정성, CI/CD 완비\n- **PoC에서 프로덕션까지** — 동일한 코드베이스로 확장, 재구축 불필요\n\n> **[라이브 데모](https://demo-frontend-production-3c93.up.railway.app)에서 바로 체험해보세요** (접근코드: `1127`)\n\n### 아키텍처 한눈에 보기\n\n<p align=\"center\">\n  <img src=\"assets/architecture.svg\" alt=\"OneRAG Architecture\" width=\"100%\"/>\n</p>\n\n---\n\n## 시작하기\n\n|  | Full API 서버 (`make start`) | CLI 챗봇 (`make easy-start`) |\n|---|---|---|\n| **Docker** | 필요 | 불필요 |\n| **Vector DB** | Weaviate (하이브리드 검색) | ChromaDB (로컬 파일) |\n| **인터페이스** | REST API + Swagger UI | 터미널 CLI |\n| **LLM** | 5종 (Gemini, OpenAI, Claude, OpenRouter, Ollama) | Gemini / OpenRouter / Ollama |\n| **용도** | 프로덕션, API 통합, 팀 개발 | 학습, 체험, 빠른 PoC |\n\n### 방법 A: Full API 서버 (Docker)\n\n```bash\ngit clone https://github.com/youngouk/OneRAG.git\ncd OneRAG && uv sync\n\ncp quickstart/.env.quickstart .env\n# .env 파일에서 GOOGLE_API_KEY 설정\n# (무료: https://aistudio.google.com/apikey)\n\nmake start\n```\n\n**끝!** [http://localhost:8000/docs](http://localhost:8000/docs)에서 바로 테스트할 수 있습니다.\n\n```bash\nmake start-down  # 종료\n```\n\n### 방법 B: 로컬 CLI 챗봇 (Docker 불필요)\n\nDocker 설치 없이 터미널에서 바로 RAG 검색 + AI 답변을 체험할 수 있습니다.\n\n```bash\ngit clone https://github.com/youngouk/OneRAG.git\ncd OneRAG && uv sync\n\nmake easy-start\n```\n\n샘플 데이터 25개가 자동 적재되고, 하이브리드 검색(Dense + BM25)이 바로 작동합니다.\nAI 답변 생성을 사용하려면 API 키를 하나 설정하세요:\n\n```bash\n# 셋 중 하나만 설정하면 됩니다\nexport GOOGLE_API_KEY=\"발급받은키\"       # 무료: https://aistudio.google.com/apikey\nexport OPENROUTER_API_KEY=\"발급받은키\"   # https://openrouter.ai/keys\nollama pull llama3.2                     # API 키 없이 로컬 LLM 사용\n```\n\n> **OneRAG가 처음이라면?** `make easy-start`로 시작해서 챗봇에게 직접 물어보세요.\n> \"하이브리드 검색이 뭐야?\", \"RAG 파이프라인이 어떻게 돼?\" — 샘플 데이터에 답이 있습니다.\n\n---\n\n## OpenAI 호환 API\n\n기존 OpenAI SDK 코드를 수정 없이 OneRAG에 연결할 수 있습니다.\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(base_url=\"http://localhost:8000/v1\", api_key=\"not-needed\")\n\n# RAG 검색 + AI 답변 생성\nresponse = client.chat.completions.create(\n    model=\"gemini\",  # 또는 ollama/llama3.2, openrouter/google/gemini-2.0-flash\n    messages=[{\"role\": \"user\", \"content\": \"RAG란 무엇인가요?\"}],\n)\nprint(response.choices[0].message.content)\n```\n\n**지원 엔드포인트:**\n- `POST /v1/chat/completions` — 채팅 완료 (스트리밍 지원)\n- `GET /v1/models` — 사용 가능한 모델 목록\n\n**모델 선택:**\n| 형식 | 예시 | 설명 |\n|------|------|------|\n| `provider` | `gemini`, `ollama`, `claude` | 기본 모델 사용 |\n| `provider/model` | `ollama/qwen2.5:3b` | 특정 모델 지정 |\n| `openrouter/vendor/model` | `openrouter/google/gemini-2.0-flash` | OpenRouter 경유 |\n\nLangChain, Cursor, Open WebUI 등 OpenAI SDK를 사용하는 모든 도구와 바로 연결됩니다.\n\n---\n\n## 컴포넌트 교체하기\n\n`.env` 또는 YAML 설정만 변경하면 모든 컴포넌트를 교체할 수 있습니다.\n\n```bash\n# Vector DB 교체\nVECTOR_DB_PROVIDER=weaviate  # 또는 chroma, pinecone, qdrant, pgvector, mongodb\n\n# LLM 교체\nLLM_PROVIDER=google          # 또는 openai, anthropic, openrouter, ollama\n```\n\n```yaml\n# 리랭커 추가 (app/config/features/reranking.yaml)\nreranking:\n  approach: \"cross-encoder\"  # 또는 late-interaction, llm, local\n  provider: \"jina\"           # 또는 cohere, google, openai, openrouter, sentence-transformers\n\n# 기능 On/Off\ncache:     { enabled: true, type: \"redis\" }    # 또는 memory, semantic\ngraph_rag: { enabled: true }                    # 지식 그래프 관계 추론\npii:       { enabled: true }                    # 개인정보 마스킹\n```\n\n---\n\n## 조립 가능한 블록들\n\n| 카테고리 | 선택지 | 변경 방법 |\n|---------|-------|----------|\n| **Vector DB** | Weaviate, Chroma, Pinecone, Qdrant, pgvector, MongoDB | 환경변수 1줄 |\n| **LLM** | Google Gemini, OpenAI, Anthropic Claude, OpenRouter, Ollama | 환경변수 1줄 |\n| **리랭커** | Jina, Cohere, Google, OpenAI, OpenRouter, Local | YAML 2줄 |\n| **캐시** | Memory, Redis, Semantic | YAML 1줄 |\n| **쿼리 라우팅** | LLM 기반, Rule 기반 | YAML 1줄 |\n| **한국어 검색** | 동의어, 불용어, 사용자사전 | YAML 설정 |\n| **보안** | PII 탐지, 마스킹, 감사 로깅 | YAML 설정 |\n| **GraphRAG** | 지식 그래프 기반 관계 추론 | YAML 1줄 |\n| **Agent** | 도구 실행, MCP 프로토콜 | YAML 설정 |\n\n---\n\n## RAG 파이프라인\n\n```\nQuery → Router → Expansion → Retriever → Cache → Reranker → Generator → PII Masking → Response\n```\n\n| 단계 | 기능 | 교체 가능 |\n|-----|------|----------|\n| 쿼리 라우팅 | 쿼리 유형 분류 | LLM/Rule 선택 |\n| 쿼리 확장 | 동의어, 불용어 처리 | 사전 커스텀 |\n| 검색 | 벡터/하이브리드 검색 | 6종 DB |\n| 캐싱 | 응답 캐시 | 3종 캐시 |\n| 재정렬 | 검색 결과 정렬 | 6종 리랭커 |\n| 답변 생성 | LLM 응답 생성 | 5종 LLM |\n| 후처리 | 개인정보 마스킹 | 정책 커스텀 |\n\n---\n\n## 단계별 구성 가이드\n\n| 단계 | 구성 | 용도 |\n|-----|------|-----|\n| **Basic** | 벡터 검색 + LLM | 간단한 문서 Q&A |\n| **Standard** | + 하이브리드 검색 + Reranker | 검색 품질이 중요한 서비스 **(권장)** |\n| **Advanced** | + GraphRAG + Agent | 복잡한 관계 추론, 도구 실행 |\n\n> Basic으로 시작해서, 필요할 때 블록을 추가하면 됩니다.\n\n---\n\n## 프론트엔드 UI\n\n별도의 React 기반 웹 UI가 포함되어 있습니다. **[라이브 데모](https://demo-frontend-production-3c93.up.railway.app)**에서 바로 체험하거나, 로컬에서 실행할 수 있습니다.\n\n<p align=\"center\">\n  <img src=\"assets/screenshot-chat-dark.png\" alt=\"OneRAG Chat - Dark Mode\" width=\"49%\"/>\n  <img src=\"assets/screenshot-docs.png\" alt=\"OneRAG Document Management\" width=\"49%\"/>\n</p>\n<p align=\"center\">\n  <sub>챗봇 인터페이스 (다크 모드) · 문서 관리</sub>\n</p>\n\n**주요 기능:**\n- WebSocket 실시간 스트리밍 채팅 (RAG 검색 결과 + AI 답변)\n- 드래그앤드롭 문서 업로드 (PDF, Word, Excel, Markdown 등)\n- 문서 관리 — 검색, 정렬, 일괄 삭제, 상세 정보 조회\n- 다크 모드, 모바일 반응형 레이아웃\n- Feature Flag 기반 모듈 활성화/비활성화\n- 관리자 대시보드 — 세션, 성능, 프롬프트 통합 관제\n\n```bash\n# 백엔드 실행 중인 상태에서\nmake frontend-dev    # → http://localhost:5173\n```\n\n> 프론트엔드 + 백엔드 + Weaviate 동시 실행: `make start-full`\n\n---\n\n## 다국어 지원\n\neasy-start CLI 챗봇은 4개 언어를 지원합니다.\n\n```bash\nmake easy-start LANG=en    # English\nmake easy-start LANG=ja    # 日本語\nmake easy-start LANG=zh    # 中文\nmake easy-start            # 한국어 (기본)\n```\n\n각 언어별로 UI 텍스트, 시스템 프롬프트, 샘플 데이터가 모두 현지화되어 있습니다.\n\n---\n\n## 개발\n\n```bash\nmake dev-reload   # 개발 서버 (자동 리로드)\nmake test         # 테스트 실행 (2,200+)\nmake lint         # 린트 검사\nmake type-check   # 타입 체크\n```\n\n---\n\n## 문서\n\n- [상세 설정 가이드](docs/SETUP.md)\n- [아키텍처 설명](docs/ARCHITECTURE.md)\n- [Streaming API 가이드](docs/streaming-api-guide.md)\n- [WebSocket API 가이드](docs/websocket-api-guide.md)\n\n---\n\n## 라이선스\n\nMIT License\n\n---\n\n<p align=\"center\">\n  <sub>이 프로젝트는 RAG Chat Service PM이 여러 프로젝트를 진행하며 구현해보고 싶었던 기능들을 모아 만들었습니다.<br>\n  RAG를 처음 접하는 분들이 쉽게 PoC를 진행하고, 프로덕션까지 확장할 수 있도록 설계했습니다.</sub>\n</p>\n\n<p align=\"center\">\n  <a href=\"h",
+      "language": "Python",
+      "topics": [
+        "chatbot",
+        "chromadb",
+        "fastapi",
+        "graphrag",
+        "hybrid-search",
+        "korean-nlp",
+        "langchain-alternative",
+        "llm",
+        "ollama",
+        "openai-compatible",
+        "pinecone",
+        "production-ready",
+        "python",
+        "qdrant",
+        "rag",
+        "rag-framework",
+        "reranker",
+        "retrieval-augmented-generation",
+        "vector-database",
+        "weaviate"
+      ],
+      "stars": 118,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "weaviate/Verba",
+      "name": "Verba",
+      "url": "https://github.com/weaviate/Verba",
+      "description": "Retrieval Augmented Generation (RAG) chatbot powered by Weaviate",
+      "readme": "# Verba\n\n## The Golden RAGtriever - Community Edition ✨\n\n[![Weaviate](https://img.shields.io/static/v1?label=powered%20by&message=Weaviate%20%E2%9D%A4&color=green&style=flat-square)](https://weaviate.io/)\n[![PyPi downloads](https://static.pepy.tech/personalized-badge/goldenverba?period=total&units=international_system&left_color=grey&right_color=orange&left_text=pip%20downloads)](https://pypi.org/project/goldenverba/) [![Docker support](https://img.shields.io/badge/Docker_support-%E2%9C%93-4c1?style=flat-square&logo=docker&logoColor=white)](https://docs.docker.com/get-started/) [![Demo](https://img.shields.io/badge/Check%20out%20the%20demo!-yellow?&style=flat-square&logo=react&logoColor=white)](https://verba.weaviate.io/)\n\nWelcome to Verba: The Golden RAGtriever, an community-driven open-source application designed to offer an end-to-end, streamlined, and user-friendly interface for Retrieval-Augmented Generation (RAG) out of the box. In just a few easy steps, explore your datasets and extract insights with ease, either locally with Ollama and Huggingface or through LLM providers such as Anthrophic, Cohere, and OpenAI. This project is built with and for the community, please be aware that it might not be maintained with the same urgency as other Weaviate production applications. Feel free to contribute to the project and help us make Verba even better! <3\n\n```\npip install goldenverba\n```\n\n![Demo of Verba](https://github.com/weaviate/Verba/blob/2.0.0/img/verba.gif)\n\n- [Verba](#verba)\n  - [🎯 What Is Verba?](#what-is-verba)\n  - [✨ Features](#feature-lists)\n- [✨ Getting Started with Verba](#getting-started-with-verba)\n- [🔑 API Keys](#api-keys)\n  - [Weaviate](#weaviate)\n  - [Ollama](#ollama)\n  - [Unstructured](#unstructured)\n  - [AssemblyAI](#assemblyai)\n  - [OpenAI](#openai)\n  - [HuggingFace](#huggingface)\n  - [Groq](#groq)\n  - [Novita AI](#novitaai)\n- [Quickstart: Deploy with pip](#how-to-deploy-with-pip)\n- [Quickstart: Build from Source](#how-to-build-from-source)\n- [Quickstart: Deploy with Docker](#how-to-install-verba-with-docker)\n- [💾 Verba Walkthrough](#️verba-walkthrough)\n- [💖 Open Source Contribution](#open-source-contribution)\n- [🚩 Known Issues](#known-issues)\n- [❔FAQ](#faq)\n\n## What Is Verba?\n\nVerba is a fully-customizable personal assistant utilizing [Retrieval Augmented Generation (RAG)](https://weaviate.io/rag#:~:text=RAG%20with%20Weaviate,accuracy%20of%20AI%2Dgenerated%20content.) for querying and interacting with your data, **either locally or deployed via cloud**. Resolve questions around your documents, cross-reference multiple data points or gain insights from existing knowledge bases. Verba combines state-of-the-art RAG techniques with Weaviate's context-aware database. Choose between different RAG frameworks, data types, chunking & retrieving techniques, and LLM providers based on your individual use-case.\n\n## Open Source Spirit\n\n**Weaviate** is proud to offer this open-source project for the community. While we strive to address issues as fast as we can, please understand that it may not be maintained with the same rigor as production software. We welcome and encourage community contributions to help keep it running smoothly. Your support in fixing open issues quickly is greatly appreciated.\n\n### Watch our newest Verba video here:\n\n[![VIDEO LINK](https://github.com/weaviate/Verba/blob/main/img/thumbnail.png)](https://www.youtube.com/watch?v=2VCy-YjRRhA&t=40s&ab_channel=Weaviate%E2%80%A2VectorDatabase)\n\n## Feature Lists\n\n| 🤖 Model Support                  | Implemented | Description                                             |\n| --------------------------------- | ----------- | ------------------------------------------------------- |\n| Ollama (e.g. Llama3)              | ✅          | Local Embedding and Generation Models powered by Ollama |\n| HuggingFace (e.g. MiniLMEmbedder) | ✅          | Local Embedding Models powered by HuggingFace           |\n| Cohere (e.g. Command R+)          | ✅          | Embedding and Generation Models by Cohere               |\n| Anthrophic (e.g. Claude Sonnet)   | ✅          | Embedding and Generation Models by Anthrophic           |\n| OpenAI (e.g. GPT4)                | ✅          | Embedding and Generation Models by OpenAI               |\n| Groq (e.g. Llama3)                | ✅          | Generation Models by Groq (LPU inference)               |\n| Novita AI (e.g. Llama3.3)         | ✅          | Generation Models by Novita AI                          |\n| Upstage (e.g. Solar)              | ✅          | Embedding and Generation Models by Upstage              |\n\n| 🤖 Embedding Support | Implemented | Description                              |\n| -------------------- | ----------- | ---------------------------------------- |\n| Weaviate             | ✅          | Embedding Models powered by Weaviate     |\n| Ollama               | ✅          | Local Embedding Models powered by Ollama |\n| SentenceTransformers | ✅          | Embedding Models powered by HuggingFace  |\n| Cohere               | ✅          | Embedding Models by Cohere               |\n| VoyageAI             | ✅          | Embedding Models by VoyageAI             |\n| OpenAI               | ✅          | Embedding Models by OpenAI               |\n| Upstage              | ✅          | Embedding Models by Upstage              |\n\n| 📁 Data Support                                          | Implemented | Description                                    |\n| -------------------------------------------------------- | ----------- | ---------------------------------------------- |\n| [UnstructuredIO](https://docs.unstructured.io/welcome)   | ✅          | Import Data through Unstructured               |\n| [Firecrawl](https://www.firecrawl.dev/)                  | ✅          | Scrape and Crawl URL through Firecrawl         |\n| [UpstageDocumentParse](https://upstage.ai/)              | ✅          | Parse Documents through Upstage Document AI    |\n| PDF Ingestion                                            | ✅          | Import PDF into Verba                          |\n| GitHub & GitLab                                          | ✅          | Import Files from Github and GitLab            |\n| CSV/XLSX Ingestion                                       | ✅          | Import Table Data into Verba                   |\n| .DOCX                                                    | ✅          | Import .docx files                             |\n| Multi-Modal (using [AssemblyAI](https://assemblyai.com)) | ✅          | Import and Transcribe Audio through AssemblyAI |\n\n| ✨ RAG Features         | Implemented     | Description                                                               |\n| ----------------------- | --------------- | ------------------------------------------------------------------------- |\n| Hybrid Search           | ✅              | Semantic Search combined with Keyword Search                              |\n| Autocomplete Suggestion | ✅              | Verba suggests autocompletion                                             |\n| Filtering               | ✅              | Apply Filters (e.g. documents, document types etc.) before performing RAG |\n| Customizable Metadata   | ✅              | Free control over Metadata                                                |\n| Async Ingestion         | ✅              | Ingest data asynchronously to speed up the process                        |\n| Advanced Querying       | planned ⏱️      | Task Delegation Based on LLM Evaluation                                   |\n| Reranking               | planned ⏱️      | Rerank results based on context for improved results                      |\n| RAG Evaluation          | planned ⏱️      | Interface for Evaluating RAG pipelines                                    |\n| Agentic RAG             | out of scope ❌ | Agentic RAG pipelines                                                     |\n| Graph RAG               | out of scope ❌ | Graph-based RAG pipelines                               ",
+      "language": "Python",
+      "topics": [],
+      "stars": 7640,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "raga-ai-hub/RagaAI-Catalyst",
+      "name": "RagaAI-Catalyst",
+      "url": "https://github.com/raga-ai-hub/RagaAI-Catalyst",
+      "description": "Python SDK for Agent AI Observability, Monitoring and Evaluation Framework. Includes features like agent, llm and tools tracing, debugging multi-agentic system, self-hosted dashboard and advanced analytics with timeline and execution graph view ",
+      "readme": "# RagaAI Catalyst&nbsp; ![GitHub release (latest by date)](https://img.shields.io/github/v/release/raga-ai-hub/ragaai-catalyst) ![GitHub stars](https://img.shields.io/github/stars/raga-ai-hub/ragaai-catalyst?style=social)  ![Issues](https://img.shields.io/github/issues/raga-ai-hub/ragaai-catalyst) \n\nRagaAI Catalyst is a comprehensive platform designed to enhance the management and optimization of LLM projects. It offers a wide range of features, including project management, dataset management, evaluation management, trace management, prompt management, synthetic data generation, and guardrail management. These functionalities enable you to efficiently evaluate, and safeguard your LLM applications.\n\n## Table of Contents\n\n- [RagaAI Catalyst](#ragaai-catalyst)\n  - [Installation](#installation)\n  - [Configuration](#configuration)\n  - [Usage](#usage)\n    - [Project Management](#project-management)\n    - [Dataset Management](#dataset-management)\n    - [Evaluation Management](#evaluation)\n    - [Trace Management](#trace-management)\n    - [Agentic Tracing](#agentic-tracing)\n    - [Prompt Management](#prompt-management)\n    - [Synthetic Data Generation](#synthetic-data-generation)\n    - [Guardrail Management](#guardrail-management)\n    - [Red-teaming](#red-teaming)\n\n## Installation\n\nTo install RagaAI Catalyst, you can use pip:\n\n```bash\npip install ragaai-catalyst\n```\n\n## Configuration\n\nBefore using RagaAI Catalyst, you need to set up your credentials. You can do this by setting environment variables or passing them directly to the `RagaAICatalyst` class:\n\n```python\nfrom ragaai_catalyst import RagaAICatalyst\n\ncatalyst = RagaAICatalyst(\n    access_key=\"YOUR_ACCESS_KEY\",\n    secret_key=\"YOUR_SECRET_KEY\",\n    base_url=\"BASE_URL\"\n)\n```\nyou'll need to generate authentication credentials:\n\n1. Navigate to your profile settings\n2. Select \"Authenticate\" \n3. Click \"Generate New Key\" to create your access and secret keys\n\n![How to generate authentication keys](docs/img/autheticate.gif)\n\n**Note**: Authetication to RagaAICatalyst is necessary to perform any operations below.\n\n\n## Usage\n\n### Project Management\n\nCreate and manage projects using RagaAI Catalyst:\n\n```python\n# Create a project\nproject = catalyst.create_project(\n    project_name=\"Test-RAG-App-1\",\n    usecase=\"Chatbot\"\n)\n\n# Get project usecases\ncatalyst.project_use_cases()\n\n# List projects\nprojects = catalyst.list_projects()\nprint(projects)\n```\n![Projects](docs/img/create_project.gif)\n\n### Dataset Management\nManage datasets efficiently for your projects:\n\n```py\nfrom ragaai_catalyst import Dataset\n\n# Initialize Dataset management for a specific project\ndataset_manager = Dataset(project_name=\"project_name\")\n\n# List existing datasets\ndatasets = dataset_manager.list_datasets()\nprint(\"Existing Datasets:\", datasets)\n\n# Create a dataset from CSV\ndataset_manager.create_from_csv(\n    csv_path='path/to/your.csv',\n    dataset_name='MyDataset',\n    schema_mapping={'column1': 'schema_element1', 'column2': 'schema_element2'}\n)\n\n# Get project schema mapping\ndataset_manager.get_schema_mapping()\n\n```\n![Dataset](docs/img/dataset.gif)\n\nFor more detailed information on Dataset Management, including CSV schema handling and advanced usage, please refer to the [Dataset Management documentation](docs/dataset_management.md).\n\n\n### Evaluation\n\nCreate and manage metric evaluation of your RAG application:\n\n```python\nfrom ragaai_catalyst import Evaluation\n\n# Create an experiment\nevaluation = Evaluation(\n    project_name=\"Test-RAG-App-1\",\n    dataset_name=\"MyDataset\",\n)\n\n# Get list of available metrics\nevaluation.list_metrics()\n\n# Add metrics to the experiment\nschema_mapping={\n    'Query': 'prompt',\n    'response': 'response',\n    'Context': 'context',\n    'expectedResponse': 'expected_response'\n}\n\n# Add single metric\nevaluation.add_metrics(\n    metrics=[\n      {\"name\": \"Faithfulness\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"gte\": 0.232323}}, \"column_name\": \"Faithfulness_v1\", \"schema_mapping\": schema_mapping},\n    \n    ]\n)\n\n# Add multiple metrics\nevaluation.add_metrics(\n    metrics=[\n        {\"name\": \"Faithfulness\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"gte\": 0.323}}, \"column_name\": \"Faithfulness_gte\", \"schema_mapping\": schema_mapping},\n        {\"name\": \"Hallucination\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"lte\": 0.323}}, \"column_name\": \"Hallucination_lte\", \"schema_mapping\": schema_mapping},\n        {\"name\": \"Hallucination\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"eq\": 0.323}}, \"column_name\": \"Hallucination_eq\", \"schema_mapping\": schema_mapping},\n    ]\n)\n\n# Get the status of the experiment\nstatus = evaluation.get_status()\nprint(\"Experiment Status:\", status)\n\n# Get the results of the experiment\nresults = evaluation.get_results()\nprint(\"Experiment Results:\", results)\n\n# Appending Metrics for New Data\n# If you've added new rows to your dataset, you can calculate metrics just for the new data:\nevaluation.append_metrics(display_name=\"Faithfulness_v1\")\n```\n\n![Evaluation](docs/img/evaluation.gif)\n\n\n\n### Trace Management\n\nRecord and analyze traces of your RAG application:\n            \n```python\nfrom ragaai_catalyst import RagaAICatalyst, Tracer\n\ntracer = Tracer(\n    project_name=\"Test-RAG-App-1\",\n    dataset_name=\"tracer_dataset_name\",\n    tracer_type=\"tracer_type\"\n)\n```\n\nThere are two ways to start a trace recording\n\n1- with tracer():\n\n```python\n\nwith tracer():\n    # Your code here\n\n```\n\n2- tracer.start()\n\n```python\n#start the trace recording\ntracer.start()\n\n# Your code here\n\n# Stop the trace recording\ntracer.stop()\n\n# Get upload status\ntracer.get_upload_status()\n```\n\n![Trace](docs/img/trace_comp.png)\nFor more detailed information on Trace Management, please refer to the [Trace Management documentation](docs/trace_management.md).\n\n### Agentic Tracing\n\nThe Agentic Tracing module provides comprehensive monitoring and analysis capabilities for AI agent systems. It helps track various aspects of agent behavior including:\n\n- LLM interactions and token usage\n- Tool utilization and execution patterns\n- Network activities and API calls\n- User interactions and feedback\n- Agent decision-making processes\n\nThe module includes utilities for cost tracking, performance monitoring, and debugging agent behavior. This helps in understanding and optimizing AI agent performance while maintaining transparency in agent operations.\n\n#### Tracer initialization\n\nInitialize the tracer with project_name and dataset_name\n\n```python\nfrom ragaai_catalyst import RagaAICatalyst, Tracer, trace_llm, trace_tool, trace_agent, current_span\n\nagentic_tracing_dataset_name = \"agentic_tracing_dataset_name\"\n\ntracer = Tracer(\n    project_name=agentic_tracing_project_name,\n    dataset_name=agentic_tracing_dataset_name,\n    tracer_type=\"Agentic\",\n)\n```\n\n```python\n# Enable auto-instrumentation\nfrom ragaai_catalyst import init_tracing\ninit_tracing(catalyst=catalyst, tracer=tracer)\n```\n\n![Tracing](docs/img/last_main.png)\nFor more detailed information on Trace Management, please refer to the [Agentic Tracing Management documentation](docs/agentic_tracing.md).\n\n\n### Prompt Management\n\nManage and use prompts efficiently in your projects:\n\n```py\nfrom ragaai_catalyst import PromptManager\n\n# Initialize PromptManager\nprompt_manager = PromptManager(project_name=\"Test-RAG-App-1\")\n\n# List available prompts\nprompts = prompt_manager.list_prompts()\nprint(\"Available prompts:\", prompts)\n\n# Get default prompt by prompt_name\nprompt_name = \"your_prompt_name\"\nprompt = prompt_manager.get_prompt(prompt_name)\n\n# Get specific version of prompt by prompt_name and version\nprompt_name = \"your_prompt_name\"\nversion = \"v1\"\nprompt = prompt_manager.get_prompt(prompt_name,version)\n\n# Get variables in a prompt\nvariable = prompt.get_variables()\nprint(\"variable:\",variable)\n\n# Get prompt content\nprompt_content = prompt.get_prompt_content()\nprint(\"prompt_content:\", prompt_content)\n\n# Compile the promp",
+      "language": "Python",
+      "topics": [
+        "agentic-ai",
+        "agentic-ai-development",
+        "agentneo",
+        "agents",
+        "ai-agent-monitoring",
+        "ai-application-debugging",
+        "ai-evaluation-tools",
+        "ai-performance-optimization",
+        "ai-tool-interaction-monitoring",
+        "llm-testing",
+        "llm-tracing",
+        "llmops"
+      ],
+      "stars": 16127,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "confident-ai/deepeval",
+      "name": "deepeval",
+      "url": "https://github.com/confident-ai/deepeval",
+      "description": "The LLM Evaluation Framework",
+      "readme": "<p align=\"center\">\n    <img src=\"https://github.com/confident-ai/deepeval/blob/main/docs/static/img/deepeval.png\" alt=\"DeepEval Logo\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n    <h1 align=\"center\">The LLM Evaluation Framework</h1>\n</p>\n\n<p align=\"center\">\n<a href=\"https://trendshift.io/repositories/5917\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/5917\" alt=\"confident-ai%2Fdeepeval | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n    <a href=\"https://discord.gg/3SEyvpgu2f\">\n        <img alt=\"discord-invite\" src=\"https://dcbadge.vercel.app/api/server/3SEyvpgu2f?style=flat\">\n    </a>\n</p>\n\n<h4 align=\"center\">\n    <p>\n        <a href=\"https://deepeval.com/docs/getting-started?utm_source=GitHub\">Documentation</a> |\n        <a href=\"#-metrics-and-features\">Metrics and Features</a> |\n        <a href=\"#-quickstart\">Getting Started</a> |\n        <a href=\"#-integrations\">Integrations</a> |\n        <a href=\"https://confident-ai.com?utm_source=GitHub\">Confident AI</a>\n    <p>\n</h4>\n\n<p align=\"center\">\n    <a href=\"https://github.com/confident-ai/deepeval/releases\">\n        <img alt=\"GitHub release\" src=\"https://img.shields.io/github/release/confident-ai/deepeval.svg?color=violet\">\n    </a>\n    <a href=\"https://colab.research.google.com/drive/1PPxYEBa6eu__LquGoFFJZkhYgWVYE6kh?usp=sharing\">\n        <img alt=\"Try Quickstart in Colab\" src=\"https://colab.research.google.com/assets/colab-badge.svg\">\n    </a>\n    <a href=\"https://github.com/confident-ai/deepeval/blob/master/LICENSE.md\">\n        <img alt=\"License\" src=\"https://img.shields.io/github/license/confident-ai/deepeval.svg?color=yellow\">\n    </a>\n    <a href=\"https://x.com/deepeval\">\n        <img alt=\"Twitter Follow\" src=\"https://img.shields.io/twitter/follow/deepeval?style=social&logo=x\">\n    </a>\n</p>\n\n<p align=\"center\">\n    <!-- Keep these links. Translations will automatically update with the README. -->\n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=de\">Deutsch</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=es\">Español</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=fr\">français</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=ja\">日本語</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=ko\">한국어</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=pt\">Português</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=ru\">Русский</a> | \n    <a href=\"https://www.readme-i18n.com/confident-ai/deepeval?lang=zh\">中文</a>\n</p>\n\n**DeepEval** is a simple-to-use, open-source LLM evaluation framework, for evaluating large-language model systems. It is similar to Pytest but specialized for unit testing LLM apps. DeepEval incorporates the latest research to run evals via metrics such as G-Eval, task completion, answer relevancy, hallucination, etc., which uses LLM-as-a-judge and other NLP models that run **locally on your machine**.\n\nWhether you're building AI agents, RAG pipelines, or chatbots, implemented via LangChain or OpenAI, DeepEval has you covered. With it, you can easily determine the optimal models, prompts, and architecture to improve your AI quality, prevent prompt drifting, or even transition from OpenAI to Claude with confidence.\n\n> [!IMPORTANT]\n> Need a place for your DeepEval testing data to live 🏡❤️? [Sign up to the DeepEval platform](https://confident-ai.com?utm_source=GitHub) to compare iterations of your LLM app, generate & share testing reports, and more.\n>\n> ![Demo GIF](assets/demo.gif)\n\n> Want to talk LLM evaluation, need help picking metrics, or just to say hi? [Come join our discord.](https://discord.com/invite/3SEyvpgu2f)\n\n<br />\n\n# 🔥 Metrics and Features\n\n- 📐 Large variety of ready-to-use LLM eval metrics (all with explanations) powered by **ANY** LLM of your choice, statistical methods, or NLP models that run **locally on your machine** covering all use cases:\n\n  - **Custom, All-Purpose Metrics:**\n\n    - [G-Eval](https://deepeval.com/docs/metrics-llm-evals) — a research-backed LLM-as-a-judge metric for evaluating on any custom criteria with human-like accuracy\n    - [DAG](https://deepeval.com/docs/metrics-dag) — DeepEval's graph-based deterministic LLM-as-a-judge metric builder\n\n  - <details>\n    <summary><b>Agentic Metrics</b></summary>\n\n    - [Task Completion](https://deepeval.com/docs/metrics-task-completion) — evaluate whether an agent accomplished its goal\n    - [Tool Correctness](https://deepeval.com/docs/metrics-tool-correctness) — check if the right tools were called with the right arguments\n    - [Goal Accuracy](https://deepeval.com/docs/metrics-goal-accuracy) — measure how accurately the agent achieved the intended goal\n    - [Step Efficiency](https://deepeval.com/docs/metrics-step-efficiency) — evaluate whether the agent took unnecessary steps\n    - [Plan Adherence](https://deepeval.com/docs/metrics-plan-adherence) — check if the agent followed the expected plan\n    - [Plan Quality](https://deepeval.com/docs/metrics-plan-quality) — evaluate the quality of the agent's plan\n    - [Tool Use](https://deepeval.com/docs/metrics-tool-use) — measure quality of tool usage\n    - [Argument Correctness](https://deepeval.com/docs/metrics-argument-correctness) — validate tool call arguments\n\n    </details>\n\n  - <details>\n    <summary><b>RAG Metrics</b></summary>\n\n    - [Answer Relevancy](https://deepeval.com/docs/metrics-answer-relevancy) — measure how relevant the RAG pipeline's output is to the input\n    - [Faithfulness](https://deepeval.com/docs/metrics-faithfulness) — evaluate whether the RAG pipeline's output factually aligns with the retrieval context\n    - [Contextual Recall](https://deepeval.com/docs/metrics-contextual-recall) — measure how well the RAG pipeline's retrieval context aligns with the expected output\n    - [Contextual Precision](https://deepeval.com/docs/metrics-contextual-precision) — evaluate whether relevant nodes in the RAG pipeline's retrieval context are ranked higher\n    - [Contextual Relevancy](https://deepeval.com/docs/metrics-contextual-relevancy) — measure the overall relevance of the RAG pipeline's retrieval context to the input\n    - [RAGAS](https://deepeval.com/docs/metrics-ragas) — average of answer relevancy, faithfulness, contextual precision, and contextual recall\n\n    </details>\n\n  - <details>\n    <summary><b>Multi-Turn Metrics</b></summary>\n\n    - [Knowledge Retention](https://deepeval.com/docs/metrics-knowledge-retention) — evaluate whether the chatbot retains factual information throughout a conversation\n    - [Conversation Completeness](https://deepeval.com/docs/metrics-conversation-completeness) — measure whether the chatbot satisfies user needs throughout a conversation\n    - [Turn Relevancy](https://deepeval.com/docs/metrics-turn-relevancy) — evaluate whether the chatbot generates consistently relevant responses throughout a conversation\n    - [Turn Faithfulness](https://deepeval.com/docs/metrics-turn-faithfulness) — check if the chatbot's responses are factually grounded in retrieval context across turns\n    - [Role Adherence](https://deepeval.com/docs/metrics-role-adherence) — evaluate whether the chatbot adheres to its assigned role throughout a conversation\n\n    </details>\n\n  - <details>\n    <summary><b>MCP Metrics</b></summary>\n\n    - [MCP Task Completion](https://deepeval.com/docs/metrics-mcp-task-completion) — evaluate how effectively an MCP-based agent accomplishes a task\n    - [MCP Use](https://deepeval.com/docs/metrics-mcp-use) — measure how effectively an agent uses its available MCP servers\n    - [Multi-Turn MCP Use](https://deepeval.com/docs/metrics-multi-turn-mcp-use) — evaluate MCP server usage across conversation turns\n\n    </details>\n\n  - <details>\n    <summary><b>Multimodal Metrics</b></summary>\n\n    - [Text to Image](https://deepeval.com/docs/multimodal-metrics-text-to-image) — evalua",
+      "language": "Python",
+      "topics": [
+        "evaluation-framework",
+        "evaluation-metrics",
+        "llm-evaluation",
+        "llm-evaluation-framework",
+        "llm-evaluation-metrics",
+        "python"
+      ],
+      "stars": 14676,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "codefuse-ai/codefuse-chatbot",
+      "name": "codefuse-chatbot",
+      "url": "https://github.com/codefuse-ai/codefuse-chatbot",
+      "description": "An intelligent assistant serving the entire software development lifecycle, powered by a Multi-Agent Framework, working with DevOps Toolkits, Code&Doc Repo RAG,  etc.",
+      "readme": "",
+      "language": "Python",
+      "topics": [
+        "aiops",
+        "chatbot",
+        "code-repo-analysis",
+        "code-repo-generation",
+        "devops",
+        "gpt",
+        "knowledge-graph",
+        "langchain",
+        "multi-agent",
+        "rag",
+        "tool-learning"
+      ],
+      "stars": 1285,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "mckaywrigley/chatbot-ui",
+      "name": "chatbot-ui",
+      "url": "https://github.com/mckaywrigley/chatbot-ui",
+      "description": "AI chat for any model.",
+      "readme": "",
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 33157,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "rawandahmad698/PyChatGPT",
+      "name": "PyChatGPT",
+      "url": "https://github.com/rawandahmad698/PyChatGPT",
+      "description": "⚡️ Python client for the ChatGPT API with, conversation tracking, proxy support and more.",
+      "readme": "",
+      "language": "Python",
+      "topics": [
+        "chatgpt",
+        "openai",
+        "python"
+      ],
+      "stars": 4195,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "vercel/chatbot",
+      "name": "chatbot",
+      "url": "https://github.com/vercel/chatbot",
+      "description": "A full-featured, hackable Next.js AI chatbot built by Vercel",
+      "readme": "",
+      "language": "TypeScript",
+      "topics": [
+        "ai",
+        "chatgpt",
+        "nextjs",
+        "react",
+        "redis",
+        "shadcn-ui",
+        "vercel"
+      ],
+      "stars": 20067,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    }
+  ],
+  "baselineOutput": [
+    {
+      "title": "Audited RAG Chatbot Starter for Internal Knowledge Bases",
+      "thesis": "Combine a production-ready Python RAG backend, a ready-made RAG chatbot UI, and LLM evaluation/observability tooling into a deployable internal knowledge assistant that teams can measure and improve safely.",
+      "formula": "OneRAG + Verba + RagaAI-Catalyst + DeepEval",
+      "repo_slugs": [
+        "notadev-iamaura/OneRAG",
+        "weaviate/Verba",
+        "raga-ai-hub/RagaAI-Catalyst",
+        "confident-ai/deepeval"
+      ],
+      "repo_roles": [
+        {
+          "repo": "notadev-iamaura/OneRAG",
+          "role": "Core Python/FastAPI RAG backend with configurable vector DB and LLM swaps via OpenAI-compatible API"
+        },
+        {
+          "repo": "weaviate/Verba",
+          "role": "RAG chatbot application layer and user-facing retrieval chat experience"
+        },
+        {
+          "repo": "raga-ai-hub/RagaAI-Catalyst",
+          "role": "Tracing, monitoring, debugging, and analytics for chatbot/agent execution"
+        },
+        {
+          "repo": "confident-ai/deepeval",
+          "role": "Offline and regression evaluation framework for answer quality and retrieval behavior"
+        }
+      ],
+      "steps": [
+        "Stand up OneRAG as the backend API and ingest a small internal document set into one supported vector database.",
+        "Configure Verba as the end-user chat interface connected to the retrieval backend/API path.",
+        "Instrument request flows with RagaAI-Catalyst to capture traces, tool/LLM spans, and execution timelines.",
+        "Create DeepEval test cases from representative internal questions and run baseline evaluations on groundedness/relevance-related checks supported by the framework.",
+        "Use evaluation and trace outputs to tune chunking, prompts, and retrieval settings, then package as a starter deployment."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A Python production RAG backend, a chatbot UX, and quality-control layers for evaluation and observability.",
+      "capabilities": [
+        "Document-grounded chat over internal knowledge bases",
+        "Backend flexibility across multiple vector databases and LLM providers",
+        "Chatbot interface for end users",
+        "Trace-level debugging and monitoring of model/tool execution",
+        "Regression evaluation for iterative prompt and retrieval tuning"
+      ],
+      "supporting_primitives": [
+        "FastAPI backend",
+        "OpenAI-compatible API",
+        "Vector database integrations",
+        "LLM provider switching",
+        "Tracing and analytics dashboard",
+        "Evaluation test harness"
+      ],
+      "why_fit": "OneRAG supplies the backend foundation and deployment flexibility, Verba supplies the RAG-chat experience, and RagaAI-Catalyst plus DeepEval cover the missing production controls: observability and measurable quality. The pieces align around the same core workflow of retrieval-backed question answering.",
+      "use_case": "An engineering, legal, or support team wants a private document assistant that can be piloted quickly but still has enough instrumentation to trust and improve it.",
+      "why_better_than_single": "OneRAG alone gives backend mechanics but not a polished user chat layer or quality controls; Verba alone gives a chatbot but not a broader production backend choice set; adding Catalyst and DeepEval makes the stack usable for real rollout decisions instead of just a demo.",
+      "first_user": "A small internal platform or AI team deploying a knowledge bot for 50-500 employees.",
+      "demo_72h": "Day 1: deploy OneRAG with one vector DB and load a sample handbook/wiki corpus; Day 2: connect Verba and get end-to-end chat working; Day 3: add Catalyst tracing, write 20-30 DeepEval test prompts, compare two prompt/retrieval configs, and show a dashboard plus eval report.",
+      "key_risks": [
+        "Potential overlap between Verba's existing RAG assumptions and OneRAG's API/backend contract may require glue code.",
+        "Evaluation quality depends on well-constructed test cases; poor eval design can create false confidence.",
+        "Observability instrumentation can add setup complexity for a short pilot.",
+        "If using multiple interchangeable LLM/vector backends, behavior variance may complicate reproducibility."
+      ],
+      "novelty": 0.73,
+      "composable_fit": 0.93,
+      "accessibility_wedge": 0.82,
+      "time_to_demo": 0.86,
+      "category_upside": 0.8,
+      "narrative_clarity": 0.91
+    },
+    {
+      "title": "Developer Copilot for Code and Docs with Measurable Retrieval Quality",
+      "thesis": "Pair a software-lifecycle-focused multi-agent assistant with a configurable Python RAG backend and an eval stack to create a code-and-doc copilot that teams can continuously benchmark against real engineering tasks.",
+      "formula": "CodeFuse-Chatbot + OneRAG + DeepEval + RagaAI-Catalyst",
+      "repo_slugs": [
+        "codefuse-ai/codefuse-chatbot",
+        "notadev-iamaura/OneRAG",
+        "confident-ai/deepeval",
+        "raga-ai-hub/RagaAI-Catalyst"
+      ],
+      "repo_roles": [
+        {
+          "repo": "codefuse-ai/codefuse-chatbot",
+          "role": "Developer-assistant experience and multi-agent application focused on software lifecycle workflows, code/doc repo RAG, and DevOps toolkits"
+        },
+        {
+          "repo": "notadev-iamaura/OneRAG",
+          "role": "Python RAG service layer to standardize retrieval and model access with swappable vector DB/LLM providers"
+        },
+        {
+          "repo": "confident-ai/deepeval",
+          "role": "Evaluation layer for testing answer quality on engineering Q&A and documentation retrieval scenarios"
+        },
+        {
+          "repo": "raga-ai-hub/RagaAI-Catalyst",
+          "role": "Tracing and debugging layer for multi-agent and LLM/tool execution flows"
+        }
+      ],
+      "steps": [
+        "Use OneRAG to index a sample software repository's docs, runbooks, and architecture notes into a chosen vector store.",
+        "Connect codefuse-chatbot to retrieval endpoints or shared RAG outputs so development questions can reference indexed code/docs context.",
+        "Instrument agent and LLM/tool flows with RagaAI-Catalyst to inspect where failures occur in multi-step software-assistant tasks.",
+        "Author DeepEval scenarios such as 'find deployment steps', 'explain module ownership', and 'summarize architecture decisions' and run them as regression tests.",
+        "Demonstrate iterative improvement by changing prompts or retrieval settings and showing before/after eval and trace outputs."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A developer-focused multi-agent assistant with a standardized Python RAG backend plus observability and evaluation controls.",
+      "capabilities": [
+        "Code-and-document retrieval for engineering teams",
+        "Developer assistant workflows spanning documentation and software lifecycle tasks",
+        "Swappable LLM and vector backend infrastructure",
+        "Execution tracing for multi-agent/tool-based flows",
+        "Regression testing for retrieval-assisted engineering answers"
+      ],
+      "supporting_primitives": [
+        "Code/doc repo RAG",
+        "Multi-agent framework",
+        "FastAPI/OpenAI-compatible API",
+        "Vector DB integrations",
+        "LLM tracing",
+        "Evaluation SDK"
+      ],
+      "why_fit": "codefuse-chatbot is already oriented around software development workflows and code/doc RAG, while OneRAG provides a simpler production-ready Python retrieval substrate. Catalyst and DeepEval address the key challenge in developer copilots: diagnosing wrong answers and proving improvements on concrete tasks.",
+      "use_case": "A platform engineering team wants an internal assistant that answers questions about repositories, runbooks, and SDLC processes without manually stitching together retrieval, agent tracing, and evals.",
+      "why_better_than_single": "codefuse-chatbot offers the domain-specific assistant concept, but pairing it with OneRAG gives cleaner backend optionality, and adding DeepEval/Catalyst turns an opaque assistant into one that can be tested and debugged systematically.",
+      "first_user": "A DevEx or internal tools team serving engineers across several repositories.",
+      "demo_72h": "Day 1: ingest one GitHub repo's docs plus a few markdown runbooks via OneRAG; Day 2: wire codefuse-chatbot for Q&A over that corpus and demo several engineering tasks; Day 3: add Catalyst traces for failed/slow flows and DeepEval benchmarks over 15-25 engineering questions, then present an improvement loop.",
+      "key_risks": [
+        "Integration may be non-trivial because codefuse-chatbot may have its own assumptions about retrieval and agent orchestration.",
+        "Repository/code retrieval quality is highly sensitive to chunking and corpus preparation, which may limit early demo quality.",
+        "Multi-agent systems can produce inconsistent behavior that is hard to benchmark cleanly.",
+        "The product may feel broad unless the first demo is scoped tightly to documentation/runbook assistance rather than full SDLC automation."
+      ],
+      "novelty": 0.76,
+      "composable_fit": 0.88,
+      "accessibility_wedge": 0.74,
+      "time_to_demo": 0.74,
+      "category_upside": 0.84,
+      "narrative_clarity": 0.85
+    },
+    {
+      "title": "Bring-Your-Own-Model RAG Chat UI for Fast Customer Pilots",
+      "thesis": "Combine a polished chat frontend with a Python RAG API and lightweight Python client access to ship a customizable, model-agnostic RAG chatbot that can be piloted quickly for customers with different provider preferences.",
+      "formula": "OneRAG + Chatbot-UI + PyChatGPT",
+      "repo_slugs": [
+        "notadev-iamaura/OneRAG",
+        "mckaywrigley/chatbot-ui",
+        "rawandahmad698/PyChatGPT"
+      ],
+      "repo_roles": [
+        {
+          "repo": "notadev-iamaura/OneRAG",
+          "role": "Backend RAG engine with configurable LLM and vector DB providers exposed through an OpenAI-compatible API"
+        },
+        {
+          "repo": "mckaywrigley/chatbot-ui",
+          "role": "User-facing chat interface for interacting with the assistant across models"
+        },
+        {
+          "repo": "rawandahmad698/PyChatGPT",
+          "role": "Python client utility for scripted conversations, testing, and backend-side interaction workflows with conversation tracking"
+        }
+      ],
+      "steps": [
+        "Deploy OneRAG and configure two alternative LLM providers plus one vector database to demonstrate backend portability.",
+        "Connect chatbot-ui to the OpenAI-compatible OneRAG endpoint to provide a polished browser-based chat experience.",
+        "Use PyChatGPT in a small Python script to run scripted conversations for smoke testing prompt behavior and maintaining repeatable sample sessions.",
+        "Load a customer-style corpus such as product manuals, FAQ pages, or policy documents and expose it through the chat interface.",
+        "Demonstrate provider swapping and scripted regression chat sessions to show fast pilot readiness."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A configurable Python RAG backend, a polished chat frontend, and a Python chat client for repeatable testing and operational scripting.",
+      "capabilities": [
+        "Browser-based RAG chat experience",
+        "LLM-provider flexibility for customer preference or cost constraints",
+        "Vector database portability",
+        "Scripted conversation testing in Python",
+        "Fast pilot packaging around customer document corpora"
+      ],
+      "supporting_primitives": [
+        "OpenAI-compatible API",
+        "Frontend chat UI",
+        "Python conversation client",
+        "Configurable retrieval backend",
+        "Conversation tracking"
+      ],
+      "why_fit": "OneRAG's OpenAI-compatible API and provider configurability naturally complement chatbot-ui's model-oriented frontend. PyChatGPT adds a simple Python-side way to script and verify conversations during pilot setup, which is useful when adapting the same product shell to different customer environments.",
+      "use_case": "An agency, consultant, or startup wants to spin up bespoke RAG chatbots for multiple customers while minimizing rework across different LLM and infrastructure preferences.",
+      "why_better_than_single": "chatbot-ui alone is just a front end, and OneRAG alone is an API backend; together they form a complete pilotable product. PyChatGPT adds a practical operator/testing layer for scripted validation and repeatable demos without building custom tooling from scratch.",
+      "first_user": "A solutions engineer or small B2B startup running rapid proofs of concept for clients.",
+      "demo_72h": "Day 1: deploy OneRAG and ingest a sample customer corpus; Day 2: connect chatbot-ui and brand the interface for the pilot; Day 3: create a PyChatGPT script that runs 10 scripted customer questions across two model backends, compare responses, and package the pilot handoff.",
+      "key_risks": [
+        "PyChatGPT is oriented to the ChatGPT API, so its usefulness depends on how closely the target endpoint behavior matches expected patterns.",
+        "This combo lacks built-in evaluation/observability rigor compared with stacks that include DeepEval or Catalyst.",
+        "Frontend-backend auth/session handling may require extra integration work.",
+        "A polished pilot can mask retrieval weaknesses if the corpus and prompts are not carefully prepared."
+      ],
+      "novelty": 0.64,
+      "composable_fit": 0.87,
+      "accessibility_wedge": 0.89,
+      "time_to_demo": 0.92,
+      "category_upside": 0.72,
+      "narrative_clarity": 0.9
+    }
+  ],
+  "candidateOutput": [
+    {
+      "title": "Observable RAG API for internal knowledge bots",
+      "thesis": "Combine a production-ready Python RAG backend with evaluation and observability so teams can ship internal chatbots that are measurable from day one, not just deployable.",
+      "formula": "OneRAG + RagaAI-Catalyst + deepeval",
+      "repo_slugs": [
+        "notadev-iamaura/OneRAG",
+        "raga-ai-hub/RagaAI-Catalyst",
+        "confident-ai/deepeval"
+      ],
+      "repo_roles": [
+        {
+          "repo": "notadev-iamaura/OneRAG",
+          "role": "anchor"
+        },
+        {
+          "repo": "raga-ai-hub/RagaAI-Catalyst",
+          "role": "enabling"
+        },
+        {
+          "repo": "confident-ai/deepeval",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use OneRAG as the core Python/FastAPI RAG service and configure one vector DB plus one model provider through its existing swap-based configuration.",
+        "Add document ingestion for an internal knowledge source and expose the OpenAI-compatible API for chat queries.",
+        "Instrument request, model, and tool/retrieval flows with RagaAI-Catalyst to capture traces, debugging data, timeline views, and execution graphs.",
+        "Create a small eval suite in deepeval for retrieval and answer quality on representative internal questions.",
+        "Set deployment gates so config/model/vector-store changes in OneRAG must pass deepeval checks before release.",
+        "Use Catalyst dashboards to monitor production behavior and identify low-quality retrieval or answer failure modes after launch."
+      ],
+      "recommended_shell": "api",
+      "what_is_being_combined": "A configurable Python RAG backend is being combined with LLM/agent observability and offline evaluation. OneRAG provides the serving layer and pluggable retrieval/model stack, Catalyst provides runtime tracing and debugging, and deepeval provides repeatable quality checks.",
+      "capabilities": [
+        "Production-ready Python/FastAPI RAG service",
+        "Config-based swapping across multiple vector databases and LLM providers",
+        "OpenAI-compatible API surface",
+        "LLM/agent/tool tracing and debugging",
+        "Self-hosted observability dashboard with timeline and execution graph",
+        "Evaluation framework for LLM output quality"
+      ],
+      "supporting_primitives": [
+        "FastAPI RAG backend",
+        "OpenAI-compatible API",
+        "Vector DB abstraction",
+        "LLM provider abstraction",
+        "Tracing and execution graphs",
+        "Automated evaluation suites"
+      ],
+      "why_fit": "The fit is strong because OneRAG already standardizes the serving path for RAG, while Catalyst and deepeval cover the two missing operational layers: runtime visibility and pre/post-deploy quality measurement. All three are Python-oriented and can be integrated without redefining the core chatbot architecture.",
+      "use_case": "A 50-500 person company building an employee helpdesk bot over SOPs, policies, and engineering docs, where reliability and debuggability matter more than a flashy UI.",
+      "why_better_than_single": "OneRAG alone helps you deploy, but not systematically understand failures or enforce quality when swapping models and vector stores. Adding Catalyst and deepeval turns a framework into an operable product surface with measurable trust.",
+      "first_user": "An internal platform engineer responsible for an employee knowledge assistant.",
+      "demo_72h": "Day 1: stand up OneRAG against one document corpus and expose chat endpoints. Day 2: wire Catalyst tracing for each request and create a simple dashboard showing retrieval and answer paths. Day 3: author 25 golden questions in deepeval, run a baseline report, then show one config swap in OneRAG and compare eval plus trace outputs. First user: a platform engineer testing an internal HR/IT support bot.",
+      "key_risks": [
+        "Integration depth between OneRAG request flow and Catalyst tracing may require custom hooks.",
+        "deepeval signal quality depends on having a representative test set.",
+        "Observability can expose sensitive prompts or document snippets if not handled carefully.",
+        "This is backend-heavy and may need a separate UI for non-technical stakeholders."
+      ],
+      "novelty": 0.68,
+      "composable_fit": 0.94,
+      "accessibility_wedge": 0.71,
+      "time_to_demo": 0.86,
+      "category_upside": 0.78,
+      "narrative_clarity": 0.9
+    },
+    {
+      "title": "RAG copilot for software delivery knowledge",
+      "thesis": "Pair a software-lifecycle assistant with a configurable RAG backbone to create a domain-specific chatbot for engineering teams that can answer from code and docs rather than generic company knowledge.",
+      "formula": "codefuse-chatbot + OneRAG + chatbot-ui",
+      "repo_slugs": [
+        "codefuse-ai/codefuse-chatbot",
+        "notadev-iamaura/OneRAG",
+        "mckaywrigley/chatbot-ui"
+      ],
+      "repo_roles": [
+        {
+          "repo": "codefuse-ai/codefuse-chatbot",
+          "role": "anchor"
+        },
+        {
+          "repo": "notadev-iamaura/OneRAG",
+          "role": "enabling"
+        },
+        {
+          "repo": "mckaywrigley/chatbot-ui",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use codefuse-chatbot as the domain anchor because it is explicitly built for the software development lifecycle with code and doc repo RAG plus multi-agent patterns.",
+        "Replace or supplement its retrieval layer with OneRAG to gain a cleaner Python/FastAPI serving path and provider/vector DB swap flexibility.",
+        "Index a sample engineering doc set and repository documentation into the chosen vector store through the OneRAG-backed retrieval service.",
+        "Expose the assistant through chatbot-ui so engineers can test conversations quickly across models.",
+        "Demonstrate common workflows such as asking architecture questions, onboarding queries, and doc lookup grounded in engineering repositories.",
+        "Package as an internal engineering knowledge copilot where infra teams can change vector DB or model without rewriting the app."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A software-development-focused assistant is being combined with a production-oriented RAG framework and a ready chat frontend. The combination targets engineering knowledge workflows instead of general-purpose chat.",
+      "capabilities": [
+        "Software development lifecycle assistant",
+        "Code and documentation repository RAG",
+        "Multi-agent framework orientation",
+        "Production-ready Python/FastAPI RAG backend",
+        "Swapable vector DBs and model providers",
+        "Hackable web chat UI"
+      ],
+      "supporting_primitives": [
+        "Code/doc repo RAG",
+        "Multi-agent scaffolding",
+        "RAG API backend",
+        "Provider-agnostic model switching",
+        "Vector-store switching",
+        "Web chat interface"
+      ],
+      "why_fit": "codefuse-chatbot supplies the domain specificity and workflow context, OneRAG adds a more modular retrieval/serving layer with broad infra choice, and chatbot-ui gives immediate usability for engineers. The repos complement each other across domain logic, backend reliability, and adoption surface.",
+      "use_case": "An engineering org that wants a chatbot for internal architecture docs, runbooks, onboarding material, and developer platform knowledge.",
+      "why_better_than_single": "codefuse-chatbot alone is domain-relevant but less obviously positioned as a configurable backend product. OneRAG adds infrastructure portability, while chatbot-ui reduces adoption friction so the system can be evaluated by real developers immediately.",
+      "first_user": "A developer productivity lead trying to reduce repeat architecture and onboarding questions in Slack.",
+      "demo_72h": "Day 1: deploy OneRAG and ingest a curated set of engineering docs and repo documentation. Day 2: connect codefuse-chatbot flows to that retrieval layer for a few high-value SDLC prompts. Day 3: mount chatbot-ui as the tester-facing interface and run a live demo with an engineering manager asking onboarding and system design questions. First user: a developer productivity lead at a 20-200 engineer company.",
+      "key_risks": [
+        "The exact integration boundary between codefuse-chatbot and OneRAG may need adaptation.",
+        "Overlapping RAG responsibilities could create architecture duplication if not kept clean.",
+        "Without strong source curation, answers may become noisy across code and docs.",
+        "UI and backend auth/permissions for private repos are outside the evidenced repo scope."
+      ],
+      "novelty": 0.74,
+      "composable_fit": 0.84,
+      "accessibility_wedge": 0.82,
+      "time_to_demo": 0.73,
+      "category_upside": 0.83,
+      "narrative_clarity": 0.88
+    },
+    {
+      "title": "Self-serve RAG chatbot starter with measurable quality",
+      "thesis": "Turn a Weaviate-powered RAG chatbot into a self-serve starter product by adding formal evaluation and a polished frontend, making it easy for small teams to launch a bot they can actually test.",
+      "formula": "Verba + deepeval + vercel/chatbot",
+      "repo_slugs": [
+        "weaviate/Verba",
+        "confident-ai/deepeval",
+        "vercel/chatbot"
+      ],
+      "repo_roles": [
+        {
+          "repo": "weaviate/Verba",
+          "role": "anchor"
+        },
+        {
+          "repo": "confident-ai/deepeval",
+          "role": "enabling"
+        },
+        {
+          "repo": "vercel/chatbot",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use Verba as the anchor because it is already a RAG chatbot powered by Weaviate, giving a direct path to a working retrieval-based assistant.",
+        "Adopt vercel/chatbot as the user-facing application layer for a more polished and hackable web experience.",
+        "Connect the frontend to the Verba-backed chat flow for interactive testing and sharing.",
+        "Add deepeval to define a starter evaluation harness with a small benchmark set for domain questions.",
+        "Package the result as a 'launch in a weekend' RAG starter where users can stand up a bot, test it, and iterate with visible quality checkpoints.",
+        "Document a narrow onboarding flow: ingest documents, ask benchmark questions, review failures, and improve corpus coverage."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A purpose-built Weaviate RAG chatbot is combined with a production-grade chat frontend and an evaluation framework. The value is not more model magic, but a cleaner path from prototype to testable product.",
+      "capabilities": [
+        "RAG chatbot powered by Weaviate",
+        "Hackable full-featured Next.js chatbot frontend",
+        "LLM evaluation workflows",
+        "Retrieval-centered chatbot UX",
+        "Benchmarking of answer quality"
+      ],
+      "supporting_primitives": [
+        "Weaviate-backed retrieval chatbot",
+        "Next.js chat interface",
+        "Evaluation test cases",
+        "Human-reviewable benchmark loop"
+      ],
+      "why_fit": "Verba already covers the core RAG chatbot behavior, vercel/chatbot improves the end-user experience and shareability, and deepeval adds the missing discipline around quality. This is a coherent stack for a starter kit aimed at teams that need confidence, not just a demo.",
+      "use_case": "A small startup or consultancy creating client-facing knowledge bots over policy manuals, product docs, or help center content.",
+      "why_better_than_single": "Verba alone can get a chatbot running, but adding deepeval creates a repeatable quality loop and vercel/chatbot makes the result feel product-ready instead of prototype-only.",
+      "first_user": "A solutions engineer building a proof-of-concept knowledge bot for a client in under a week.",
+      "demo_72h": "Day 1: deploy Verba and ingest a sample documentation corpus. Day 2: stand up vercel/chatbot as the front-end and connect it to the chatbot backend for end-to-end interaction. Day 3: create a 20-question deepeval benchmark, run it, and show how content tweaks improve results. First user: a solutions engineer delivering a client pilot.",
+      "key_risks": [
+        "The interface contract between Verba and vercel/chatbot may require glue code.",
+        "Evaluation may highlight retrieval issues that require corpus work rather than code fixes.",
+        "This combo is opinionated around Weaviate because Verba is Weaviate-powered.",
+        "Frontend polish can distract from source-quality limitations in the knowledge base."
+      ],
+      "novelty": 0.62,
+      "composable_fit": 0.87,
+      "accessibility_wedge": 0.89,
+      "time_to_demo": 0.9,
+      "category_upside": 0.72,
+      "narrative_clarity": 0.92
+    }
+  ],
+  "judgment": {
+    "verdict": "baseline_wins",
+    "baseline": {
+      "repo_fit": 5,
+      "novelty": 4,
+      "clarity": 5,
+      "theoretical_plausibility": 4,
+      "signal_value": 5
+    },
+    "candidate": {
+      "repo_fit": 4,
+      "novelty": 3,
+      "clarity": 4,
+      "theoretical_plausibility": 4,
+      "signal_value": 4
+    },
+    "rationale": "Baseline is stronger overall because it stays more tightly grounded in the repo context and surfaces more credible RAG-specific combinations. Its top combo is especially strong: OneRAG + Verba + RagaAI-Catalyst + DeepEval is directly aligned to the query ('python framework for rag chatbot') and combines backend, RAG chatbot layer, observability, and evaluation without drifting into generic UI-first chatbot packaging. The second baseline combo also uses codefuse-chatbot in a repo-faithful way and keeps eval/observability attached, which raises signal. The third baseline combo is weaker, but still plausibly anchored on OneRAG’s OpenAI-compatible API.\n\nCandidate has one very solid entry (OneRAG + Catalyst + deepeval), but it is more of an observable RAG backend/API stack than a full chatbot framework answer. Its second combo is plausible but weaker than baseline’s equivalent because adding chatbot-ui to codefuse + OneRAG feels somewhat generic and less necessary than adding eval/observability. The third candidate combo is the weakest: Verba + deepeval + vercel/chatbot is less repo-grounded for a Python RAG chatbot request, since vercel/chatbot is a generic Next.js frontend and may duplicate what Verba already provides. Candidate also uses abstract repo roles like 'anchor/enabling/amplification,' which are less informative than baseline’s concrete repo-role descriptions. Overall, baseline delivers better repo fit, clearer practical stack composition, and higher signal for someone actually seeking credible Python RAG chatbot frameworks."
+  }
+}

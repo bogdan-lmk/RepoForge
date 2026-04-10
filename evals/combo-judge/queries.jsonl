@@ -1,0 +1,10 @@
+{"id":"c_specific_langchain","query":"langchain framework for ai agents","notes":"Should produce combinations around agent orchestration, memory, and execution surfaces."}
+{"id":"c_specific_supabase","query":"supabase open source backend platform","notes":"Should produce backend product ideas grounded in auth, storage, and DB primitives."}
+{"id":"c_capability_rag","query":"python framework for rag chatbot","notes":"Should surface credible RAG combinations, not generic chatbot fluff."}
+{"id":"c_capability_realtime","query":"real time analytics dashboard stack","notes":"Should combine ingestion, storage, and UI repos into a plausible stack."}
+{"id":"c_capability_workflows","query":"interesting workflow automation repos","notes":"Should produce composable automation ideas with clear user value."}
+{"id":"c_alternative_langchain","query":"alternative to langchain for llm apps","notes":"Should produce non-obvious substitute stacks and explain tradeoffs."}
+{"id":"c_alternative_supabase","query":"alternative to supabase backend","notes":"Should frame alternatives as coherent product hypotheses, not a list of tools."}
+{"id":"c_comparison_prisma_drizzle","query":"prisma vs drizzle orm","notes":"Should generate comparison-driven product ideas or migration utilities with strong repo fit."}
+{"id":"c_trend_agents","query":"trending ai agent frameworks github","notes":"Should convert repo trends into category hypotheses with believable signal."}
+{"id":"c_trend_startup_tools","query":"open source startup tools worth tracking","notes":"Should produce crisp opportunity framing, not vague marketplace generalities."}

@@ -1,0 +1,647 @@
+{
+  "query": {
+    "id": "c_capability_realtime",
+    "query": "real time analytics dashboard stack",
+    "notes": "Should combine ingestion, storage, and UI repos into a plausible stack."
+  },
+  "repos": [
+    {
+      "slug": "plausible/analytics",
+      "name": "analytics",
+      "url": "https://github.com/plausible/analytics",
+      "description": "Open source, privacy-first web analytics. Lightweight, cookie-free Google Analytics alternative. Self-hosted or cloud.",
+      "readme": "# Plausible Analytics\n\n<p align=\"center\">\n  <a href=\"https://plausible.io/\">\n    <img src=\"https://raw.githubusercontent.com/plausible/docs/master/static/img/plausible-analytics-icon-top.png\" width=\"140px\" alt=\"Plausible Analytics\" />\n  </a>\n</p>\n<p align=\"center\">\n    <a href=\"https://plausible.io/plausible.io\">Live Demo</a> |\n    <a href=\"https://plausible.io/open-source-website-analytics\">Open Source</a> |\n    <a href=\"https://plausible.io/docs\">Docs</a> |\n    <a href=\"https://github.com/plausible/analytics/blob/master/CONTRIBUTING.md\">Contributing</a>\n    <br /><br />\n</p>\n\n[Plausible Analytics](https://plausible.io/) is an open source, privacy-first web analytics tool. Lightweight, cookie-free [alternative to Google Analytics](https://plausible.io/blog/remove-google-analytics). Available in managed cloud or self-hosted community edition.\n\n- 🔐 [Privacy-focused](https://plausible.io/privacy-focused-web-analytics)\n- 🛡️ [GDPR, CCPA, PECR compliant](https://plausible.io/data-policy)\n- 📊 [Simple, fast dashboard](https://plausible.io/simple-web-analytics)\n- 🪶 [Lightweight script](https://plausible.io/lightweight-web-analytics)\n- 🇪🇺 [Made and hosted in the EU](https://plausible.io/eu-hosted-web-analytics)\n\n![Plausible Analytics](.github/plausible-analytics-dashboard.webp)\n\n## Why Plausible?\n\nHere's what makes Plausible a great Google Analytics alternative and why we're trusted by thousands of paying subscribers to deliver their website and business insights:\n\n- **Clutter-free**  \n  Plausible provides [simple web analytics](https://plausible.io/simple-web-analytics) that cut through the noise. No layers of menus or need to create custom reports. All key insights are on a single page, with no training required.\n\n- **Privacy-first and compliant**  \n  Measure traffic, not individuals. No personal data or IP addresses are stored, and no cookies or persistent identifiers are used. Fully compliant with GDPR, CCPA and PECR.  \n  [Read more about our data policy](https://plausible.io/data-policy)\n\n- **Lightweight**  \n  Our script is [tiny](https://plausible.io/lightweight-web-analytics), helping your website load faster. You can also send events directly to our [events API](https://plausible.io/docs/events-api).\n\n- **Built for modern workflows**  \n  Works with modern frameworks and supports SPAs out of the box, including pushState and hash-based routing. See [details](https://plausible.io/docs/hash-based-routing).\n\n- **Define key goals and track conversions**  \n  Track goals, conversions, revenue attribution and funnels using custom events and dimensions. Turn on codeless tracking for outbound link clicks, form completions, file downloads and 404 error pages.\n\n- **Easy reporting and sharing**  \n  Get weekly or monthly reports via email or Slack, including traffic spike/drop notifications. [Invite team members](https://plausible.io/docs/users-roles) with role-based access, share dashboards publicly or with anyone using a simple link. Make your analytics transparent by default.\n\n- **Search insights included**  \n  Integrate with Google Search Console to get accurate keyword data directly in your dashboard.\n\n- **API and integrations**  \n  Send events directly via our API and export your stats using the stats API or CSV. Build custom workflows and integrations on top of your data.\n\n- **Real-time insights**  \n  Monitor live traffic and understand what’s happening on your site as it happens.\n\n- **Smooth transition from Google Analytics**  \n  Familiar metrics, campaign tracking and Search Console integration. Import your historical Google Analytics stats and continue where you left off.\n\nThousands of teams use Plausible to understand their traffic without sacrificing privacy or simplicity. Learn how to [get the most out of your Plausible experience](https://plausible.io/docs/your-plausible-experience).\n\nWe are dedicated to making web analytics more privacy-friendly. Our mission is to reduce corporate surveillance by providing an alternative web analytics tool which doesn’t come from the AdTech world. We are completely independent and solely funded by our subscribers.  \n\nInterested to learn more? [Read more on our website](https://plausible.io), learn more about the team and our goals on [our about page](https://plausible.io/about) or explore [the documentation](https://plausible.io/docs). \n\n## Why is Plausible Analytics Cloud not free like Google Analytics?\n\nPlausible is an independent, open source project funded entirely by our users. We charge a subscription to sustainably develop, maintain and improve the product over the long term.\n\nGoogle Analytics is free to use because Google monetizes user data for advertising. That model comes with trade-offs: data collection, complexity and additional overhead for compliance and consent.\n\nWith Plausible, the business model is simple:\n\n- No data collection beyond aggregated, anonymized stats  \n- No third-party data sharing  \n- No advertising or tracking ecosystem  \n- You fully own and control your data  \n\nWe believe paying for analytics should be straightforward. You pay for a product, not with your users’ data, but with a transparent subscription. [Learn more](https://plausible.io/paid-analytics-vs-free-ga).\n\n## Getting started with Plausible\n\nThe easiest way to get started with Plausible Analytics is with [our official managed service in the cloud](https://plausible.io/register).\n\n- Takes ~2 minutes to set up  \n- Global CDN, high availability, backups and security included  \n- No maintenance required\n\nIn order to be compliant with the GDPR and the Schrems II ruling, all visitor data for our managed service in the cloud is exclusively processed on servers and cloud infrastructure owned and operated by European providers. Your website data never leaves the EU.\n\nOur managed hosting can save a substantial amount of developer time and resources. For most sites this ends up being the best value option and the revenue goes to funding the maintenance and further development of Plausible. So you’ll be supporting open source software and getting a great service!\n\n### Can Plausible be self-hosted?\n\nPlausible is [open source web analytics](https://plausible.io/open-source-website-analytics) and we have a free as in beer and self-hosted solution called [Plausible Community Edition (CE)](https://plausible.io/self-hosted-web-analytics). Here are the differences between Plausible Analytics managed hosting in the cloud and the Plausible CE:\n\n|  | Plausible Analytics Cloud  | Plausible Community Edition |\n| ------------- | ------------- | ------------- |\n| **Infrastructure management** | Easy and convenient. It takes 2 minutes to start counting your stats with a worldwide CDN, high availability, backups, security and maintenance all done for you by us. We manage everything so you don’t have to worry about anything and can focus on your stats. | You do it all yourself. You need to get a server and you need to manage your infrastructure. You are responsible for installation, maintenance, upgrades, server capacity, uptime, backup, security, stability, consistency, loading time and so on.|\n| **Release schedule** | Continuously developed and improved with new features and updates multiple times per week. | [It's a long term release](https://plausible.io/blog/building-open-source) published twice per year so latest features and improvements won't be immediately available.|\n| **Premium features** | All features available as listed in [our pricing plans](https://plausible.io/#pricing). | Premium features (marketing funnels, ecommerce revenue goals, SSO and sites API) are not available in order to help support [the project's long-term sustainability](https://plausible.io/blog/community-edition).|\n| **Bot filtering** | Advanced bot filtering for more accurate stats. Our algorithm detects and excludes non-human traffic patterns. We also exclude known bots by the User-Agent header and filter out traffic from data centers and referrer spam domains. ",
+      "language": "Elixir",
+      "topics": [
+        "analytics",
+        "analytics-dashboard",
+        "clickhouse",
+        "elixir",
+        "google-analytics",
+        "marketing",
+        "open-source-analytics",
+        "phoenix",
+        "plausible-analytics",
+        "postgresql",
+        "privacy",
+        "privacy-friendly",
+        "self-hosted",
+        "simple-analytics",
+        "statistics",
+        "tailwindcss",
+        "web-analytics",
+        "website-analytics",
+        "website-stats",
+        "website-tracking"
+      ],
+      "stars": 24560,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "datahub-project/datahub",
+      "name": "datahub",
+      "url": "https://github.com/datahub-project/datahub",
+      "description": "The Metadata Platform for your Data and AI Stack",
+      "readme": "<!--HOSTED_DOCS_ONLY\nimport useBaseUrl from '@docusaurus/useBaseUrl';\n\nexport const Logo = (props) => {\n  return (\n    <div style={{ display: \"flex\", justifyContent: \"center\", padding: \"20px\", height: \"190px\" }}>\n      <img\n        alt=\"DataHub Logo\"\n        src=\"https://raw.githubusercontent.com/datahub-project/static-assets/main/imgs/datahub-logo-color-mark.svg\"\n        {...props}\n      />\n    </div>\n  );\n};\n\n<Logo />\n\n<!--\nHOSTED_DOCS_ONLY-->\n<p align=\"center\">\n<a href=\"https://datahub.com\">\n<img alt=\"DataHub\" src=\"https://raw.githubusercontent.com/datahub-project/static-assets/main/imgs/datahub-logo-color-mark.svg\" height=\"150\" />\n</a>\n</p>\n<!-- -->\n\n# The #1 Open Source AI Data Catalog\n\n_Enterprise-grade metadata platform enabling discovery, governance, and observability across your entire data ecosystem_\n\n<p align=\"center\">\n  <a href=\"https://github.com/datahub-project/datahub/actions/workflows/build-and-test.yml\">\n    <img src=\"https://github.com/datahub-project/datahub/actions/workflows/build-and-test.yml/badge.svg\" alt=\"Build Status\" />\n  </a>\n  <a href=\"https://pypi.org/project/acryl-datahub/\">\n    <img src=\"https://img.shields.io/pypi/v/acryl-datahub.svg\" alt=\"PyPI Version\" />\n  </a>\n  <a href=\"https://pypi.org/project/acryl-datahub/\">\n    <img src=\"https://img.shields.io/pypi/dm/acryl-datahub.svg\" alt=\"PyPI Downloads\" />\n  </a>\n  <a href=\"https://hub.docker.com/r/linkedin/datahub-gms\">\n    <img src=\"https://img.shields.io/docker/pulls/linkedin/datahub-gms.svg\" alt=\"Docker Pulls\" />\n  </a>\n  <br />\n  <a href=\"https://datahub.com/slack?utm_source=github&utm_medium=readme&utm_campaign=github_readme\">\n    <img src=\"https://img.shields.io/badge/slack-join_chat-white.svg?logo=slack&style=social\" alt=\"Join Slack\" />\n  </a>\n  <a href=\"https://www.youtube.com/channel/UC3qFQC5IiwR5fvWEqi_tJ5w\">\n    <img src=\"https://img.shields.io/youtube/channel/subscribers/UC3qFQC5IiwR5fvWEqi_tJ5w?style=social&logo=youtube&label=Subscribe\" alt=\"YouTube Subscribers\" />\n  </a>\n  <a href=\"https://datahub.com/blog/\">\n    <img src=\"https://img.shields.io/badge/blog-read-red.svg?style=social&logo=medium\" alt=\"DataHub Blog\" />\n  </a>\n  <a href=\"https://github.com/datahub-project/datahub/graphs/contributors\">\n    <img src=\"https://img.shields.io/github/contributors/datahub-project/datahub.svg\" alt=\"Contributors\" />\n  </a>\n  <a href=\"https://github.com/datahub-project/datahub/stargazers\">\n    <img src=\"https://img.shields.io/github/stars/datahub-project/datahub.svg?style=social&label=Star\" alt=\"GitHub Stars\" />\n  </a>\n  <a href=\"https://github.com/datahub-project/datahub/blob/master/LICENSE\">\n    <img src=\"https://img.shields.io/badge/License-Apache_2.0-blue.svg\" alt=\"License\" />\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://datahub.com/free-trial/\"><b>Free Cloud Trial</b></a> •\n  <a href=\"https://docs.datahub.com/docs/quickstart\"><b>Quick Start</b></a> •\n  <a href=\"https://demo.datahub.com\"><b>Live Demo</b></a> •\n  <a href=\"https://docs.datahub.com\"><b>Documentation</b></a> •\n  <a href=\"https://datahub.com/slack\"><b>Slack Community</b></a> •\n  <a href=\"https://www.youtube.com/@datahubproject\"><b>YouTube</b></a>\n</p>\n\n<p align=\"center\">\n  <i>Built with ❤️ by <a href=\"https://datahub.com\">DataHub</a> and <a href=\"https://engineering.linkedin.com\">LinkedIn</a></i>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://demo.datahub.com\">\n    <img width=\"90%\" src=\"https://raw.githubusercontent.com/datahub-project/static-assets/refs/heads/main/imgs/demos/datahub-tour.gif\" alt=\"DataHub Product Tour\" />\n  </a>\n</p>\n\n<p align=\"center\">\n  <i>Search, discover, and understand your data with DataHub's unified metadata platform</i>\n</p>\n\n---\n\n### 🤖 **NEW: Connect AI Agents to DataHub via Model Context Protocol (MCP)**\n\n<p align=\"center\">\n  <a href=\"https://youtu.be/aVWJsw7RJ8c?t=568\">\n    <img width=\"600\" src=\"https://raw.githubusercontent.com/datahub-project/static-assets/refs/heads/main/imgs/demos/mcp-demo.gif\" alt=\"DataHub MCP Demo - Query metadata with AI agents\" />\n  </a>\n  <br/>\n  <i>▶️ Click to watch full demo on YouTube</i>\n</p>\n\nConnect your AI coding assistants (Cursor, Claude Desktop, Cline) directly to DataHub.\nQuery metadata with natural language: _\"What datasets contain PII?\"_ or _\"Show me lineage for this table\"_\n\n**Quick setup:**\n\n```bash\nnpx -y @acryldata/mcp-server-datahub init\n```\n\n[Learn more →](https://github.com/acryldata/mcp-server-datahub)\n\n---\n\n## What is DataHub?\n\n> **🔍 Finding the right DataHub?** This is the **open-source metadata platform** at [datahub.com](https://datahub.com) (GitHub: [datahub-project/datahub](https://github.com/datahub-project/datahub)). It was previously hosted at `datahubproject.io`, which now redirects to [datahub.com](https://datahub.com). This project is **not related to** [datahub.io](https://datahub.io), which is a separate public dataset hosting service. See the [FAQ](#-frequently-asked-questions) below.\n\n**DataHub is the #1 open-source AI data catalog** that enables discovery, governance, and observability across your entire data ecosystem. Originally built at LinkedIn, DataHub now powers data discovery at thousands of organizations worldwide, managing millions of data assets.\n\n**The Challenge:** Modern data stacks are fragmented across dozens of tools—warehouses, lakes, BI platforms, ML systems, AI agents, orchestration engines. Finding the right data, understanding its lineage, and ensuring governance is like searching through a maze blindfolded.\n\n**The DataHub Solution:** DataHub acts as the central nervous system for your data stack—connecting all your tools through real-time streaming or batch ingestion to create a unified metadata graph. Unlike static catalogs, DataHub keeps your metadata fresh and actionable—powering both human teams and AI agents.\n\n![DataHub for Humans and AI](https://raw.githubusercontent.com/datahub-project/static-assets/refs/heads/main/imgs/datahub_for_human_and_ai.png)\n\n### Why DataHub?\n\n- **🚀 Battle-Tested at Scale:** Born at LinkedIn to handle hyperscale data, now proven at thousands of organizations worldwide managing millions of data assets\n- **⚡ Real-Time Streaming:** Metadata updates in seconds, not hours or days\n- **🤖 AI-Ready:** Native support for AI agents via MCP, LLM integrations, and context management\n- **🔌 Pioneering Ingestion Architecture:** Flexible push/pull framework (widely adopted by other catalogs) with 80+ production-grade connectors extracting deep metadata—column lineage, usage stats, profiling, and quality metrics\n- **👨‍💻 Developer-First:** Rich APIs (GraphQL, OpenAPI), Python + Java SDKs, CLI tools\n- **🏢 Enterprise Ready:** Battle-tested security, authentication, authorization, and audit trails\n- **🌍 Open Source:** Apache 2.0 licensed, vendor-neutral, community-driven\n\n---\n\n## 🧠 The Context Foundation\n\nEssential for modern data teams and reliable AI agents:\n\n- **[Context Management Is the Missing Piece in the Agentic AI Puzzle](https://datahub.com/blog/context-management-is-the-missing-piece-in-the-agentic-ai-puzzle/)** - Why context management is essential for deploying reliable AI agents at scale\n- **[Data Lineage: What It Is and Why It Matters](https://datahub.com/blog/data-lineage-what-it-is-and-why-it-matters/)** - Understanding the map of how data flows through your organization\n- **[What is Metadata Management?](https://datahub.com/blog/what-is-metadata-management/)** - A comprehensive guide for enterprise data leaders\n\n---\n\n## 📑 Table of Contents\n\n- [FAQ](#-frequently-asked-questions)\n- [See DataHub in Action](#-see-datahub-in-action)\n- [Quick Start](#-quick-start-60-seconds)\n- [Installation Options](#-installation-options)\n- [Architecture](#-architecture-overview)\n- [Use Cases & Examples](#-use-cases--examples)\n- [Trusted By](#-trusted-by-industry-leaders)\n- [Ecosystem](#-datahub-ecosystem)\n- [Community](#-community--support)\n- [Contributing](#-contributing)\n- [Resources](#-resources--learning)\n- [License](#-license)\n\n---\n\n## ❓ Frequently Asked Question",
+      "language": "Java",
+      "topics": [
+        "data-catalog",
+        "data-discovery",
+        "data-governance",
+        "datahub",
+        "hacktoberfest",
+        "metadata"
+      ],
+      "stars": 11779,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "pjborowiecki/saasyland.com",
+      "name": "saasyland.com",
+      "url": "https://github.com/pjborowiecki/saasyland.com",
+      "description": "Saasy Land is an open-source, opinionated, clean, elegant Next.js starter kit for production-grade SaaS. Engineered for scale with Bun, Vercel edge, Elysia APIs, Better Auth, Neon + Drizzle, and Shadcn UI. The robust, high-performance foundation for serious builders to ship modern, scalable full-stack applications without the boilerplate overhead.",
+      "readme": "# [Next 14 starters with authentication and database set up](https://saasyland.com)\n\n#### See the live demo [here](https://saasyland.com)\n\n## Description:\n\nStarter templates for [Next.js 14](https://nextjs.org/) full-stack projects. Built with [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com/), [ShadCn/ui](https://ui.shadcn.com/), authentication, and database. Several branches contain several different configurations, including serverless databases like PostgreSQL with [Neon](https://neon.tech), or MySQL with [PlanetScale](https://planetscale.com), [Drizzle ORM](https://orm.drizzle.team/), [Prisma ORM v.5](https://www.prisma.io/) (serverless-compatible), but also [MongoDB Atlas](https://www.mongodb.com/atlas/database), [Supabase](https://supabase.com/), and even [Nest.js](https://nestjs.com/), [Express (MERN stack)](https://expressjs.com/), or [Django](https://www.djangoproject.com/). All users are stored in a database, regardless of whether they signed up with email and password, magic link, or via an OAuth provider, such a Google or GitHub.\n\n<br />\n\n> **Warning**\n> This project is still in active development. See a feature list below to get a better understanding of what has been implemented to date and what is yet to come.\n\n<br />\n\n## Features:\n\n- [x] Authentication with NextAuth\n- [x] Database and ORM set up\n- [x] Magic link authentication\n- [x] OAuth authentication\n- [x] Email and password authentication\n- [x] Email verification\n- [x] Password reset\n- [x] Email templates with React Email\n- [x] Functional contact form\n- [x] Functional newsletter sign up\n- [x] Functional blog with Contentlayer and MDX\n- [x] Functional and styled landing page with pricing, features, testimonials, and FAQ sections\n- [x] Functional and styled sign in and sign up pages\n- [x] Input validation with Zod\n- [x] Rigorous linting and TypeScript type checking\n\n<br />\n\n- [ ] Documentation pages\n- [ ] Stripe payments integration\n- [ ] Opt out from newsletter\n- [ ] User profile and settings pages\n- [ ] Custom loading pages with skeleton loaders\n- [ ] Custom error pages\n- [ ] Add pages for menu items\n- [ ] Improve MDX blog styling\n- [ ] Improve performance and make Edge compatible\n- [ ] Add tests\n\n<br />\n\n![public/images/screenshots/screenshot_1](./public/images/screenshots/screenshot_1.png)\n\n![public/images/screenshots/screenshot_2](./public/images/screenshots/screenshot_2.png)\n\n![public/images/screenshots/screenshot_3](./public/images/screenshots/screenshot_3.png)\n\n![public/images/screenshots/screenshot_4](./public/images/screenshots/screenshot_4.png)\n\n<br />\n\n## Available configurations:\n\n- ### [next-auth-drizzle-neon-postgres](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-drizzle-planetscale-mysql)\n\nThis branch contains a Next.js 14 starter with Next-Auth authentication using JSON Web Tokens (JWT), and a PostgreSQL database set up at [Neon](https://neon.tech). The database is connected with [Drizzle ORM](https://orm.drizzle.team), which is serverless-compatible. OAuth authentication is also set up for GitHub and Google providers. The set up contains email verification and password reset functionality, both set up with [Resend](https://resend.com) and [React Email](https://react).\n\n- ### [next-auth-drizzle-planetscale-mysql](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-drizzle-planetscale-mysql)\n\nThis branch contains a Next.js 14 starter with Next-Auth authentication using JSON Web Tokens (JWT), and a MySQL database set up at [PlanetScale](https://planetscale.com). The database is connected with [Drizzle ORM](https://orm.drizzle.team/), which is serverless-compatible. OAuth authentication is also set up for GitHub and Google providers. The set up contains email verification and password reset functionality, both set up with [Resend](https://resend.com) and [React Email](https://react.email/).\n\n- ### [next-auth-prisma5-serverless-neon-postgres](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-prisma5-serverless-neon-postgres)\n\nThis branch contains a Next.js 14 starter with Next-Auth authentication using JSON Web Tokens (JWT), and a PostgreSQL database set up at [Neon](https://neon.tech). The database is connected via [Prisma](https://prisma.io) v.5, which is serverless-compatible. OAuth authentication is also set up for GitHub and Google. The set up contains email verification and password reset functionality, both set up with [Resend](https://resend.com) and [React Email](https://react.email/).\n\n- ### [next-auth-prisma5-serverless-planetscale-mysql](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-prisma5-serverless-planetscale-mysql)\n\nThis branch contains a Next.js 14 starter with Next-Auth authentication using JSON Web Tokens (JWT), and a MySQL database set up at [PlanetScale](https://planetscale.com). The database is connected via [Prisma](https://prisma.io) v.5, which is serverless-compatible. OAuth authentication is also set up for GitHub and Google. The set up contains email verification and password reset functionality, both set up with [Resend](https://resend.com) and [React Email](https://react.email/).\n\n- ### [next-auth-docker-local-postgres-drizzle](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-docker-local-postgres-drizzle)\n\nUnder construction\n\n- ### [next-auth-docker-local-postgres-prisma](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-docker-local-postgres-prisma)\n\nUnder construction\n\n- ### [next-auth-mongoose-mongodb](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-mongoose-mongodb)\n\nUnder construction\n\n- ### [nestjs-nextjs-next-auth-prisma-sqlite](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/nestjs-nextjs-next-auth-prisma-sqlite)\n\nUnder construction\n\n- ### [nestjs-nextjs-next-auth-drizzle-sqlite](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/nestjs-nextjs-next-auth-drizzle-sqlite)\n\nUnder construction\n\n- ### [mern-nextjs-redux](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/mern-nextjs-redux)\n\nUnder construction\n\n- ### [mern-vite-plain-react-redux](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/mern-vite-plain-react-redux)\n\nUnder construction\n\n- ### [next-auth-supabase-postgres](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/next-auth-supabase-postgres)\n\nUnder construction\n\n- ### [supabase-postgres](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/supabase-postgres)\n\nUnder construction\n\n- ### [django-rest-djoser-digital-ocean-spaces-aws-ses-next-redux](https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented/tree/django-rest-djoser-digital-ocean-spaces-aws-ses-next-redux)\n\nUnder construction\n",
+      "language": "TypeScript",
+      "topics": [
+        "better",
+        "bun",
+        "drizzle",
+        "neon",
+        "next16",
+        "nextjs",
+        "saas",
+        "saas-boilerplate",
+        "saas-template",
+        "serverless",
+        "starter-template"
+      ],
+      "stars": 423,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "raga-ai-hub/RagaAI-Catalyst",
+      "name": "RagaAI-Catalyst",
+      "url": "https://github.com/raga-ai-hub/RagaAI-Catalyst",
+      "description": "Python SDK for Agent AI Observability, Monitoring and Evaluation Framework. Includes features like agent, llm and tools tracing, debugging multi-agentic system, self-hosted dashboard and advanced analytics with timeline and execution graph view ",
+      "readme": "# RagaAI Catalyst&nbsp; ![GitHub release (latest by date)](https://img.shields.io/github/v/release/raga-ai-hub/ragaai-catalyst) ![GitHub stars](https://img.shields.io/github/stars/raga-ai-hub/ragaai-catalyst?style=social)  ![Issues](https://img.shields.io/github/issues/raga-ai-hub/ragaai-catalyst) \n\nRagaAI Catalyst is a comprehensive platform designed to enhance the management and optimization of LLM projects. It offers a wide range of features, including project management, dataset management, evaluation management, trace management, prompt management, synthetic data generation, and guardrail management. These functionalities enable you to efficiently evaluate, and safeguard your LLM applications.\n\n## Table of Contents\n\n- [RagaAI Catalyst](#ragaai-catalyst)\n  - [Installation](#installation)\n  - [Configuration](#configuration)\n  - [Usage](#usage)\n    - [Project Management](#project-management)\n    - [Dataset Management](#dataset-management)\n    - [Evaluation Management](#evaluation)\n    - [Trace Management](#trace-management)\n    - [Agentic Tracing](#agentic-tracing)\n    - [Prompt Management](#prompt-management)\n    - [Synthetic Data Generation](#synthetic-data-generation)\n    - [Guardrail Management](#guardrail-management)\n    - [Red-teaming](#red-teaming)\n\n## Installation\n\nTo install RagaAI Catalyst, you can use pip:\n\n```bash\npip install ragaai-catalyst\n```\n\n## Configuration\n\nBefore using RagaAI Catalyst, you need to set up your credentials. You can do this by setting environment variables or passing them directly to the `RagaAICatalyst` class:\n\n```python\nfrom ragaai_catalyst import RagaAICatalyst\n\ncatalyst = RagaAICatalyst(\n    access_key=\"YOUR_ACCESS_KEY\",\n    secret_key=\"YOUR_SECRET_KEY\",\n    base_url=\"BASE_URL\"\n)\n```\nyou'll need to generate authentication credentials:\n\n1. Navigate to your profile settings\n2. Select \"Authenticate\" \n3. Click \"Generate New Key\" to create your access and secret keys\n\n![How to generate authentication keys](docs/img/autheticate.gif)\n\n**Note**: Authetication to RagaAICatalyst is necessary to perform any operations below.\n\n\n## Usage\n\n### Project Management\n\nCreate and manage projects using RagaAI Catalyst:\n\n```python\n# Create a project\nproject = catalyst.create_project(\n    project_name=\"Test-RAG-App-1\",\n    usecase=\"Chatbot\"\n)\n\n# Get project usecases\ncatalyst.project_use_cases()\n\n# List projects\nprojects = catalyst.list_projects()\nprint(projects)\n```\n![Projects](docs/img/create_project.gif)\n\n### Dataset Management\nManage datasets efficiently for your projects:\n\n```py\nfrom ragaai_catalyst import Dataset\n\n# Initialize Dataset management for a specific project\ndataset_manager = Dataset(project_name=\"project_name\")\n\n# List existing datasets\ndatasets = dataset_manager.list_datasets()\nprint(\"Existing Datasets:\", datasets)\n\n# Create a dataset from CSV\ndataset_manager.create_from_csv(\n    csv_path='path/to/your.csv',\n    dataset_name='MyDataset',\n    schema_mapping={'column1': 'schema_element1', 'column2': 'schema_element2'}\n)\n\n# Get project schema mapping\ndataset_manager.get_schema_mapping()\n\n```\n![Dataset](docs/img/dataset.gif)\n\nFor more detailed information on Dataset Management, including CSV schema handling and advanced usage, please refer to the [Dataset Management documentation](docs/dataset_management.md).\n\n\n### Evaluation\n\nCreate and manage metric evaluation of your RAG application:\n\n```python\nfrom ragaai_catalyst import Evaluation\n\n# Create an experiment\nevaluation = Evaluation(\n    project_name=\"Test-RAG-App-1\",\n    dataset_name=\"MyDataset\",\n)\n\n# Get list of available metrics\nevaluation.list_metrics()\n\n# Add metrics to the experiment\nschema_mapping={\n    'Query': 'prompt',\n    'response': 'response',\n    'Context': 'context',\n    'expectedResponse': 'expected_response'\n}\n\n# Add single metric\nevaluation.add_metrics(\n    metrics=[\n      {\"name\": \"Faithfulness\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"gte\": 0.232323}}, \"column_name\": \"Faithfulness_v1\", \"schema_mapping\": schema_mapping},\n    \n    ]\n)\n\n# Add multiple metrics\nevaluation.add_metrics(\n    metrics=[\n        {\"name\": \"Faithfulness\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"gte\": 0.323}}, \"column_name\": \"Faithfulness_gte\", \"schema_mapping\": schema_mapping},\n        {\"name\": \"Hallucination\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"lte\": 0.323}}, \"column_name\": \"Hallucination_lte\", \"schema_mapping\": schema_mapping},\n        {\"name\": \"Hallucination\", \"config\": {\"model\": \"gpt-4o-mini\", \"provider\": \"openai\", \"threshold\": {\"eq\": 0.323}}, \"column_name\": \"Hallucination_eq\", \"schema_mapping\": schema_mapping},\n    ]\n)\n\n# Get the status of the experiment\nstatus = evaluation.get_status()\nprint(\"Experiment Status:\", status)\n\n# Get the results of the experiment\nresults = evaluation.get_results()\nprint(\"Experiment Results:\", results)\n\n# Appending Metrics for New Data\n# If you've added new rows to your dataset, you can calculate metrics just for the new data:\nevaluation.append_metrics(display_name=\"Faithfulness_v1\")\n```\n\n![Evaluation](docs/img/evaluation.gif)\n\n\n\n### Trace Management\n\nRecord and analyze traces of your RAG application:\n            \n```python\nfrom ragaai_catalyst import RagaAICatalyst, Tracer\n\ntracer = Tracer(\n    project_name=\"Test-RAG-App-1\",\n    dataset_name=\"tracer_dataset_name\",\n    tracer_type=\"tracer_type\"\n)\n```\n\nThere are two ways to start a trace recording\n\n1- with tracer():\n\n```python\n\nwith tracer():\n    # Your code here\n\n```\n\n2- tracer.start()\n\n```python\n#start the trace recording\ntracer.start()\n\n# Your code here\n\n# Stop the trace recording\ntracer.stop()\n\n# Get upload status\ntracer.get_upload_status()\n```\n\n![Trace](docs/img/trace_comp.png)\nFor more detailed information on Trace Management, please refer to the [Trace Management documentation](docs/trace_management.md).\n\n### Agentic Tracing\n\nThe Agentic Tracing module provides comprehensive monitoring and analysis capabilities for AI agent systems. It helps track various aspects of agent behavior including:\n\n- LLM interactions and token usage\n- Tool utilization and execution patterns\n- Network activities and API calls\n- User interactions and feedback\n- Agent decision-making processes\n\nThe module includes utilities for cost tracking, performance monitoring, and debugging agent behavior. This helps in understanding and optimizing AI agent performance while maintaining transparency in agent operations.\n\n#### Tracer initialization\n\nInitialize the tracer with project_name and dataset_name\n\n```python\nfrom ragaai_catalyst import RagaAICatalyst, Tracer, trace_llm, trace_tool, trace_agent, current_span\n\nagentic_tracing_dataset_name = \"agentic_tracing_dataset_name\"\n\ntracer = Tracer(\n    project_name=agentic_tracing_project_name,\n    dataset_name=agentic_tracing_dataset_name,\n    tracer_type=\"Agentic\",\n)\n```\n\n```python\n# Enable auto-instrumentation\nfrom ragaai_catalyst import init_tracing\ninit_tracing(catalyst=catalyst, tracer=tracer)\n```\n\n![Tracing](docs/img/last_main.png)\nFor more detailed information on Trace Management, please refer to the [Agentic Tracing Management documentation](docs/agentic_tracing.md).\n\n\n### Prompt Management\n\nManage and use prompts efficiently in your projects:\n\n```py\nfrom ragaai_catalyst import PromptManager\n\n# Initialize PromptManager\nprompt_manager = PromptManager(project_name=\"Test-RAG-App-1\")\n\n# List available prompts\nprompts = prompt_manager.list_prompts()\nprint(\"Available prompts:\", prompts)\n\n# Get default prompt by prompt_name\nprompt_name = \"your_prompt_name\"\nprompt = prompt_manager.get_prompt(prompt_name)\n\n# Get specific version of prompt by prompt_name and version\nprompt_name = \"your_prompt_name\"\nversion = \"v1\"\nprompt = prompt_manager.get_prompt(prompt_name,version)\n\n# Get variables in a prompt\nvariable = prompt.get_variables()\nprint(\"variable:\",variable)\n\n# Get prompt content\nprompt_content = prompt.get_prompt_content()\nprint(\"prompt_content:\", prompt_content)\n\n# Compile the promp",
+      "language": "Python",
+      "topics": [
+        "agentic-ai",
+        "agentic-ai-development",
+        "agentneo",
+        "agents",
+        "ai-agent-monitoring",
+        "ai-application-debugging",
+        "ai-evaluation-tools",
+        "ai-performance-optimization",
+        "ai-tool-interaction-monitoring",
+        "llm-testing",
+        "llm-tracing",
+        "llmops"
+      ],
+      "stars": 16127,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "lexical+rerank"
+    },
+    {
+      "slug": "binhnguyennus/awesome-scalability",
+      "name": "awesome-scalability",
+      "url": "https://github.com/binhnguyennus/awesome-scalability",
+      "description": "The Patterns of Scalable, Reliable, and Performant Large-Scale Systems",
+      "readme": "[![Logo](/logo.png)](http://awesome-scalability.com/)\n\nAn updated and organized reading list for illustrating the patterns of scalable, reliable, and performant large-scale systems. Concepts are explained in the articles of prominent engineers and credible references. Case studies are taken from battle-tested systems that serve millions to billions of users.\n\n#### If your system goes slow\n> Understand your problems: scalability problem (fast for a single user but slow under heavy load) or performance problem (slow for a single user) by reviewing some [design principles](#principle) and checking how [scalability](#scalability) and [performance](#performance) problems are solved at tech companies. The section of [intelligence](#intelligence) are created for those who work with data and machine learning at big (data) and deep (learning) scale.\n\n#### If your system goes down\n> \"Even if you lose all one day, you can build all over again if you retain your calm!\" - Thuan Pham, former CTO of Uber. So, keep calm and mind the [availability](#availability) and [stability](#stability) matters! \n\n#### If you are having a system design interview\n> Look at some [interview notes](#interview) and [real-world architectures with completed diagrams](#architecture) to get a comprehensive view before designing your system on whiteboard. You can check some [talks](#talk) of engineers from tech giants to know how they build, scale, and optimize their systems. Good luck!\n\n#### If you are building your dream team\n> The goal of scaling team is not growing team size but increasing team output and value. You can find out how tech companies reach that goal in various aspects: hiring, management, organization, culture, and communication in the [organization](#organization) section.\n\n#### Community power\n\n> Contributions are greatly welcome! You may want to take a look at the [contribution guidelines](CONTRIBUTING.md). If you see a link here that is no longer maintained or is not a good fit, please submit a pull request!\n\n> Many long hours of hard work have gone into this project. If you find it helpful, please share on Facebook, [on Twitter](https://ctt.ec/V8B2p), [on Weibo](http://t.cn/RnjFLCB), or on your chat groups! Knowledge is power, knowledge shared is power multiplied. Thank you!\n\n## Content\n- [Principle](#principle)\n- [Scalability](#scalability)\n- [Availability](#availability)\n- [Stability](#stability)\n- [Performance](#performance)\n- [Intelligence](#intelligence)\n- [Architecture](#architecture)\n- [Interview](#interview)\n- [Organization](#organization)\n- [Talk](#talk)\n- [Book](#book)\n\n## Principle\n* [Lessons from Giant-Scale Services - Eric Brewer, UC Berkeley & Google](https://people.eecs.berkeley.edu/~brewer/papers/GiantScale-IEEE.pdf)\n* [Designs, Lessons and Advice from Building Large Distributed Systems - Jeff Dean, Google](https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf)\n* [How to Design a Good API & Why it Matters - Joshua Bloch, CMU & Google](https://www.infoq.com/presentations/effective-api-design)\n* [On Efficiency, Reliability, Scaling - James Hamilton, VP at AWS](http://mvdirona.com/jrh/work/)\n* [Principles of Chaos Engineering](https://www.usenix.org/conference/srecon17americas/program/presentation/rosenthal)\n* [Finding the Order in Chaos](https://www.usenix.org/conference/srecon16/program/presentation/lueder)\n* [The Twelve-Factor App](https://12factor.net/)\n* [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)\n* [High Cohesion and Low Coupling](http://www.math-cs.gordon.edu/courses/cs211/lectures-2009/Cohesion,Coupling,MVC.pdf)\n* [Monoliths and Microservices](https://medium.com/@SkyscannerEng/monoliths-and-microservices-8c65708c3dbf)\n* [CAP Theorem and Trade-offs](http://robertgreiner.com/2014/08/cap-theorem-revisited/)\n* [CP Databases and AP Databases](https://blog.andyet.com/2014/10/01/right-database)\n* [Stateless vs Stateful Scalability](http://ithare.com/scaling-stateful-objects/)\t\n* [Scale Up vs Scale Out: Hidden Costs](https://blog.codinghorror.com/scaling-up-vs-scaling-out-hidden-costs/)\n* [ACID and BASE](https://neo4j.com/blog/acid-vs-base-consistency-models-explained/)\n* [Blocking/Non-Blocking and Sync/Async](https://blogs.msdn.microsoft.com/csliu/2009/08/27/io-concept-blockingnon-blocking-vs-syncasync/)\n* [Performance and Scalability of Databases](https://use-the-index-luke.com/sql/testing-scalability)\n* [Database Isolation Levels and Effects on Performance and Scalability](http://highscalability.com/blog/2011/2/10/database-isolation-levels-and-their-effects-on-performance-a.html)\n* [The Probability of Data Loss in Large Clusters](https://martin.kleppmann.com/2017/01/26/data-loss-in-large-clusters.html)\n* [Data Access for Highly-Scalable Solutions: Using SQL, NoSQL, and Polyglot Persistence](https://docs.microsoft.com/en-us/previous-versions/msp-n-p/dn271399(v=pandp.10))\n* [SQL vs NoSQL](https://www.upwork.com/hiring/data/sql-vs-nosql-databases-whats-the-difference/)\n* [SQL vs NoSQL - Lesson Learned at Salesforce](https://engineering.salesforce.com/sql-or-nosql-9eaf1d92545b)\n* [NoSQL Databases: Survey and Decision Guidance](https://medium.baqend.com/nosql-databases-a-survey-and-decision-guidance-ea7823a822d)\n* [How Sharding Works](https://medium.com/@jeeyoungk/how-sharding-works-b4dec46b3f6)\n* [Consistent Hashing](http://www.tom-e-white.com/2007/11/consistent-hashing.html)\n* [Consistent Hashing: Algorithmic Tradeoffs](https://medium.com/@dgryski/consistent-hashing-algorithmic-tradeoffs-ef6b8e2fcae8)\n* [Don’t be tricked by the Hashing Trick](https://booking.ai/dont-be-tricked-by-the-hashing-trick-192a6aae3087)\n* [Uniform Consistent Hashing at Netflix](https://medium.com/netflix-techblog/distributing-content-to-open-connect-3e3e391d4dc9)\n* [Eventually Consistent - Werner Vogels, CTO at Amazon](https://www.allthingsdistributed.com/2008/12/eventually_consistent.html)\n* [Cache is King](https://www.stevesouders.com/blog/2012/10/11/cache-is-king/)\n* [Anti-Caching](https://www.the-paper-trail.org/post/2014-06-06-paper-notes-anti-caching/)\n* [Understand Latency](http://highscalability.com/latency-everywhere-and-it-costs-you-sales-how-crush-it)\n* [Latency Numbers Every Programmer Should Know](http://norvig.com/21-days.html#answers)\n* [The Calculus of Service Availability](https://queue.acm.org/detail.cfm?id=3096459&__s=dnkxuaws9pogqdnxmx8i)\n* [Architecture Issues When Scaling Web Applications: Bottlenecks, Database, CPU, IO](http://highscalability.com/blog/2014/5/12/4-architecture-issues-when-scaling-web-applications-bottlene.html)\t\n* [Common Bottlenecks](http://highscalability.com/blog/2012/5/16/big-list-of-20-common-bottlenecks.html)\n* [Life Beyond Distributed Transactions](https://queue.acm.org/detail.cfm?id=3025012)\n* [Relying on Software to Redirect Traffic Reliably at Various Layers](https://www.usenix.org/conference/srecon15/program/presentation/taveira)\n* [Breaking Things on Purpose](https://www.usenix.org/conference/srecon17americas/program/presentation/andrus)\n* [Avoid Over Engineering](https://medium.com/@rdsubhas/10-modern-software-engineering-mistakes-bc67fbef4fc8)\n* [Scalability Worst Practices](https://www.infoq.com/articles/scalability-worst-practices)\n* [Use Solid Technologies - Don’t Re-invent the Wheel - Keep It Simple!](https://medium.com/@DataStax/instagram-engineerings-3-rules-to-a-scalable-cloud-application-architecture-c44afed31406)\n* [Simplicity by Distributing Complexity](https://engineering.zalando.com/posts/2018/01/simplicity-by-distributing-complexity.html)\n* [Why Over-Reusing is Bad](http://tech.transferwise.com/why-over-reusing-is-bad/)\n* [Performance is a Feature](https://blog.codinghorror.com/performance-is-a-feature/)\n* [Make Performance Part of Your Workflow](https://codeascraft.com/2014/12/11/make-performance-part-of-your-workflow/)\n* [The Benefits of Server Side Rendering over Client Side Rendering](https://medium.com/walmartlabs/the-benefits-of",
+      "language": null,
+      "topics": [
+        "architecture",
+        "awesome",
+        "awesome-list",
+        "backend",
+        "big-data",
+        "computer-science",
+        "design-patterns",
+        "devops",
+        "distributed-systems",
+        "interview",
+        "interview-practice",
+        "interview-questions",
+        "lists",
+        "machine-learning",
+        "programming",
+        "resources",
+        "scalability",
+        "system",
+        "system-design",
+        "web-development"
+      ],
+      "stars": 70283,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "vercel/analytics",
+      "name": "analytics",
+      "url": "https://github.com/vercel/analytics",
+      "description": "Privacy-friendly, real-time traffic insights",
+      "readme": "",
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 503,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "influxdata/influxdb",
+      "name": "influxdb",
+      "url": "https://github.com/influxdata/influxdb",
+      "description": "Scalable datastore for metrics, events, and real-time analytics",
+      "readme": "",
+      "language": "Rust",
+      "topics": [
+        "database",
+        "go",
+        "influxdb",
+        "metrics",
+        "monitoring",
+        "react",
+        "rust",
+        "time-series"
+      ],
+      "stars": 31426,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "metabase/metabase",
+      "name": "metabase",
+      "url": "https://github.com/metabase/metabase",
+      "description": "The easy-to-use open source Business Intelligence and Embedded Analytics tool that lets everyone work with data :bar_chart:",
+      "readme": "",
+      "language": "Clojure",
+      "topics": [
+        "analytics",
+        "bi",
+        "business-intelligence",
+        "businessintelligence",
+        "clojure",
+        "dashboard",
+        "data",
+        "data-analysis",
+        "data-visualization",
+        "database",
+        "metabase",
+        "mysql",
+        "postgres",
+        "postgresql",
+        "reporting",
+        "slack",
+        "sql-editor",
+        "visualization"
+      ],
+      "stars": 46802,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    }
+  ],
+  "baselineOutput": [
+    {
+      "title": "Privacy-First Real-Time Product Analytics SaaS",
+      "thesis": "Combine privacy-first event collection, a real-time time-series backend, embedded BI, and a SaaS app shell to deliver a hosted analytics dashboard for product teams that want Plausible-style tracking plus deeper live exploration.",
+      "formula": "plausible/analytics + influxdata/influxdb + metabase/metabase + pjborowiecki/saasyland.com",
+      "repo_slugs": [
+        "plausible/analytics",
+        "influxdata/influxdb",
+        "metabase/metabase",
+        "pjborowiecki/saasyland.com"
+      ],
+      "repo_roles": [
+        {
+          "repo": "plausible/analytics",
+          "role": "privacy-first web analytics event collection and baseline dashboard semantics"
+        },
+        {
+          "repo": "influxdata/influxdb",
+          "role": "real-time datastore for high-ingest metrics and event series"
+        },
+        {
+          "repo": "metabase/metabase",
+          "role": "self-service BI and embedded analytics for deeper slice-and-dice views"
+        },
+        {
+          "repo": "pjborowiecki/saasyland.com",
+          "role": "multi-tenant SaaS shell for auth, billing-ready app structure, and customer-facing dashboard delivery"
+        }
+      ],
+      "steps": [
+        "Use Saasy Land as the customer-facing app with orgs, auth, and dashboard pages.",
+        "Ingest pageview and event data through Plausible-compatible or Plausible-inspired collection flows into InfluxDB for real-time storage.",
+        "Create a sync or transform layer that exposes InfluxDB-backed aggregates to Metabase for embedded dashboards.",
+        "Embed curated Metabase views inside the Saasy Land app for funnels, live visitors, top pages, and campaign summaries.",
+        "Add tenant scoping and saved dashboard presets for different customer segments such as SaaS, media, and ecommerce."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A privacy-first web analytics collector, a real-time metrics/event database, an embeddable BI layer, and a production SaaS frontend.",
+      "capabilities": [
+        "Real-time traffic and event monitoring",
+        "Privacy-first website analytics",
+        "Embedded dashboards for customers",
+        "Historical trend analysis",
+        "Multi-tenant SaaS delivery"
+      ],
+      "supporting_primitives": [
+        "Event ingestion",
+        "Time-series storage",
+        "SQL/BI visualization",
+        "Auth and app scaffolding"
+      ],
+      "why_fit": "The pieces line up cleanly: Plausible covers privacy-first analytics semantics, InfluxDB is built for metrics/events and low-latency analytics, Metabase gives flexible dashboards without building every chart from scratch, and Saasy Land provides the application framework needed to package the stack as a usable product.",
+      "use_case": "A startup or agency wants a hosted analytics portal that shows live traffic, conversions, and content performance without relying on Google Analytics.",
+      "why_better_than_single": "Plausible alone is opinionated and focused, but adding InfluxDB and Metabase enables more custom real-time analysis and embedded reporting, while Saasy Land turns the stack into a customer-ready product instead of a loose internal deployment.",
+      "first_user": "Agencies managing analytics for multiple client websites.",
+      "demo_72h": "Day 1: deploy Saasy Land, InfluxDB, Metabase, and Plausible locally or in staging; wire auth and create a sample tenant dashboard. Day 2: route tracked pageview/event data into InfluxDB and build a few live aggregate queries. Day 3: embed Metabase charts into the app, add a live visitors page, and demo one tenant viewing real-time and 7-day analytics side by side.",
+      "key_risks": [
+        "Plausible is already a complete analytics product, so differentiation must come from multi-tenant packaging or deeper custom dashboards.",
+        "Mapping event data cleanly from collection into InfluxDB and then into Metabase may require nontrivial modeling work.",
+        "Metabase is strongest for BI-style analysis, so extremely low-latency live dashboard UX may still need custom frontend components.",
+        "Multi-tenant data isolation must be handled carefully across storage and embedded BI layers."
+      ],
+      "novelty": 0.49,
+      "composable_fit": 0.9,
+      "accessibility_wedge": 0.82,
+      "time_to_demo": 0.84,
+      "category_upside": 0.74,
+      "narrative_clarity": 0.89
+    },
+    {
+      "title": "Real-Time Data Observability Command Center",
+      "thesis": "Combine metadata management, real-time metrics storage, and BI dashboards to create an operational analytics console that shows data platform health, freshness, and lineage-adjacent context in one place.",
+      "formula": "datahub-project/datahub + influxdata/influxdb + metabase/metabase + pjborowiecki/saasyland.com",
+      "repo_slugs": [
+        "datahub-project/datahub",
+        "influxdata/influxdb",
+        "metabase/metabase",
+        "pjborowiecki/saasyland.com"
+      ],
+      "repo_roles": [
+        {
+          "repo": "datahub-project/datahub",
+          "role": "metadata platform and system of record for datasets, pipelines, and data stack entities"
+        },
+        {
+          "repo": "influxdata/influxdb",
+          "role": "real-time storage for operational metrics, freshness checks, and pipeline event streams"
+        },
+        {
+          "repo": "metabase/metabase",
+          "role": "dashboarding and embedded BI for reliability, freshness, and usage reporting"
+        },
+        {
+          "repo": "pjborowiecki/saasyland.com",
+          "role": "front-end app shell to package observability views, auth, and team workflows into a usable SaaS or internal portal"
+        }
+      ],
+      "steps": [
+        "Ingest metadata from a sample warehouse or pipeline environment into DataHub.",
+        "Send pipeline run stats, freshness timestamps, incident counters, or quality check outputs into InfluxDB.",
+        "Build Metabase dashboards for dataset freshness, pipeline failure rates, and ownership-based issue summaries.",
+        "Use Saasy Land to provide a unified homepage with links to entity detail pages, alerts, and embedded dashboards.",
+        "Cross-link from a dashboard tile to the corresponding DataHub entity page so users can move from metrics to metadata context."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "Metadata inventory plus live operational metrics plus embedded analytics in a team-facing portal.",
+      "capabilities": [
+        "Dataset and pipeline inventory",
+        "Freshness and reliability monitoring",
+        "Operational dashboards",
+        "Team access via a polished web app",
+        "Contextual drill-down from metric to asset metadata"
+      ],
+      "supporting_primitives": [
+        "Metadata catalog",
+        "Metrics/event storage",
+        "Embedded BI",
+        "Auth and UI scaffolding"
+      ],
+      "why_fit": "DataHub explains what assets exist and who owns them, while InfluxDB stores the fast-moving operational signals about those assets; Metabase visualizes the patterns, and Saasy Land turns the whole thing into an accessible command center instead of a set of separate tools.",
+      "use_case": "A data platform team wants one dashboard where analysts and engineers can see which datasets are stale, which pipelines are failing, and who owns affected assets.",
+      "why_better_than_single": "DataHub alone is metadata-centric, not a complete live operations dashboard; InfluxDB plus Metabase adds the time-based operational layer, and Saasy Land creates a simpler team entry point than asking users to navigate multiple systems directly.",
+      "first_user": "A 10-50 person data team running shared pipelines and analytics assets.",
+      "demo_72h": "Day 1: stand up DataHub, InfluxDB, Metabase, and Saasy Land; load sample metadata and mock pipeline entities. Day 2: stream sample freshness and failure metrics into InfluxDB; build Metabase charts for SLA breaches and stale datasets. Day 3: create a portal homepage in Saasy Land with embedded dashboards and links into DataHub entity pages for drill-down.",
+      "key_risks": [
+        "DataHub integration can be setup-heavy depending on real source systems.",
+        "This combo provides observability-adjacent value, but lineage visualization and incident workflows may still remain inside DataHub or custom code.",
+        "Defining a clean metric model for freshness, failures, and ownership can take time before dashboards are genuinely useful.",
+        "Metabase embedding and DataHub navigation may feel loosely coupled unless the portal adds opinionated workflows."
+      ],
+      "novelty": 0.63,
+      "composable_fit": 0.88,
+      "accessibility_wedge": 0.71,
+      "time_to_demo": 0.72,
+      "category_upside": 0.8,
+      "narrative_clarity": 0.84
+    },
+    {
+      "title": "Live AI Agent Analytics Dashboard for Teams",
+      "thesis": "Combine agent observability traces, real-time analytics storage, BI dashboards, and a SaaS shell to give teams a live command center for monitoring agent executions, latency, and failure patterns.",
+      "formula": "raga-ai-hub/RagaAI-Catalyst + influxdata/influxdb + metabase/metabase + pjborowiecki/saasyland.com",
+      "repo_slugs": [
+        "raga-ai-hub/RagaAI-Catalyst",
+        "influxdata/influxdb",
+        "metabase/metabase",
+        "pjborowiecki/saasyland.com"
+      ],
+      "repo_roles": [
+        {
+          "repo": "raga-ai-hub/RagaAI-Catalyst",
+          "role": "agent/LLM/tool tracing, debugging, monitoring, and evaluation source data with dashboard context"
+        },
+        {
+          "repo": "influxdata/influxdb",
+          "role": "real-time metrics and event store for execution counts, latency series, token-like usage counters if available, and error streams"
+        },
+        {
+          "repo": "metabase/metabase",
+          "role": "dashboard layer for team-level trend analysis and embedded reporting"
+        },
+        {
+          "repo": "pjborowiecki/saasyland.com",
+          "role": "customer-facing app shell for orgs, auth, and packaging the monitoring experience as a product"
+        }
+      ],
+      "steps": [
+        "Instrument a demo AI agent workflow with RagaAI-Catalyst tracing and monitoring.",
+        "Export or mirror execution-level metrics and status events into InfluxDB for fast live aggregations.",
+        "Create Metabase dashboards for run volume, error rates, tool failure frequency, and latency over time.",
+        "Use Saasy Land to build an operations console with team login, environment selector, and embedded charts.",
+        "Link dashboard panels to RagaAI-Catalyst trace/debug views so operators can jump from aggregate anomaly to run-level diagnosis."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "Agent observability traces with real-time metrics warehousing and embedded team dashboards inside a polished web app.",
+      "capabilities": [
+        "Agent execution monitoring",
+        "Trace-to-dashboard drilldown",
+        "Real-time latency and failure analytics",
+        "Team-facing monitoring portal",
+        "Historical trend reporting"
+      ],
+      "supporting_primitives": [
+        "Tracing",
+        "Monitoring/evaluation",
+        "Time-series analytics",
+        "Embedded BI",
+        "Auth and app scaffolding"
+      ],
+      "why_fit": "RagaAI-Catalyst already provides observability and debugging for agent systems, but teams also need aggregate dashboards and a simple operations surface; InfluxDB and Metabase add that analytics layer, while Saasy Land packages it into an internal or external monitoring product.",
+      "use_case": "An applied AI team wants one dashboard to monitor agent reliability across environments and then drill into individual failing traces when incidents happen.",
+      "why_better_than_single": "RagaAI-Catalyst covers observability depth, but combining it with InfluxDB and Metabase makes it easier to build executive and operator dashboards, trending reports, and a branded team portal without forcing every user into a trace-centric interface.",
+      "first_user": "A startup operating one or more customer-facing AI agents in production.",
+      "demo_72h": "Day 1: instrument a sample agent app with RagaAI-Catalyst and generate representative traces and runs. Day 2: push run status and latency metrics into InfluxDB and build Metabase dashboards. Day 3: wrap the experience in Saasy Land with team login, a live operations homepage, and links from failing dashboard segments to trace detail views.",
+      "key_risks": [
+        "RagaAI-Catalyst already includes dashboard and analytics features, so the product must add clear workflow or multi-tenant packaging value.",
+        "Data export or synchronization from trace data into InfluxDB may need custom glue code.",
+        "AI observability schemas vary widely across agents and tools, so normalization could become messy.",
+        "Users may prefer a single native observability UI if the added dashboard layer does not deliver stronger operational summaries."
+      ],
+      "novelty": 0.58,
+      "composable_fit": 0.86,
+      "accessibility_wedge": 0.76,
+      "time_to_demo": 0.78,
+      "category_upside": 0.77,
+      "narrative_clarity": 0.87
+    }
+  ],
+  "candidateOutput": [
+    {
+      "title": "Privacy-first real-time product analytics stack for SaaS apps",
+      "thesis": "Combine a lightweight event collector, a purpose-built real-time time-series store, and embedded BI to give SaaS teams a self-hosted real-time analytics dashboard they can ship to customers or internal teams fast.",
+      "formula": "Plausible/Vercel-style collection + InfluxDB real-time storage + Metabase self-serve BI + SaaS starter for packaging",
+      "repo_slugs": [
+        "plausible/analytics",
+        "influxdata/influxdb",
+        "metabase/metabase",
+        "pjborowiecki/saasyland.com"
+      ],
+      "repo_roles": [
+        {
+          "repo": "plausible/analytics",
+          "role": "anchor"
+        },
+        {
+          "repo": "influxdata/influxdb",
+          "role": "enabling"
+        },
+        {
+          "repo": "metabase/metabase",
+          "role": "amplification"
+        },
+        {
+          "repo": "pjborowiecki/saasyland.com",
+          "role": "enabling"
+        }
+      ],
+      "steps": [
+        "Use Plausible as the privacy-first web analytics/event collection layer for pageviews and custom events.",
+        "Stream or batch normalized events into InfluxDB so dashboards can query low-latency time-series aggregates for live metrics.",
+        "Expose curated dashboards and ad hoc drill-down in Metabase, including embedded views for tenant-facing analytics.",
+        "Use SaasyLand as the product shell for auth, tenancy, billing, dashboard UX, and admin controls so the analytics stack becomes a sellable SaaS instead of an internal tool.",
+        "Launch with a narrow wedge: B2B SaaS companies that want privacy-friendly in-app usage analytics for their own customers without sending data to Google Analytics."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A privacy-first analytics collector is combined with a real-time time-series backend and an embedded BI layer, then wrapped in a multi-tenant SaaS application shell.",
+      "capabilities": [
+        "Cookie-free web analytics collection",
+        "Real-time metrics/event storage",
+        "Dashboarding and self-serve BI",
+        "Embedded analytics for internal or customer-facing use",
+        "Auth and SaaS app scaffolding"
+      ],
+      "supporting_primitives": [
+        "Plausible's privacy-first, lightweight analytics collection",
+        "InfluxDB's metrics/events storage for real-time analytics workloads",
+        "Metabase's easy dashboarding and embedded analytics",
+        "SaasyLand's production-grade SaaS starter with auth, database, APIs, and UI"
+      ],
+      "why_fit": "The repos line up along the analytics stack cleanly: Plausible handles privacy-friendly capture, InfluxDB is specialized for metrics/events and real-time querying, Metabase turns stored data into usable dashboards, and SaasyLand supplies the application infrastructure these analytics repos do not provide on their own.",
+      "use_case": "A SaaS vendor wants to show each customer live product usage dashboards, active users, feature adoption, and traffic trends inside their app while keeping data collection privacy-friendly and self-hostable.",
+      "why_better_than_single": "Plausible alone gives analytics but not a full embedded multi-tenant product layer; InfluxDB alone is storage without collection UX; Metabase alone is BI without event capture or real-time pipeline. Together they form a complete, shippable analytics product.",
+      "first_user": "A 10-50 person B2B SaaS company that wants to add customer-facing usage analytics to its product this quarter.",
+      "demo_72h": "Day 1: Stand up SaasyLand app shell, add tenant auth, deploy Plausible and InfluxDB, instrument a sample SaaS app with pageview/custom events. Day 2: Build ingestion from collected events into InfluxDB and define tenant-scoped schemas/queries for DAU, feature events, and live visitors. Day 3: Embed Metabase dashboards into the SaaS shell, add one customer-facing analytics page and one internal admin page, then onboard a design-partner SaaS team as the first user.",
+      "key_risks": [
+        "Plausible is centered on web analytics, so broader product-event semantics may need custom modeling.",
+        "Multi-tenant isolation for embedded analytics must be implemented carefully.",
+        "Real-time freshness between collection and BI views can become a UX issue if sync is not tight.",
+        "Metabase embedding and theming may limit highly bespoke customer-facing experiences."
+      ],
+      "novelty": 0.65,
+      "composable_fit": 0.92,
+      "accessibility_wedge": 0.84,
+      "time_to_demo": 0.87,
+      "category_upside": 0.78,
+      "narrative_clarity": 0.92
+    },
+    {
+      "title": "Metadata-aware analytics governance layer for dashboard sprawl",
+      "thesis": "Combine BI, metadata cataloging, and real-time analytics storage to create a dashboard stack where every chart is traceable to its data definitions, owners, and freshness status.",
+      "formula": "Metabase dashboards + DataHub metadata graph + InfluxDB operational analytics",
+      "repo_slugs": [
+        "metabase/metabase",
+        "datahub-project/datahub",
+        "influxdata/influxdb"
+      ],
+      "repo_roles": [
+        {
+          "repo": "metabase/metabase",
+          "role": "anchor"
+        },
+        {
+          "repo": "datahub-project/datahub",
+          "role": "enabling"
+        },
+        {
+          "repo": "influxdata/influxdb",
+          "role": "enabling"
+        }
+      ],
+      "steps": [
+        "Use Metabase as the primary dashboard and BI surface for analysts and operators.",
+        "Store operational metrics and event-style analytics in InfluxDB for low-latency dashboard queries.",
+        "Use DataHub to catalog data assets, document datasets and metrics, assign ownership, and expose lineage/freshness context around the dashboards.",
+        "Create a governance UX that links each Metabase dashboard to DataHub metadata so users can see source definitions, owners, and operational status before trusting a chart.",
+        "Position it as the anti-dashboard-sprawl stack for teams that already have dashboards but lack confidence in what metrics mean or whether they are current."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A dashboarding tool is combined with a metadata platform and a real-time analytics datastore so analytics users can not only view metrics, but also understand where they come from and whether they are trustworthy.",
+      "capabilities": [
+        "Business intelligence dashboards",
+        "Real-time metrics/event querying",
+        "Metadata cataloging for data assets",
+        "Ownership/documentation around analytics assets",
+        "Operational trust layer for analytics consumption"
+      ],
+      "supporting_primitives": [
+        "Metabase's approachable BI and dashboarding",
+        "DataHub's metadata platform for data and AI stacks",
+        "InfluxDB's scalable datastore for metrics, events, and real-time analytics"
+      ],
+      "why_fit": "This combination addresses a real stack gap: Metabase is strong at consuming and presenting data, InfluxDB is suited for real-time operational analytics data, and DataHub adds the metadata and governance layer neither of the others provides. The fit is technical and organizational rather than superficial.",
+      "use_case": "An internal data platform team wants executives and operators to use real-time dashboards without recurring debates over metric definitions, source ownership, or stale pipelines.",
+      "why_better_than_single": "Metabase alone answers 'what is happening' but not 'can I trust this metric'; DataHub alone catalogs assets but does not provide dashboard consumption; InfluxDB alone powers fast queries but not semantic clarity. The combination turns analytics into an auditable product.",
+      "first_user": "A data platform lead at a mid-market company with dozens of internal dashboards and recurring metric definition conflicts.",
+      "demo_72h": "Day 1: Load sample operational event data into InfluxDB and stand up a few Metabase real-time dashboards. Day 2: Register the relevant datasets/dashboards in DataHub with owners, descriptions, and source references. Day 3: Build a lightweight integration page that surfaces linked metadata next to each dashboard and demo it to a data platform lead as the first user.",
+      "key_risks": [
+        "Deep bi-directional integration between Metabase assets and DataHub metadata may require custom glue.",
+        "Metric-layer semantics are not natively solved by the listed repos alone.",
+        "Operational users may ignore metadata unless the trust signals are embedded directly in workflow.",
+        "The product wedge is strongest for organizations already feeling dashboard sprawl pain, which narrows early market."
+      ],
+      "novelty": 0.73,
+      "composable_fit": 0.86,
+      "accessibility_wedge": 0.7,
+      "time_to_demo": 0.74,
+      "category_upside": 0.8,
+      "narrative_clarity": 0.88
+    },
+    {
+      "title": "Unified real-time observability dashboard for AI agent products and customer traffic",
+      "thesis": "Combine agent tracing analytics with privacy-friendly web traffic insights and real-time metrics storage to give AI product teams one dashboard for user traffic, agent behavior, and operational incidents.",
+      "formula": "RagaAI agent observability + Plausible/Vercel traffic analytics + InfluxDB live metrics + Metabase cross-domain dashboards",
+      "repo_slugs": [
+        "raga-ai-hub/RagaAI-Catalyst",
+        "plausible/analytics",
+        "influxdata/influxdb",
+        "metabase/metabase"
+      ],
+      "repo_roles": [
+        {
+          "repo": "raga-ai-hub/RagaAI-Catalyst",
+          "role": "anchor"
+        },
+        {
+          "repo": "plausible/analytics",
+          "role": "enabling"
+        },
+        {
+          "repo": "influxdata/influxdb",
+          "role": "enabling"
+        },
+        {
+          "repo": "metabase/metabase",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use RagaAI-Catalyst for agent, LLM, and tool tracing plus debugging views for AI product behavior.",
+        "Use Plausible to capture privacy-first traffic and user journey signals from the customer-facing product surface.",
+        "Store normalized high-cardinality operational counters, latency metrics, and event aggregates in InfluxDB to support live service health views.",
+        "Use Metabase to create unified dashboards that correlate traffic spikes, user journeys, agent execution traces, and failure rates.",
+        "Sell it as an analytics cockpit for AI-native apps that currently split web analytics and agent observability across separate tools."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "Agent observability data is combined with privacy-first web analytics and real-time operational metrics, then presented through a unified BI layer for cross-functional debugging and monitoring.",
+      "capabilities": [
+        "Agent/LLM/tools tracing and debugging",
+        "Privacy-friendly web traffic analytics",
+        "Real-time metrics and event analytics",
+        "Cross-source dashboards for ops and product teams"
+      ],
+      "supporting_primitives": [
+        "RagaAI-Catalyst's agent observability and evaluation/tracing framework",
+        "Plausible's lightweight privacy-first traffic analytics",
+        "InfluxDB's real-time metrics/events datastore",
+        "Metabase's flexible dashboard composition"
+      ],
+      "why_fit": "AI product teams increasingly need to connect user demand with agent behavior. RagaAI-Catalyst covers the AI execution side, Plausible covers product traffic, InfluxDB provides a real-time storage backbone for operational metrics, and Metabase unifies views across those domains.",
+      "use_case": "An AI support copilot company wants to know whether a rise in website traffic caused degraded tool-call latency, more agent failures, and lower successful resolution rates.",
+      "why_better_than_single": "RagaAI alone shows agent internals but not top-of-funnel traffic; Plausible alone shows visits but not whether agent systems are succeeding; InfluxDB alone is just the real-time backend; Metabase alone cannot generate the underlying telemetry. Together they answer the full operational question.",
+      "first_user": "The head of engineering or AI platform at an AI-native SaaS product with both customer traffic and agent workflows in production.",
+      "demo_72h": "Day 1: Instrument a sample AI app with RagaAI-Catalyst tracing and Plausible traffic analytics; define a few shared identifiers such as session or request groups. Day 2: Push aggregate operational metrics into InfluxDB for latency, token/tool counts, failures, and traffic rates. Day 3: Build Metabase dashboards correlating traffic, agent traces, and incidents, then review the cockpit with an AI product engineering lead as the first user.",
+      "key_risks": [
+        "Joining web analytics and agent telemetry may be difficult without a clean shared identity model.",
+        "RagaAI-Catalyst already includes a self-hosted dashboard, so the added value must be the cross-domain unification.",
+        "Different telemetry granularities may make dashboards misleading if not modeled carefully.",
+        "Privacy and retention policies become more complex when combining user journey and execution trace data."
+      ],
+      "novelty": 0.81,
+      "composable_fit": 0.84,
+      "accessibility_wedge": 0.68,
+      "time_to_demo": 0.72,
+      "category_upside": 0.83,
+      "narrative_clarity": 0.86
+    }
+  ],
+  "judgment": {
+    "verdict": "candidate_wins",
+    "baseline": {
+      "repo_fit": 4,
+      "novelty": 4,
+      "clarity": 5,
+      "theoretical_plausibility": 4,
+      "signal_value": 4
+    },
+    "candidate": {
+      "repo_fit": 4,
+      "novelty": 5,
+      "clarity": 4,
+      "theoretical_plausibility": 4,
+      "signal_value": 5
+    },
+    "rationale": "Both outputs are strong and mostly repo-grounded. The baseline is clearer and more consistently uses all three layers the query asks for—in particular, its first idea cleanly combines ingestion (Plausible), storage (InfluxDB), UI/BI (Metabase), and an app shell (SaasyLand). It also stays practical and explains tradeoffs well. However, it is somewhat repetitive and conservative: two of its ideas are close variants on 'add InfluxDB + Metabase + SaasyLand around an existing analytics/observability product.' The candidate is slightly less crisp in places—e.g. role labels like 'anchor/enabling/amplification' are less informative than the baseline's explicit role descriptions, and references like 'Plausible/Vercel-style collection' are a bit looser than the actual listed repos. Still, the candidate provides stronger signal overall: its first stack is tightly aligned to the query, its second idea around DataHub + Metabase + InfluxDB is a more distinctive and credible governance-oriented dashboard stack, and its third idea offers a genuinely novel cross-domain AI-agent-plus-traffic analytics cockpit. So the candidate edges out the baseline on novelty and usefulness, while remaining plausible enough to win overall."
+  }
+}

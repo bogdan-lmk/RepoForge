@@ -16,9 +16,10 @@ interface RepoCardProps {
   description?: string | null;
   language?: string | null;
   stars?: number | null;
+  onOpen?: () => void;
 }
 
-export function RepoCard({ slug, description, language, stars }: RepoCardProps) {
+export function RepoCard({ slug, description, language, stars, onOpen }: RepoCardProps) {
   const langColor = LANG_COLORS[language ?? ""] ?? "#71717A";
   const owner = slug.split("/")[0]?.slice(0, 2).toUpperCase() ?? "R";
 
@@ -29,6 +30,7 @@ export function RepoCard({ slug, description, language, stars }: RepoCardProps) 
     >
       <Link
         href={`/repos/${encodeURIComponent(slug)}`}
+        onClick={onOpen}
         className="group flex items-center gap-4 rounded-xl border border-border-subtle bg-surface-elevated/70 px-4 py-3.5 backdrop-blur-sm transition-all hover:border-teal/15 hover:bg-surface-elevated"
       >
         <div

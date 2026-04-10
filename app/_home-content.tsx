@@ -11,6 +11,7 @@ import { ForgeSpinner } from "@/components/ForgeSpinner";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { CursorGlow } from "@/components/CursorGlow";
 import type { RepoDoc, ComboIdea } from "@/core/types";
+import { enqueueEvent, flushEvents } from "@/lib/analytics";
 
 const stagger: Variants = {
   hidden: {},
@@ -117,6 +118,15 @@ export default function HomeContent() {
 
   const handleSearch = useCallback(
     async (q: string) => {
+      const source = searched ? "results-searchbar" : "hero-searchbar";
+
+      enqueueEvent({
+        type: searched ? "query_retried" : "search_started",
+        queryText: q,
+        page: "home",
+        source,
+      });
+
       setLoading(true);
       setSearched(true);
       setRepos([]);
@@ -135,14 +145,32 @@ export default function HomeContent() {
         const payload = json.data ?? json;
         setRepos(payload.repos ?? []);
         setIdeas(payload.combos ?? []);
+        enqueueEvent({
+          type: "results_rendered",
+          queryText: q,
+          page: "home",
+          source,
+          payload: {
+            repoCount: Array.isArray(payload.repos) ? payload.repos.length : 0,
+            comboCount: Array.isArray(payload.combos) ? payload.combos.length : 0,
+          },
+        });
+        void flushEvents();
       } catch {
         setRepos([]);
         setIdeas([]);
+        enqueueEvent({
+          type: "search_failed",
+          queryText: q,
+          page: "home",
+          source,
+        });
+        void flushEvents();
       } finally {
         setLoading(false);
       }
     },
-    [updateURL],
+    [searched, updateURL],
   );
 
   const handleClear = useCallback(() => {
@@ -160,16 +188,37 @@ export default function HomeContent() {
 
   const handleSave = useCallback(async (idea: ComboIdea) => {
     if (idea.id) {
-      await fetch(`/api/combos/${idea.id}`, { method: "PATCH" });
+      const response = await fetch(`/api/combos/${idea.id}`, { method: "PATCH" });
+      if (response.ok) {
+        enqueueEvent({
+          type: "combo_saved",
+          comboId: idea.id,
+          queryText: searchQuery || null,
+          page: "home",
+          source: "ideas-panel",
+          payload: { title: idea.title },
+        });
+        void flushEvents();
+      }
       return;
     }
 
-    await fetch("/api/combos", {
+    const response = await fetch("/api/combos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(idea),
     });
-  }, []);
+    if (response.ok) {
+      enqueueEvent({
+        type: "combo_saved",
+        queryText: searchQuery || null,
+        page: "home",
+        source: "ideas-panel",
+        payload: { title: idea.title },
+      });
+      void flushEvents();
+    }
+  }, [searchQuery]);
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -322,6 +371,16 @@ export default function HomeContent() {
                           description={repo.description}
                           language={repo.language}
                           stars={repo.stars}
+                          onOpen={() => {
+                            enqueueEvent({
+                              type: "repo_opened",
+                              repoSlug: repo.slug,
+                              queryText: searchQuery || null,
+                              page: "home",
+                              source: "repos-panel",
+                            });
+                            void flushEvents();
+                          }}
                         />
                       </motion.div>
                     ))}
@@ -372,6 +431,17 @@ export default function HomeContent() {
                           tags={idea.repoSlugs?.slice(0, 3)}
                           demo72h={idea.demo72h}
                           href={idea.id ? `/ideas/${idea.id}` : null}
+                          onOpen={() => {
+                            enqueueEvent({
+                              type: "combo_expanded",
+                              comboId: idea.id ?? null,
+                              queryText: searchQuery || null,
+                              page: "home",
+                              source: "ideas-panel",
+                              payload: { title: idea.title },
+                            });
+                            void flushEvents();
+                          }}
                           onSave={() => handleSave(idea)}
                         />
                       </motion.div>

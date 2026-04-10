@@ -1,13 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ParsedQuery } from "@/core/types";
+import { env } from "@/env";
 
-const { mockQuery, mockSearch, mockGetCollections, mockCreateCollection, mockCreatePayloadIndex } =
+const { mockQuery, mockSearch, mockGetCollections, mockGetCollection, mockCreateCollection, mockCreatePayloadIndex, mockGenerateEmbedding } =
   vi.hoisted(() => ({
     mockQuery: vi.fn(),
     mockSearch: vi.fn(),
     mockGetCollections: vi.fn(),
+    mockGetCollection: vi.fn(),
     mockCreateCollection: vi.fn(),
     mockCreatePayloadIndex: vi.fn(),
+    mockGenerateEmbedding: vi.fn().mockResolvedValue(new Array(1536).fill(0.1)),
   }));
 
 vi.mock("@/lib/logger", () => ({
@@ -17,6 +20,7 @@ vi.mock("@/lib/logger", () => ({
 vi.mock("@qdrant/js-client-rest", () => ({
   QdrantClient: vi.fn().mockImplementation(function (this: Record<string, unknown>) {
     this.getCollections = mockGetCollections;
+    this.getCollection = mockGetCollection;
     this.createCollection = mockCreateCollection;
     this.createPayloadIndex = mockCreatePayloadIndex;
     this.query = mockQuery;
@@ -25,7 +29,7 @@ vi.mock("@qdrant/js-client-rest", () => ({
 }));
 
 vi.mock("@/lib/openai", () => ({
-  generateEmbedding: vi.fn().mockResolvedValue(new Array(1536).fill(0.1)),
+  generateEmbedding: mockGenerateEmbedding,
 }));
 
 import { searchVectors } from "@/lib/qdrant";
@@ -46,9 +50,23 @@ function makeParsed(overrides: Partial<ParsedQuery> = {}): ParsedQuery {
 beforeEach(() => {
   vi.clearAllMocks();
   mockGetCollections.mockResolvedValue({ collections: [{ name: "repos" }] });
+  mockGetCollection.mockResolvedValue({
+    config: {
+      params: {
+        vectors: { dense: { size: 1536, distance: "Cosine" } },
+        sparse_vectors: { bm25: { modifier: "idf" } },
+      },
+    },
+  });
   mockCreatePayloadIndex.mockResolvedValue({});
   mockQuery.mockResolvedValue({ points: [] });
   mockSearch.mockResolvedValue([]);
+  mockGenerateEmbedding.mockResolvedValue(new Array(1536).fill(0.1));
+  Object.assign(env, {
+    QDRANT_DENSE_PROVIDER: "openai",
+    QDRANT_DENSE_MODEL: "sentence-transformers/all-minilm-l6-v2",
+    QDRANT_DENSE_VECTOR_SIZE: 384,
+  });
 });
 
 describe("searchVectors", () => {
@@ -94,9 +112,33 @@ describe("searchVectors", () => {
     expect(sparsePrefetch!.query).toEqual(
       expect.objectContaining({
         text: "notebooklm python api",
-        model: "Qdrant/bm25",
+        model: "qdrant/bm25",
       }),
     );
+  });
+
+  it("uses Qdrant-native dense inference when the experiment flag is enabled", async () => {
+    Object.assign(env, {
+      QDRANT_DENSE_PROVIDER: "qdrant",
+      QDRANT_DENSE_MODEL: "sentence-transformers/all-minilm-l6-v2",
+      QDRANT_DENSE_VECTOR_SIZE: 384,
+    });
+
+    await searchVectors("notebooklm python api", makeParsed(), 8);
+
+    const callArgs = mockQuery.mock.calls[0][1] as Record<string, unknown>;
+    const prefetches = callArgs.prefetch as Array<Record<string, unknown>>;
+    const densePrefetch = prefetches.find((prefetch) => prefetch.using === "dense");
+
+    expect(densePrefetch).toEqual(
+      expect.objectContaining({
+        query: {
+          text: "notebooklm python api",
+          model: "sentence-transformers/all-minilm-l6-v2",
+        },
+      }),
+    );
+    expect(mockGenerateEmbedding).not.toHaveBeenCalled();
   });
 
   it("returns empty array when Qdrant returns no results", async () => {
@@ -164,28 +206,55 @@ describe("searchVectors", () => {
   });
 
   it("falls back to dense-only search when hybrid query fails", async () => {
-    mockQuery.mockRejectedValue(new Error("BM25 not supported"));
-    mockSearch.mockResolvedValue([
-      {
-        score: 0.85,
-        payload: {
-          slug: "fallback/repo",
-          name: "Fallback Repo",
-          description: "Dense only",
-          capabilities: [],
-          primitives: [],
-          stars: 100,
-          language: "Python",
-          topics: [],
-        },
-      },
-    ]);
+    mockQuery
+      .mockRejectedValueOnce(new Error("BM25 not supported"))
+      .mockResolvedValueOnce({
+        points: [
+          {
+            score: 0.85,
+            payload: {
+              slug: "fallback/repo",
+              name: "Fallback Repo",
+              description: "Dense only",
+              capabilities: [],
+              primitives: [],
+              stars: 100,
+              language: "Python",
+              topics: [],
+            },
+          },
+        ],
+      });
 
     const parsed = makeParsed();
     const result = await searchVectors("fallback test", parsed, 5);
 
-    expect(mockSearch).toHaveBeenCalled();
+    expect(mockQuery).toHaveBeenCalledTimes(2);
     expect(result).toHaveLength(1);
     expect(result[0].slug).toBe("fallback/repo");
+  });
+
+  it("adds anchor-based filter during dense fallback when anchor terms exist", async () => {
+    mockQuery
+      .mockRejectedValueOnce(new Error("BM25 not supported"))
+      .mockResolvedValueOnce({ points: [] });
+
+    await searchVectors("claude code", makeParsed({ anchorTerms: ["Claude", "assistant"] }), 5);
+
+    expect(mockQuery).toHaveBeenLastCalledWith(
+      "repos",
+      expect.objectContaining({
+        query: expect.anything(),
+        using: "dense",
+        filter: {
+          should: [
+            { key: "slug", match: { value: "claude" } },
+            { key: "topics", match: { value: "claude" } },
+            { key: "slug", match: { value: "assistant" } },
+            { key: "topics", match: { value: "assistant" } },
+          ],
+        },
+      }),
+    );
   });
 });

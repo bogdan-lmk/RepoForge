@@ -17,6 +17,7 @@ interface IdeaCardProps {
   saved?: boolean;
   href?: string | null;
   onSave?: () => void;
+  onOpen?: () => void;
 }
 
 function ScoreRing({ score, size = 42 }: { score: number; size?: number }) {
@@ -53,6 +54,7 @@ export function IdeaCard({
   saved,
   href,
   onSave,
+  onOpen,
 }: IdeaCardProps) {
   const [justSaved, setJustSaved] = useState(false);
 
@@ -141,7 +143,7 @@ export function IdeaCard({
 
   if (href) {
     return (
-      <Link href={href} className={cardClasses}>
+      <Link href={href} className={cardClasses} onClick={onOpen}>
         {inner}
       </Link>
     );

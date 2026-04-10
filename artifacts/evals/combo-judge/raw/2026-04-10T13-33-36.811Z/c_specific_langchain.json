@@ -1,0 +1,631 @@
+{
+  "query": {
+    "id": "c_specific_langchain",
+    "query": "langchain framework for ai agents",
+    "notes": "Should produce combinations around agent orchestration, memory, and execution surfaces."
+  },
+  "repos": [
+    {
+      "slug": "langchain-ai/langgraph",
+      "name": "langgraph",
+      "url": "https://github.com/langchain-ai/langgraph",
+      "description": "Build resilient language agents as graphs.",
+      "readme": "<div align=\"center\">\n  <a href=\"https://www.langchain.com/langgraph\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\".github/images/logo-dark.svg\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\".github/images/logo-light.svg\">\n      <img alt=\"LangGraph Logo\" src=\".github/images/logo-dark.svg\" width=\"50%\">\n    </picture>\n  </a>\n</div>\n\n<div align=\"center\">\n  <h3>Low-level orchestration framework for building stateful agents.</h3>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://opensource.org/licenses/MIT\" target=\"_blank\"><img src=\"https://img.shields.io/pypi/l/langgraph\" alt=\"PyPI - License\"></a>\n  <a href=\"https://pypistats.org/packages/langgraph\" target=\"_blank\"><img src=\"https://img.shields.io/pepy/dt/langgraph\" alt=\"PyPI - Downloads\"></a>\n  <a href=\"https://pypi.org/project/langgraph/\" target=\"_blank\"><img src=\"https://img.shields.io/pypi/v/langgraph.svg?label=%20\" alt=\"Version\"></a>\n  <a href=\"https://x.com/langchain\" target=\"_blank\"><img src=\"https://img.shields.io/twitter/url/https/twitter.com/langchain.svg?style=social&label=Follow%20%40LangChain\" alt=\"Twitter / X\"></a>\n</div>\n\n<br>\n\nTrusted by companies shaping the future of agents – including Klarna, Replit, Elastic, and more – LangGraph is a low-level orchestration framework for building, managing, and deploying long-running, stateful agents.\n\n```bash\npip install -U langgraph\n```\n\nIf you're looking to quickly build agents with LangChain's `create_agent` (built on LangGraph), check out the [LangChain Agents documentation](https://docs.langchain.com/oss/python/langchain/agents).\n\n> [!NOTE]\n> Looking for the JS/TS library? Check out [LangGraph.js](https://github.com/langchain-ai/langgraphjs) and the [JS docs](https://docs.langchain.com/oss/javascript/langgraph/overview).\n\n## Why use LangGraph?\n\nLangGraph provides low-level supporting infrastructure for *any* long-running, stateful workflow or agent:\n\n- **[Durable execution](https://docs.langchain.com/oss/python/langgraph/durable-execution)** — Build agents that persist through failures and can run for extended periods, automatically resuming from exactly where they left off.\n- **[Human-in-the-loop](https://docs.langchain.com/oss/python/langgraph/interrupts)** — Seamlessly incorporate human oversight by inspecting and modifying agent state at any point during execution.\n- **[Comprehensive memory](https://docs.langchain.com/oss/python/langgraph/memory)** — Create truly stateful agents with both short-term working memory for ongoing reasoning and long-term persistent memory across sessions.\n- **[Debugging with LangSmith](https://www.langchain.com/langsmith)** — Gain deep visibility into complex agent behavior with visualization tools that trace execution paths, capture state transitions, and provide detailed runtime metrics.\n- **[Production-ready deployment](https://docs.langchain.com/langsmith/deployments)** — Deploy sophisticated agent systems confidently with scalable infrastructure designed to handle the unique challenges of stateful, long-running workflows.\n\n> [!TIP]\n> For developing, debugging, and deploying AI agents and LLM applications, see [LangSmith](https://docs.langchain.com/langsmith/home).\n\n## LangGraph ecosystem\n\nWhile LangGraph can be used standalone, it also integrates seamlessly with any LangChain product, giving developers a full suite of tools for building agents.\n\nTo improve your LLM application development, pair LangGraph with:\n\n- [Deep Agents](https://github.com/langchain-ai/deepagents) *(new!)* – Build agents that can plan, use subagents, and leverage file systems for complex tasks.\n- [LangChain](https://docs.langchain.com/oss/python/langchain/overview) – Provides integrations and composable components to streamline LLM application development.\n- [LangSmith](https://www.langchain.com/langsmith) – Helpful for agent evals and observability. Debug poor-performing LLM app runs, evaluate agent trajectories, gain visibility in production, and improve performance over time.\n- [LangSmith Deployment](https://docs.langchain.com/langsmith/deployments) – Deploy and scale agents effortlessly with a purpose-built deployment platform for long-running, stateful workflows. Discover, reuse, configure, and share agents across teams – and iterate quickly with visual prototyping in [LangSmith Studio](https://docs.langchain.com/langsmith/studio).\n\n---\n\n## Documentation\n\n- [docs.langchain.com](https://docs.langchain.com/oss/python/langgraph/overview) – Comprehensive documentation, including conceptual overviews and guides\n- [reference.langchain.com/python/langgraph](https://reference.langchain.com/python/langgraph) – API reference docs for LangGraph packages\n- [LangGraph Quickstart](https://docs.langchain.com/oss/python/langgraph/quickstart) – Get started building with LangGraph\n- [Chat LangChain](https://chat.langchain.com/) – Chat with the LangChain documentation and get answers to your questions\n\n**Discussions**: Visit the [LangChain Forum](https://forum.langchain.com) to connect with the community and share all of your technical questions, ideas, and feedback.\n\n## Additional resources\n\n- **[Guides](https://docs.langchain.com/oss/python/learn)** – Quick, actionable code snippets for topics such as streaming, adding memory & persistence, and design patterns (e.g. branching, subgraphs, etc.).\n- **[LangChain Academy](https://academy.langchain.com/courses/intro-to-langgraph)** – Learn the basics of LangGraph in our free, structured course.\n- **[Case studies](https://www.langchain.com/built-with-langgraph)** – Hear how industry leaders use LangGraph to ship AI applications at scale.\n- [Contributing Guide](https://docs.langchain.com/oss/python/contributing/overview) – Learn how to contribute to LangChain projects and find good first issues.\n- [Code of Conduct](https://github.com/langchain-ai/langchain/?tab=coc-ov-file) – Our community guidelines and standards for participation.\n\n---\n\n## Acknowledgements\n\nLangGraph is inspired by [Pregel](https://research.google/pubs/pub37252/) and [Apache Beam](https://beam.apache.org/). The public interface draws inspiration from [NetworkX](https://networkx.org/documentation/latest/). LangGraph is built by LangChain Inc, the creators of LangChain, but can be used without LangChain.\n",
+      "language": "Python",
+      "topics": [
+        "agents",
+        "ai",
+        "ai-agents",
+        "chatgpt",
+        "deepagents",
+        "enterprise",
+        "framework",
+        "gemini",
+        "generative-ai",
+        "langchain",
+        "langgraph",
+        "llm",
+        "multiagent",
+        "open-source",
+        "openai",
+        "pydantic",
+        "python",
+        "rag"
+      ],
+      "stars": 28886,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "langchain-ai/langchain",
+      "name": "langchain",
+      "url": "https://github.com/langchain-ai/langchain",
+      "description": "The agent engineering platform",
+      "readme": "<div align=\"center\">\n  <a href=\"https://docs.langchain.com/oss/python/langchain/overview\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\".github/images/logo-dark.svg\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\".github/images/logo-light.svg\">\n      <img alt=\"LangChain Logo\" src=\".github/images/logo-dark.svg\" width=\"50%\">\n    </picture>\n  </a>\n</div>\n\n<div align=\"center\">\n  <h3>The agent engineering platform.</h3>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://opensource.org/licenses/MIT\" target=\"_blank\"><img src=\"https://img.shields.io/pypi/l/langchain\" alt=\"PyPI - License\"></a>\n  <a href=\"https://pypistats.org/packages/langchain\" target=\"_blank\"><img src=\"https://img.shields.io/pepy/dt/langchain\" alt=\"PyPI - Downloads\"></a>\n  <a href=\"https://pypi.org/project/langchain/#history\" target=\"_blank\"><img src=\"https://img.shields.io/pypi/v/langchain?label=%20\" alt=\"Version\"></a>\n  <a href=\"https://x.com/langchain\" target=\"_blank\"><img src=\"https://img.shields.io/twitter/url/https/twitter.com/langchain.svg?style=social&label=Follow%20%40LangChain\" alt=\"Twitter / X\"></a>\n</div>\n\n<br>\n\nLangChain is a framework for building agents and LLM-powered applications. It helps you chain together interoperable components and third-party integrations to simplify AI application development — all while future-proofing decisions as the underlying technology evolves.\n\n> [!NOTE]\n> Looking for the JS/TS library? Check out [LangChain.js](https://github.com/langchain-ai/langchainjs).\n\n## Quickstart\n\n```bash\npip install langchain\n# or\nuv add langchain\n```\n\n```python\nfrom langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\"openai:gpt-5.4\")\nresult = model.invoke(\"Hello, world!\")\n```\n\nIf you're looking for more advanced customization or agent orchestration, check out [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview), our framework for building controllable agent workflows.\n\n> [!TIP]\n> For developing, debugging, and deploying AI agents and LLM applications, see [LangSmith](https://docs.langchain.com/langsmith/home).\n\n## LangChain ecosystem\n\nWhile the LangChain framework can be used standalone, it also integrates seamlessly with any LangChain product, giving developers a full suite of tools when building LLM applications.\n\n- **[Deep Agents](https://github.com/langchain-ai/deepagents)** — Build agents that can plan, use subagents, and leverage file systems for complex tasks\n- **[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)** — Build agents that can reliably handle complex tasks with our low-level agent orchestration framework\n- **[Integrations](https://docs.langchain.com/oss/python/integrations/providers/overview)** — Chat & embedding models, tools & toolkits, and more\n- **[LangSmith](https://www.langchain.com/langsmith)** — Agent evals, observability, and debugging for LLM apps\n- **[LangSmith Deployment](https://docs.langchain.com/langsmith/deployments)** — Deploy and scale agents with a purpose-built platform for long-running, stateful workflows\n\n## Why use LangChain?\n\nLangChain helps developers build applications powered by LLMs through a standard interface for models, embeddings, vector stores, and more.\n\n- **Real-time data augmentation** — Easily connect LLMs to diverse data sources and external/internal systems, drawing from LangChain's vast library of integrations with model providers, tools, vector stores, retrievers, and more\n- **Model interoperability** — Swap models in and out as your engineering team experiments to find the best choice for your application's needs. As the industry frontier evolves, adapt quickly — LangChain's abstractions keep you moving without losing momentum\n- **Rapid prototyping** — Quickly build and iterate on LLM applications with LangChain's modular, component-based architecture. Test different approaches and workflows without rebuilding from scratch, accelerating your development cycle\n- **Production-ready features** — Deploy reliable applications with built-in support for monitoring, evaluation, and debugging through integrations like LangSmith. Scale with confidence using battle-tested patterns and best practices\n- **Vibrant community and ecosystem** — Leverage a rich ecosystem of integrations, templates, and community-contributed components. Benefit from continuous improvements and stay up-to-date with the latest AI developments through an active open-source community\n- **Flexible abstraction layers** — Work at the level of abstraction that suits your needs — from high-level chains for quick starts to low-level components for fine-grained control. LangChain grows with your application's complexity\n\n---\n\n## Documentation\n\n- [docs.langchain.com](https://docs.langchain.com/oss/python/langchain/overview) – Comprehensive documentation, including conceptual overviews and guides\n- [reference.langchain.com/python](https://reference.langchain.com/python) – API reference docs for LangChain packages\n- [Chat LangChain](https://chat.langchain.com/) – Chat with the LangChain documentation and get answers to your questions\n\n**Discussions**: Visit the [LangChain Forum](https://forum.langchain.com) to connect with the community and share all of your technical questions, ideas, and feedback.\n\n## Additional resources\n\n- [Contributing Guide](https://docs.langchain.com/oss/python/contributing/overview) – Learn how to contribute to LangChain projects and find good first issues.\n- [Code of Conduct](https://github.com/langchain-ai/langchain/?tab=coc-ov-file) – Our community guidelines and standards for participation.\n- [LangChain Academy](https://academy.langchain.com/) – Comprehensive, free courses on LangChain libraries and products, made by the LangChain team.\n",
+      "language": "Python",
+      "topics": [
+        "agents",
+        "ai",
+        "ai-agents",
+        "anthropic",
+        "chatgpt",
+        "deepagents",
+        "enterprise",
+        "framework",
+        "gemini",
+        "generative-ai",
+        "langchain",
+        "langgraph",
+        "llm",
+        "multiagent",
+        "open-source",
+        "openai",
+        "pydantic",
+        "python",
+        "rag"
+      ],
+      "stars": 133047,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "The-Pocket/PocketFlow",
+      "name": "PocketFlow",
+      "url": "https://github.com/The-Pocket/PocketFlow",
+      "description": "Pocket Flow: 100-line LLM framework. Let Agents build Agents!",
+      "readme": "<div align=\"center\">\n  <img src=\"https://github.com/The-Pocket/.github/raw/main/assets/title.png\" alt=\"Pocket Flow – 100-line minimalist LLM framework\" width=\"600\"/>\n</div>\n\n<!-- For translation, replace English with [English](https://github.com/The-Pocket/PocketFlow/blob/main/README.md), and remove the link for the target language. -->\n\nEnglish | [中文](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_CHINESE.md) | [Español](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_SPANISH.md) | [日本語](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_JAPANESE.md) | [Deutsch](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_GERMAN.md) | [Русский](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_RUSSIAN.md) | [Português](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_PORTUGUESE.md) | [Français](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_FRENCH.md) | [한국어](https://github.com/The-Pocket/PocketFlow/blob/main/cookbook/pocketflow-batch/translations/README_KOREAN.md)\n\n![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)\n[![Docs](https://img.shields.io/badge/docs-latest-blue)](https://the-pocket.github.io/PocketFlow/)\n <a href=\"https://discord.gg/hUHHE9Sa6T\">\n    <img src=\"https://img.shields.io/discord/1346833819172601907?logo=discord&style=flat\">\n</a>\n\nPocket Flow is a [100-line](https://github.com/The-Pocket/PocketFlow/blob/main/pocketflow/__init__.py) minimalist LLM framework\n\n- **Lightweight**: Just 100 lines. Zero bloat, zero dependencies, zero vendor lock-in.\n  \n- **Expressive**: Everything you love—([Multi-](https://the-pocket.github.io/PocketFlow/design_pattern/multi_agent.html))[Agents](https://the-pocket.github.io/PocketFlow/design_pattern/agent.html), [Workflow](https://the-pocket.github.io/PocketFlow/design_pattern/workflow.html), [RAG](https://the-pocket.github.io/PocketFlow/design_pattern/rag.html), and more.\n\n- **[Agentic Coding](https://zacharyhuang.substack.com/p/agentic-coding-the-most-fun-way-to)**: Let AI Agents (e.g., Cursor AI) build Agents—10x productivity boost!\n\nGet started with Pocket Flow:\n- To install, ```pip install pocketflow```or just copy the [source code](https://github.com/The-Pocket/PocketFlow/blob/main/pocketflow/__init__.py) (only 100 lines).\n- To learn more, check out the [video tutorial](https://youtu.be/0Zr3NwcvpA0) and [documentation](https://the-pocket.github.io/PocketFlow/)\n- 🎉 Join our [Discord](https://discord.gg/hUHHE9Sa6T) to connect with other developers building with Pocket Flow!\n- 🎉 Pocket Flow now has [Typescript](https://github.com/The-Pocket/PocketFlow-Typescript), [Java](https://github.com/The-Pocket/PocketFlow-Java), [C++](https://github.com/The-Pocket/PocketFlow-CPP), [Go](https://github.com/The-Pocket/PocketFlow-Go), [Rust](https://github.com/The-Pocket/PocketFlow-Rust) and [PHP](https://github.com/The-Pocket/PocketFlow-PHP) versions!\n\n## Why Pocket Flow?\n\nCurrent LLM frameworks are bloated... You only need 100 lines for LLM Framework!\n\n<div align=\"center\">\n  <img src=\"https://github.com/The-Pocket/.github/raw/main/assets/meme.jpg\" width=\"400\"/>\n\n\n  |                | **Abstraction**          | **App-Specific Wrappers**                                      | **Vendor-Specific Wrappers**                                    | **Lines**       | **Size**    |\n|----------------|:-----------------------------: |:-----------------------------------------------------------:|:------------------------------------------------------------:|:---------------:|:----------------------------:|\n| LangChain  | Agent, Chain               | Many <br><sup><sub>(e.g., QA, Summarization)</sub></sup>              | Many <br><sup><sub>(e.g., OpenAI, Pinecone, etc.)</sub></sup>                   | 405K          | +166MB                     |\n| CrewAI     | Agent, Chain            | Many <br><sup><sub>(e.g., FileReadTool, SerperDevTool)</sub></sup>         | Many <br><sup><sub>(e.g., OpenAI, Anthropic, Pinecone, etc.)</sub></sup>        | 18K           | +173MB                     |\n| SmolAgent   | Agent                      | Some <br><sup><sub>(e.g., CodeAgent, VisitWebTool)</sub></sup>         | Some <br><sup><sub>(e.g., DuckDuckGo, Hugging Face, etc.)</sub></sup>           | 8K            | +198MB                     |\n| LangGraph   | Agent, Graph           | Some <br><sup><sub>(e.g., Semantic Search)</sub></sup>                     | Some <br><sup><sub>(e.g., PostgresStore, SqliteSaver, etc.) </sub></sup>        | 37K           | +51MB                      |\n| AutoGen    | Agent                | Some <br><sup><sub>(e.g., Tool Agent, Chat Agent)</sub></sup>              | Many <sup><sub>[Optional]<br> (e.g., OpenAI, Pinecone, etc.)</sub></sup>        | 7K <br><sup><sub>(core-only)</sub></sup>    | +26MB <br><sup><sub>(core-only)</sub></sup>          |\n| **PocketFlow** | **Graph**                    | **None**                                                 | **None**                                                  | **100**       | **+56KB**                  |\n\n</div>\n\n## How does Pocket Flow work?\n\nThe [100 lines](https://github.com/The-Pocket/PocketFlow/blob/main/pocketflow/__init__.py) capture the core abstraction of LLM frameworks: Graph!\n<br>\n<div align=\"center\">\n  <img src=\"https://github.com/The-Pocket/.github/raw/main/assets/abstraction.png\" width=\"900\"/>\n</div>\n<br>\n\nFrom there, it's easy to implement popular design patterns like ([Multi-](https://the-pocket.github.io/PocketFlow/design_pattern/multi_agent.html))[Agents](https://the-pocket.github.io/PocketFlow/design_pattern/agent.html), [Workflow](https://the-pocket.github.io/PocketFlow/design_pattern/workflow.html), [RAG](https://the-pocket.github.io/PocketFlow/design_pattern/rag.html), etc.\n<br>\n<div align=\"center\">\n  <img src=\"https://github.com/The-Pocket/.github/raw/main/assets/design.png\" width=\"900\"/>\n</div>\n<br>\n✨ Below are basic tutorials:\n\n<div align=\"center\">\n  \n|  Name  | Difficulty    |  Description  |  \n| :-------------:  | :-------------: | :--------------------- |  \n| [Chat](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-chat) | ☆☆☆ <sup>*Dummy*</sup>  | A basic chat bot with conversation history |\n| [Structured Output](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-structured-output) | ☆☆☆ <sup>*Dummy*</sup> | Extracting structured data from resumes by prompting |\n| [Workflow](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-workflow) | ☆☆☆ <sup>*Dummy*</sup> | A writing workflow that outlines, writes content, and applies styling |\n| [Agent](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-agent) | ☆☆☆ <sup>*Dummy*</sup>  | A research agent that can search the web and answer questions |\n| [RAG](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-rag) | ☆☆☆ <sup>*Dummy*</sup> | A simple Retrieval-augmented Generation process |\n| [Batch](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-batch) | ☆☆☆ <sup>*Dummy*</sup> | A batch processor that translates markdown into multiple languages |\n| [Streaming](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-llm-streaming) | ☆☆☆ <sup>*Dummy*</sup> | A real-time LLM streaming demo with user interrupt capability |\n| [Chat Guardrail](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-chat-guardrail) | ☆☆☆ <sup>*Dummy*</sup> | A travel advisor chatbot that only processes travel-related queries |\n| [Majority Vote](https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-majority-vote) | ☆☆☆ <sup>*Dummy*</sup> | Improve reasoning accuracy by aggregating multiple solution attempts |\n| [M",
+      "language": "Python",
+      "topics": [
+        "agentic-ai",
+        "agentic-framework",
+        "agentic-workflow",
+        "agents",
+        "ai-framework",
+        "ai-frameworks",
+        "aiagent",
+        "aiagents",
+        "artificial-intelligence",
+        "flow-based-programming",
+        "flow-engineering",
+        "large-language-model",
+        "large-language-models",
+        "llm-agent",
+        "llm-framework",
+        "pocket-flow",
+        "pocketflow",
+        "retrieval-augmented-generation",
+        "workflow",
+        "workflow-orchestration"
+      ],
+      "stars": 10379,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "bytedance/deer-flow",
+      "name": "deer-flow",
+      "url": "https://github.com/bytedance/deer-flow",
+      "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
+      "readme": "# 🦌 DeerFlow - 2.0\n\nEnglish | [中文](./README_zh.md) | [日本語](./README_ja.md) | [Français](./README_fr.md) | [Русский](./README_ru.md)\n\n[![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](./backend/pyproject.toml)\n[![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js&logoColor=white)](./Makefile)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)\n\n<a href=\"https://trendshift.io/repositories/14699\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14699\" alt=\"bytedance%2Fdeer-flow | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n> On February 28th, 2026, DeerFlow claimed the 🏆 #1 spot on GitHub Trending following the launch of version 2. Thanks a million to our incredible community — you made this happen! 💪🔥\n\nDeerFlow (**D**eep **E**xploration and **E**fficient **R**esearch **Flow**) is an open-source **super agent harness** that orchestrates **sub-agents**, **memory**, and **sandboxes** to do almost anything — powered by **extensible skills**.\n\nhttps://github.com/user-attachments/assets/a8bcadc4-e040-4cf2-8fda-dd768b999c18\n\n> [!NOTE]\n> **DeerFlow 2.0 is a ground-up rewrite.** It shares no code with v1. If you're looking for the original Deep Research framework, it's maintained on the [`1.x` branch](https://github.com/bytedance/deer-flow/tree/main-1.x) — contributions there are still welcome. Active development has moved to 2.0.\n\n## Official Website\n\n[<img width=\"2880\" height=\"1600\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a598c49f-3b2f-41ea-a052-05e21349188a\" />](https://deerflow.tech)\n\nLearn more and see **real demos** on our [**official website**](https://deerflow.tech).\n\n## Coding Plan from ByteDance Volcengine\n\n<img width=\"4808\" height=\"2400\" alt=\"英文方舟\" src=\"https://github.com/user-attachments/assets/2ecc7b9d-50be-4185-b1f7-5542d222fb2d\" />\n\n- We strongly recommend using Doubao-Seed-2.0-Code, DeepSeek v3.2 and Kimi 2.5 to run DeerFlow\n- [Learn more](https://www.byteplus.com/en/activity/codingplan?utm_campaign=deer_flow&utm_content=deer_flow&utm_medium=devrel&utm_source=OWO&utm_term=deer_flow)\n- [中国大陆地区的开发者请点击这里](https://www.volcengine.com/activity/codingplan?utm_campaign=deer_flow&utm_content=deer_flow&utm_medium=devrel&utm_source=OWO&utm_term=deer_flow)\n\n## InfoQuest\n\nDeerFlow has newly integrated the intelligent search and crawling toolset independently developed by BytePlus--[InfoQuest (supports free online experience)](https://docs.byteplus.com/en/docs/InfoQuest/What_is_Info_Quest)\n\n<a href=\"https://docs.byteplus.com/en/docs/InfoQuest/What_is_Info_Quest\" target=\"_blank\">\n  <img\n    src=\"https://sf16-sg.tiktokcdn.com/obj/eden-sg/hubseh7bsbps/20251208-160108.png\"   alt=\"InfoQuest_banner\"\n  />\n</a>\n\n---\n\n## Table of Contents\n\n- [🦌 DeerFlow - 2.0](#-deerflow---20)\n  - [Official Website](#official-website)\n  - [Coding Plan from ByteDance Volcengine](#coding-plan-from-bytedance-volcengine)\n  - [InfoQuest](#infoquest)\n  - [Table of Contents](#table-of-contents)\n  - [One-Line Agent Setup](#one-line-agent-setup)\n  - [Quick Start](#quick-start)\n    - [Configuration](#configuration)\n    - [Running the Application](#running-the-application)\n      - [Deployment Sizing](#deployment-sizing)\n      - [Option 1: Docker (Recommended)](#option-1-docker-recommended)\n      - [Option 2: Local Development](#option-2-local-development)\n    - [Advanced](#advanced)\n      - [Sandbox Mode](#sandbox-mode)\n      - [MCP Server](#mcp-server)\n      - [IM Channels](#im-channels)\n      - [LangSmith Tracing](#langsmith-tracing)\n      - [Langfuse Tracing](#langfuse-tracing)\n      - [Using Both Providers](#using-both-providers)\n  - [From Deep Research to Super Agent Harness](#from-deep-research-to-super-agent-harness)\n  - [Core Features](#core-features)\n    - [Skills \\& Tools](#skills--tools)\n      - [Claude Code Integration](#claude-code-integration)\n    - [Sub-Agents](#sub-agents)\n    - [Sandbox \\& File System](#sandbox--file-system)\n    - [Context Engineering](#context-engineering)\n    - [Long-Term Memory](#long-term-memory)\n  - [Recommended Models](#recommended-models)\n  - [Embedded Python Client](#embedded-python-client)\n  - [Documentation](#documentation)\n  - [⚠️ Security Notice](#️-security-notice)\n    - [Improper Deployment May Introduce Security Risks](#improper-deployment-may-introduce-security-risks)\n    - [Security Recommendations](#security-recommendations)\n  - [Contributing](#contributing)\n  - [License](#license)\n  - [Acknowledgments](#acknowledgments)\n    - [Key Contributors](#key-contributors)\n  - [Star History](#star-history)\n\n## One-Line Agent Setup\n\nIf you use Claude Code, Codex, Cursor, Windsurf, or another coding agent, you can hand it the setup instructions in one sentence:\n\n```text\nHelp me clone DeerFlow if needed, then bootstrap it for local development by following https://raw.githubusercontent.com/bytedance/deer-flow/main/Install.md\n```\n\nThat prompt is intended for coding agents. It tells the agent to clone the repo if needed, choose Docker when available, and stop with the exact next command plus any missing config the user still needs to provide.\n\n## Quick Start\n\n### Configuration\n\n1. **Clone the DeerFlow repository**\n\n   ```bash\n   git clone https://github.com/bytedance/deer-flow.git\n   cd deer-flow\n   ```\n\n2. **Generate local configuration files**\n\n   From the project root directory (`deer-flow/`), run:\n\n   ```bash\n   make config\n   ```\n\n   This command creates local configuration files based on the provided example templates.\n\n3. **Configure your preferred model(s)**\n\n   Edit `config.yaml` and define at least one model:\n\n   ```yaml\n   models:\n     - name: gpt-4                       # Internal identifier\n       display_name: GPT-4               # Human-readable name\n       use: langchain_openai:ChatOpenAI  # LangChain class path\n       model: gpt-4                      # Model identifier for API\n       api_key: $OPENAI_API_KEY          # API key (recommended: use env var)\n       max_tokens: 4096                  # Maximum tokens per request\n       temperature: 0.7                  # Sampling temperature\n\n     - name: openrouter-gemini-2.5-flash\n       display_name: Gemini 2.5 Flash (OpenRouter)\n       use: langchain_openai:ChatOpenAI\n       model: google/gemini-2.5-flash-preview\n       api_key: $OPENAI_API_KEY          # OpenRouter still uses the OpenAI-compatible field name here\n       base_url: https://openrouter.ai/api/v1\n\n     - name: gpt-5-responses\n       display_name: GPT-5 (Responses API)\n       use: langchain_openai:ChatOpenAI\n       model: gpt-5\n       api_key: $OPENAI_API_KEY\n       use_responses_api: true\n       output_version: responses/v1\n\n     - name: qwen3-32b-vllm\n       display_name: Qwen3 32B (vLLM)\n       use: deerflow.models.vllm_provider:VllmChatModel\n       model: Qwen/Qwen3-32B\n       api_key: $VLLM_API_KEY\n       base_url: http://localhost:8000/v1\n       supports_thinking: true\n       when_thinking_enabled:\n         extra_body:\n           chat_template_kwargs:\n             enable_thinking: true\n   ```\n\n   OpenRouter and similar OpenAI-compatible gateways should be configured with `langchain_openai:ChatOpenAI` plus `base_url`. If you prefer a provider-specific environment variable name, point `api_key` at that variable explicitly (for example `api_key: $OPENROUTER_API_KEY`).\n\n   To route OpenAI models through `/v1/responses`, keep using `langchain_openai:ChatOpenAI` and set `use_responses_api: true` with `output_version: responses/v1`.\n\n   For vLLM 0.19.0, use `deerflow.models.vllm_provider:VllmChatModel`. For Qwen-style reasoning models, DeerFlow toggles reasoning with `extra_body.chat_template_kwargs.enable_thinking` and preserves vLLM's non-standard `reasoning` field across multi-turn tool-call conversations. Legacy `thinking` configs are normalized automatically for backward compatibility. Reasoning models may also require the server to be started with `--rea",
+      "language": "Python",
+      "topics": [
+        "agent",
+        "agentic",
+        "agentic-framework",
+        "agentic-workflow",
+        "ai",
+        "ai-agents",
+        "deep-research",
+        "harness",
+        "langchain",
+        "langgraph",
+        "langmanus",
+        "llm",
+        "multi-agent",
+        "nodejs",
+        "podcast",
+        "python",
+        "superagent",
+        "typescript"
+      ],
+      "stars": 59739,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "SylphAI-Inc/LLM-engineer-handbook",
+      "name": "LLM-engineer-handbook",
+      "url": "https://github.com/SylphAI-Inc/LLM-engineer-handbook",
+      "description": "A curated list of Large Language Model resources, covering model training, serving, fine-tuning, and building LLM applications.",
+      "readme": "# LLM-engineer-handbook\n🔥 Large Language Models(LLM) have taken the ~~NLP community~~ ~~AI community~~ **the Whole World** by storm. \n\nWhy do we create this repo?\n\n- Everyone can now build an LLM demo in minutes, but it takes a real LLM/AI expert to close the last mile of performance, security, and scalability gaps.\n- The LLM space is complicated! This repo provides a curated list to help you navigate so that you are more likely to build production-grade LLM applications. It includes a collection of Large Language Model frameworks and tutorials, covering model training, serving, fine-tuning, LLM applications & prompt optimization, and LLMOps.\n\n\n*However, classical ML is not going away. Even LLMs need them. We have seen classical models used for protecting data privacy, detecing hallucinations, and more. So, do not forget to study the fundamentals of classical ML.*\n\n\n\n\n## Overview\n\nThe current workflow might look like this: You build a demo using an existing application library or directly from LLM model provider SDKs. It works somehow, but you need to further create evaluation and training datasets to optimize the performance (e.g., accuracy, latency, cost). \n\nYou can do prompt engineering or auto-prompt optimization; you can create a larger dataset to fine-tune the LLM or use Direct Preference Optimization (DPO) to align the model with human preferences.\nThen you need to consider the serving and LLMOps to deploy the model at scale and pipelines to refresh the data.\n\nWe organize the resources by (1) tracking all libraries, frameworks, and tools, (2) learning resources on the whole LLM lifecycle, (3) understanding LLMs, (4) social accounts and community, and (5) how to contribute to this repo.\n\n\n- [LLM-engineer-handbook](#llm-engineer-handbook)\n  - [Overview](#overview)\n- [Libraries \\& Frameworks \\& Tools](#libraries--frameworks--tools)\n  - [Applications](#applications)\n  - [Pretraining](#pretraining)\n  - [Fine-tuning](#fine-tuning)\n  - [Serving](#serving)\n  - [Prompt Management](#prompt-management)\n  - [Datasets](#datasets)\n  - [Benchmarks](#benchmarks)\n- [Learning Resources for LLMs](#learning-resources-for-llms)\n    - [Applications](#applications-1)\n      - [Agent](#agent)\n    - [Modeling](#modeling)\n    - [Training](#training)\n    - [Fine-tuning](#fine-tuning-1)\n    - [Fundamentals](#fundamentals)\n    - [Books](#books)\n    - [Newsletters](#newsletters)\n    - [Auto-optimization](#auto-optimization)\n- [Understanding LLMs](#understanding-llms)\n- [Social Accounts \\& Community](#social-accounts--community)\n  - [Social Accounts](#social-accounts)\n  - [Community](#community)\n- [Contributing](#contributing)\n\n\n\n\n\n# Libraries & Frameworks & Tools\n## Applications\n\n**Build & Auto-optimize**\n\n- [AdalFlow](https://github.com/SylphAI-Inc/AdalFlow) - The library to build & auto-optimize LLM applications, from Chatbot, RAG, to Agent by [SylphAI](https://www.sylph.ai/).\n\n- [dspy](https://github.com/stanfordnlp/dspy) - DSPy: The framework for programming—not prompting—foundation models.\n\n**Build**\n\n- [LlamaIndex](https://github.com/jerryjliu/llama_index) — A Python library for augmenting LLM apps with data.\n- [LangChain](https://github.com/hwchase17/langchain) — A popular Python/JavaScript library for chaining sequences of language model prompts.\n- [Haystack](https://github.com/deepset-ai/haystack) — Python framework that allows you to build applications powered by LLMs.\n- [Instill Core](https://github.com/instill-ai/instill-core) — A platform built with Go for orchestrating LLMs to create AI applications.\n\n**Prompt Optimization**\n\n- [AutoPrompt](https://github.com/Eladlev/AutoPrompt) - A framework for prompt tuning using Intent-based Prompt Calibration.\n- [PromptFify](https://github.com/promptslab/Promptify) - A library for prompt engineering that simplifies NLP tasks (e.g., NER, classification) using LLMs like GPT.\n\n**Others**\n\n- [LiteLLM](https://github.com/BerriAI/litellm) - Python SDK, Proxy Server (LLM Gateway) to call 100+ LLM APIs in OpenAI format.\n\n\n## Pretraining\n\n- [PyTorch](https://pytorch.org/) - PyTorch is an open source machine learning library based on the Torch library, used for applications such as computer vision and natural language processing.\n- [TensorFlow](https://www.tensorflow.org/) - TensorFlow is an open source machine learning library developed by Google.\n- [JAX](https://github.com/jax-ml/jax) - Google’s library for high-performance computing and automatic differentiation.\n- [tinygrad](https://github.com/tinygrad/tinygrad) - A minimalistic deep learning library with a focus on simplicity and educational use, created by George Hotz.\n- [micrograd](https://github.com/karpathy/micrograd) - A simple, lightweight autograd engine for educational purposes, created by Andrej Karpathy.\n\n## Fine-tuning\n\n- [Transformers](https://huggingface.co/docs/transformers/en/installation) - Hugging Face Transformers is a popular library for Natural Language Processing (NLP) tasks, including fine-tuning large language models.\n- [Unsloth](https://github.com/unslothai/unsloth) - Finetune Llama 3.2, Mistral, Phi-3.5 & Gemma 2-5x faster with 80% less memory!\n- [LitGPT](https://github.com/Lightning-AI/litgpt) - 20+ high-performance LLMs with recipes to pretrain, finetune, and deploy at scale.\n- [AutoTrain](https://github.com/huggingface/autotrain-advanced) - No code fine-tuning of LLMs and other machine learning tasks.\n\n## Top Models\n- [DeepSeek R1](https://github.com/deepseek-ai/DeepSeek-R1) - The most popular GPTo1 comparable open-source reasoning model. Read their technical report + check out their github.\n  \n## Serving\n\n- [TorchServe](https://pytorch.org/serve/) - An open-source model serving library developed by AWS and Facebook specifically for PyTorch models, enabling scalable deployment, model versioning, and A/B testing.\n\n- [TensorFlow Serving](https://www.tensorflow.org/tfx/guide/serving) - A flexible, high-performance serving system for machine learning models, designed for production environments, and optimized for TensorFlow models but also supports other formats.\n\n- [Ray Serve](https://docs.ray.io/en/latest/serve/index.html) - Part of the Ray ecosystem, Ray Serve is a scalable model-serving library that supports deployment of machine learning models across multiple frameworks, with built-in support for Python-based APIs and model pipelines.\n\n- [NVIDIA TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) - TensorRT-LLM is NVIDIA's compiler for transformer-based models (LLMs), providing state-of-the-art optimizations on NVIDIA GPUs.\n \n- [NVIDIA Triton Inference Server](https://developer.nvidia.com/triton-inference-server) - A high-performance inference server supporting multiple ML/DL frameworks (TensorFlow, PyTorch, ONNX, TensorRT etc.), optimized for NVIDIA GPU deployments, and ideal for both cloud and on-premises serving.\n\n- [ollama](https://github.com/ollama/ollama) - A lightweight, extensible framework for building and running large language models on the local machine.\n\n- [llama.cpp](https://github.com/ggerganov/llama.cpp) - A library for running LLMs in pure C/C++. Supported architectures include (LLaMA, Falcon, Mistral, MoEs, phi and more)\n\n- [TGI](https://github.com/huggingface/text-generation-inference) - HuggingFace's text-generation-inference toolkit for deploying and serving LLMs, built on top of Rust, Python and gRPC.\n\n- [vllm](https://github.com/vllm-project/vllm) - An optimized, high-throughput serving engine for large language models, designed to efficiently handle massive-scale inference with reduced latency.\n\n- [sglang](https://github.com/sgl-project/sglang) - SGLang is a fast serving framework for large language models and vision language models.\n\n- [LitServe](https://github.com/Lightning-AI/LitServe) - LitServe is a lightning-fast serving engine for any AI model of any size. Flexible. Easy. Enterprise-scale.\n\n## Prompt Management\n\n- [Opik](https://github.com/comet-ml/opik) - Opik is an open-source platform for evaluating, testing ",
+      "language": null,
+      "topics": [],
+      "stars": 4864,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "fts+rerank"
+    },
+    {
+      "slug": "Polymarket/agents",
+      "name": "agents",
+      "url": "https://github.com/Polymarket/agents",
+      "description": "Trade autonomously on Polymarket using AI Agents",
+      "readme": "<!-- PROJECT SHIELDS -->\n[![Contributors][contributors-shield]][contributors-url]\n[![Forks][forks-shield]][forks-url]\n[![Stargazers][stars-shield]][stars-url]\n[![Issues][issues-shield]][issues-url]\n[![MIT License][license-shield]][license-url]\n\n\n<!-- PROJECT LOGO -->\n<br />\n<div align=\"center\">\n  <a href=\"https://github.com/polymarket/agents\">\n    <img src=\"docs/images/cli.png\" alt=\"Logo\" width=\"466\" height=\"262\">\n  </a>\n\n<h3 align=\"center\">Polymarket Agents</h3>\n\n  <p align=\"center\">\n    Trade autonomously on Polymarket using AI Agents\n    <br />\n    <a href=\"https://github.com/polymarket/agents\"><strong>Explore the docs »</strong></a>\n    <br />\n    <br />\n    <a href=\"https://github.com/polymarket/agents\">View Demo</a>\n    ·\n    <a href=\"https://github.com/polymarket/agents/issues/new?labels=bug&template=bug-report---.md\">Report Bug</a>\n    ·\n    <a href=\"https://github.com/polymarket/agents/issues/new?labels=enhancement&template=feature-request---.md\">Request Feature</a>\n  </p>\n</div>\n\n\n<!-- CONTENT -->\n# Polymarket Agents\n\nPolymarket Agents is a developer framework and set of utilities for building AI agents for Polymarket.\n\nThis code is free and publicly available under MIT License open source license ([terms of service](#terms-of-service))!\n\n## Features\n\n- Integration with Polymarket API\n- AI agent utilities for prediction markets\n- Local and remote RAG (Retrieval-Augmented Generation) support\n- Data sourcing from betting services, news providers, and web search\n- Comphrehensive LLM tools for prompt engineering\n\n# Getting started\n\nThis repo is inteded for use with Python 3.9\n\n1. Clone the repository\n\n   ```\n   git clone https://github.com/{username}/polymarket-agents.git\n   cd polymarket-agents\n   ```\n\n2. Create the virtual environment\n\n   ```\n   virtualenv --python=python3.9 .venv\n   ```\n\n3. Activate the virtual environment\n\n   - On Windows:\n\n   ```\n   .venv\\Scripts\\activate\n   ```\n\n   - On macOS and Linux:\n\n   ```\n   source .venv/bin/activate\n   ```\n\n4. Install the required dependencies:\n\n   ```\n   pip install -r requirements.txt\n   ```\n\n5. Set up your environment variables:\n\n   - Create a `.env` file in the project root directory\n\n   ```\n   cp .env.example .env\n   ```\n\n   - Add the following environment variables:\n\n   ```\n   POLYGON_WALLET_PRIVATE_KEY=\"\"\n   OPENAI_API_KEY=\"\"\n   ```\n\n6. Load your wallet with USDC.\n\n7. Try the command line interface...\n\n   ```\n   python scripts/python/cli.py\n   ```\n\n   Or just go trade! \n\n   ```\n   python agents/application/trade.py\n   ```\n\n8. Note: If running the command outside of docker, please set the following env var:\n\n   ```\n   export PYTHONPATH=\".\"\n   ```\n\n   If running with docker is preferred, we provide the following scripts:\n\n   ```\n   ./scripts/bash/build-docker.sh\n   ./scripts/bash/run-docker-dev.sh\n   ```\n\n## Architecture\n\nThe Polymarket Agents architecture features modular components that can be maintained and extended by individual community members.\n\n### APIs\n\nPolymarket Agents connectors standardize data sources and order types.\n\n- `Chroma.py`: chroma DB for vectorizing news sources and other API data. Developers are able to add their own vector database implementations.\n\n- `Gamma.py`: defines `GammaMarketClient` class, which interfaces with the Polymarket Gamma API to fetch and parse market and event metadata. Methods to retrieve current and tradable markets, as well as defined information on specific markets and events.\n\n- `Polymarket.py`: defines a Polymarket class that interacts with the Polymarket API to retrieve and manage market and event data, and to execute orders on the Polymarket DEX. It includes methods for API key initialization, market and event data retrieval, and trade execution. The file also provides utility functions for building and signing orders, as well as examples for testing API interactions.\n\n- `Objects.py`: data models using Pydantic; representations for trades, markets, events, and related entities.\n\n### Scripts\n\nFiles for managing your local environment, server set-up to run the application remotely, and cli for end-user commands.\n\n`cli.py` is the primary user interface for the repo. Users can run various commands to interact with the Polymarket API, retrieve relevant news articles, query local data, send data/prompts to LLMs, and execute trades in Polymarkets.\n\nCommands should follow this format:\n\n`python scripts/python/cli.py command_name [attribute value] [attribute value]`\n\nExample:\n\n`get-all-markets`\nRetrieve and display a list of markets from Polymarket, sorted by volume.\n\n   ```\n   python scripts/python/cli.py get-all-markets --limit <LIMIT> --sort-by <SORT_BY>\n   ```\n\n- limit: The number of markets to retrieve (default: 5).\n- sort_by: The sorting criterion, either volume (default) or another valid attribute.\n\n# Contributing\n\nIf you would like to contribute to this project, please follow these steps:\n\n1. Fork the repository.\n2. Create a new branch.\n3. Make your changes.\n4. Submit a pull request.\n\nPlease run pre-commit hooks before making contributions. To initialize them:\n\n   ```\n   pre-commit install\n   ```\n\n# Related Repos\n\n- [py-clob-client](https://github.com/Polymarket/py-clob-client): Python client for the Polymarket CLOB\n- [python-order-utils](https://github.com/Polymarket/python-order-utils): Python utilities to generate and sign orders from Polymarket's CLOB\n- [Polymarket CLOB client](https://github.com/Polymarket/clob-client): Typescript client for Polymarket CLOB\n- [Langchain](https://github.com/langchain-ai/langchain): Utility for building context-aware reasoning applications\n- [Chroma](https://docs.trychroma.com/getting-started): Chroma is an AI-native open-source vector database\n\n# Prediction markets reading\n\n- Prediction Markets: Bottlenecks and the Next Major Unlocks, Mikey 0x: https://mirror.xyz/1kx.eth/jnQhA56Kx9p3RODKiGzqzHGGEODpbskivUUNdd7hwh0\n- The promise and challenges of crypto + AI applications, Vitalik Buterin: https://vitalik.eth.limo/general/2024/01/30/cryptoai.html\n- Superforecasting: How to Upgrade Your Company's Judgement, Schoemaker and Tetlock: https://hbr.org/2016/05/superforecasting-how-to-upgrade-your-companys-judgment\n\n# License\n\nThis project is licensed under the MIT License. See the [LICENSE](https://github.com/Polymarket/agents/blob/main/LICENSE.md) file for details.\n\n# Contact\n\nFor any questions or inquiries, please contact liam@polymarket.com or reach out at www.greenestreet.xyz\n\nEnjoy using the CLI application! If you encounter any issues, feel free to open an issue on the repository.\n\n# Terms of Service\n\n[Terms of Service](https://polymarket.com/tos) prohibit US persons and persons from certain other jurisdictions from trading on Polymarket (via UI & API and including agents developed by persons in restricted jurisdictions), although data and information is viewable globally.\n\n\n<!-- LINKS -->\n[contributors-shield]: https://img.shields.io/github/contributors/polymarket/agents?style=for-the-badge\n[contributors-url]: https://github.com/polymarket/agents/graphs/contributors\n[forks-shield]: https://img.shields.io/github/forks/polymarket/agents?style=for-the-badge\n[forks-url]: https://github.com/polymarket/agents/network/members\n[stars-shield]: https://img.shields.io/github/stars/polymarket/agents?style=for-the-badge\n[stars-url]: https://github.com/polymarket/agents/stargazers\n[issues-shield]: https://img.shields.io/github/issues/polymarket/agents?style=for-the-badge\n[issues-url]: https://github.com/polymarket/agents/issues\n[license-shield]: https://img.shields.io/github/license/polymarket/agents?style=for-the-badge\n[license-url]: https://github.com/polymarket/agents/blob/master/LICENSE.md\n",
+      "language": "Python",
+      "topics": [],
+      "stars": 2808,
+      "capabilities": [],
+      "primitives": [],
+      "source": "github+rerank",
+      "score": 1
+    },
+    {
+      "slug": "langchain-ai/langchain-nextjs-template",
+      "name": "langchain-nextjs-template",
+      "url": "https://github.com/langchain-ai/langchain-nextjs-template",
+      "description": "LangChain + Next.js starter template",
+      "readme": "",
+      "language": "TypeScript",
+      "topics": [],
+      "stars": 2450,
+      "capabilities": [],
+      "primitives": [],
+      "score": 1,
+      "source": "vector+rerank"
+    },
+    {
+      "slug": "ollama/ollama",
+      "name": "ollama",
+      "url": "https://github.com/ollama/ollama",
+      "description": "Get up and running with Kimi-K2.5, GLM-5, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
+      "readme": "<p align=\"center\">\n  <a href=\"https://ollama.com\">\n    <img src=\"https://github.com/ollama/ollama/assets/3325447/0d0b44e2-8f4a-4e99-9b52-a5c1c741c8f7\" alt=\"ollama\" width=\"200\"/>\n  </a>\n</p>\n\n# Ollama\n\nStart building with open models.\n\n## Download\n\n### macOS\n\n```shell\ncurl -fsSL https://ollama.com/install.sh | sh\n```\n\nor [download manually](https://ollama.com/download/Ollama.dmg)\n\n### Windows\n\n```shell\nirm https://ollama.com/install.ps1 | iex\n```\n\nor [download manually](https://ollama.com/download/OllamaSetup.exe)\n\n### Linux\n\n```shell\ncurl -fsSL https://ollama.com/install.sh | sh\n```\n\n[Manual install instructions](https://docs.ollama.com/linux#manual-install)\n\n### Docker\n\nThe official [Ollama Docker image](https://hub.docker.com/r/ollama/ollama) `ollama/ollama` is available on Docker Hub.\n\n### Libraries\n\n- [ollama-python](https://github.com/ollama/ollama-python)\n- [ollama-js](https://github.com/ollama/ollama-js)\n\n### Community\n\n- [Discord](https://discord.gg/ollama)\n- [𝕏 (Twitter)](https://x.com/ollama)\n- [Reddit](https://reddit.com/r/ollama)\n\n## Get started\n\n```\nollama\n```\n\nYou'll be prompted to run a model or connect Ollama to your existing agents or applications such as `claude`, `codex`, `openclaw` and more.\n\n### Coding\n\nTo launch a specific integration:\n\n```\nollama launch claude\n```\n\nSupported integrations include [Claude Code](https://docs.ollama.com/integrations/claude-code), [Codex](https://docs.ollama.com/integrations/codex), [Droid](https://docs.ollama.com/integrations/droid), and [OpenCode](https://docs.ollama.com/integrations/opencode).\n\n### AI assistant\n\nUse [OpenClaw](https://docs.ollama.com/integrations/openclaw) to turn Ollama into a personal AI assistant across WhatsApp, Telegram, Slack, Discord, and more:\n\n```\nollama launch openclaw\n```\n\n### Chat with a model\n\nRun and chat with [Gemma 3](https://ollama.com/library/gemma3):\n\n```\nollama run gemma3\n```\n\nSee [ollama.com/library](https://ollama.com/library) for the full list.\n\nSee the [quickstart guide](https://docs.ollama.com/quickstart) for more details.\n\n## REST API\n\nOllama has a REST API for running and managing models.\n\n```\ncurl http://localhost:11434/api/chat -d '{\n  \"model\": \"gemma3\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Why is the sky blue?\"\n  }],\n  \"stream\": false\n}'\n```\n\nSee the [API documentation](https://docs.ollama.com/api) for all endpoints.\n\n### Python\n\n```\npip install ollama\n```\n\n```python\nfrom ollama import chat\n\nresponse = chat(model='gemma3', messages=[\n  {\n    'role': 'user',\n    'content': 'Why is the sky blue?',\n  },\n])\nprint(response.message.content)\n```\n\n### JavaScript\n\n```\nnpm i ollama\n```\n\n```javascript\nimport ollama from \"ollama\";\n\nconst response = await ollama.chat({\n  model: \"gemma3\",\n  messages: [{ role: \"user\", content: \"Why is the sky blue?\" }],\n});\nconsole.log(response.message.content);\n```\n\n## Supported backends\n\n- [llama.cpp](https://github.com/ggml-org/llama.cpp) project founded by Georgi Gerganov.\n\n## Documentation\n\n- [CLI reference](https://docs.ollama.com/cli)\n- [REST API reference](https://docs.ollama.com/api)\n- [Importing models](https://docs.ollama.com/import)\n- [Modelfile reference](https://docs.ollama.com/modelfile)\n- [Building from source](https://github.com/ollama/ollama/blob/main/docs/development.md)\n\n## Community Integrations\n\n> Want to add your project? Open a pull request.\n\n### Chat Interfaces\n\n#### Web\n\n- [Open WebUI](https://github.com/open-webui/open-webui) - Extensible, self-hosted AI interface\n- [Onyx](https://github.com/onyx-dot-app/onyx) - Connected AI workspace\n- [LibreChat](https://github.com/danny-avila/LibreChat) - Enhanced ChatGPT clone with multi-provider support\n- [Lobe Chat](https://github.com/lobehub/lobe-chat) - Modern chat framework with plugin ecosystem ([docs](https://lobehub.com/docs/self-hosting/examples/ollama))\n- [NextChat](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web) - Cross-platform ChatGPT UI ([docs](https://docs.nextchat.dev/models/ollama))\n- [Perplexica](https://github.com/ItzCrazyKns/Perplexica) - AI-powered search engine, open-source Perplexity alternative\n- [big-AGI](https://github.com/enricoros/big-AGI) - AI suite for professionals\n- [Lollms WebUI](https://github.com/ParisNeo/lollms-webui) - Multi-model web interface\n- [ChatOllama](https://github.com/sugarforever/chat-ollama) - Chatbot with knowledge bases\n- [Bionic GPT](https://github.com/bionic-gpt/bionic-gpt) - On-premise AI platform\n- [Chatbot UI](https://github.com/ivanfioravanti/chatbot-ollama) - ChatGPT-style web interface\n- [Hollama](https://github.com/fmaclen/hollama) - Minimal web interface\n- [Chatbox](https://github.com/Bin-Huang/Chatbox) - Desktop and web AI client\n- [chat](https://github.com/swuecho/chat) - Chat web app for teams\n- [Ollama RAG Chatbot](https://github.com/datvodinh/rag-chatbot.git) - Chat with multiple PDFs using RAG\n- [Tkinter-based client](https://github.com/chyok/ollama-gui) - Python desktop client\n\n#### Desktop\n\n- [Dify.AI](https://github.com/langgenius/dify) - LLM app development platform\n- [AnythingLLM](https://github.com/Mintplex-Labs/anything-llm) - All-in-one AI app for Mac, Windows, and Linux\n- [Maid](https://github.com/Mobile-Artificial-Intelligence/maid) - Cross-platform mobile and desktop client\n- [Witsy](https://github.com/nbonamy/witsy) - AI desktop app for Mac, Windows, and Linux\n- [Cherry Studio](https://github.com/kangfenmao/cherry-studio) - Multi-provider desktop client\n- [Ollama App](https://github.com/JHubi1/ollama-app) - Multi-platform client for desktop and mobile\n- [PyGPT](https://github.com/szczyglis-dev/py-gpt) - AI desktop assistant for Linux, Windows, and Mac\n- [Alpaca](https://github.com/Jeffser/Alpaca) - GTK4 client for Linux and macOS\n- [SwiftChat](https://github.com/aws-samples/swift-chat) - Cross-platform including iOS, Android, and Apple Vision Pro\n- [Enchanted](https://github.com/AugustDev/enchanted) - Native macOS and iOS client\n- [RWKV-Runner](https://github.com/josStorer/RWKV-Runner) - Multi-model desktop runner\n- [Ollama Grid Search](https://github.com/dezoito/ollama-grid-search) - Evaluate and compare models\n- [macai](https://github.com/Renset/macai) - macOS client for Ollama and ChatGPT\n- [AI Studio](https://github.com/MindWorkAI/AI-Studio) - Multi-provider desktop IDE\n- [Reins](https://github.com/ibrahimcetin/reins) - Parameter tuning and reasoning model support\n- [ConfiChat](https://github.com/1runeberg/confichat) - Privacy-focused with optional encryption\n- [LLocal.in](https://github.com/kartikm7/llocal) - Electron desktop client\n- [MindMac](https://mindmac.app) - AI chat client for Mac\n- [Msty](https://msty.app) - Multi-model desktop client\n- [BoltAI for Mac](https://boltai.com) - AI chat client for Mac\n- [IntelliBar](https://intellibar.app/) - AI-powered assistant for macOS\n- [Kerlig AI](https://www.kerlig.com/) - AI writing assistant for macOS\n- [Hillnote](https://hillnote.com) - Markdown-first AI workspace\n- [Perfect Memory AI](https://www.perfectmemory.ai/) - Productivity AI personalized by screen and meeting history\n\n#### Mobile\n\n- [Ollama Android Chat](https://github.com/sunshine0523/OllamaServer) - One-click Ollama on Android\n\n> SwiftChat, Enchanted, Maid, Ollama App, Reins, and ConfiChat listed above also support mobile platforms.\n\n### Code Editors & Development\n\n- [Cline](https://github.com/cline/cline) - VS Code extension for multi-file/whole-repo coding\n- [Continue](https://github.com/continuedev/continue) - Open-source AI code assistant for any IDE\n- [Void](https://github.com/voideditor/void) - Open source AI code editor, Cursor alternative\n- [Copilot for Obsidian](https://github.com/logancyang/obsidian-copilot) - AI assistant for Obsidian\n- [twinny](https://github.com/rjmacarthy/twinny) - Copilot and Copilot chat alternative\n- [gptel Emacs client](https://github.com/karthink/gptel) - LLM client for Emacs\n- [Ollama Copilot](https://github.com/bernardo-bruning/ollama-copilot) - Use Ollama as GitHub Copilot\n- [Obsidian Local GPT](https://github.com/",
+      "language": "Go",
+      "topics": [
+        "deepseek",
+        "gemma",
+        "gemma3",
+        "glm",
+        "go",
+        "golang",
+        "gpt-oss",
+        "llama",
+        "llama3",
+        "llm",
+        "llms",
+        "minimax",
+        "mistral",
+        "ollama",
+        "qwen"
+      ],
+      "stars": 168441,
+      "capabilities": [],
+      "primitives": [],
+      "source": "github+rerank",
+      "score": 1
+    }
+  ],
+  "baselineOutput": [
+    {
+      "title": "Local Research Agent Studio",
+      "thesis": "Combine LangGraph orchestration, LangChain components, a Next.js frontend, and Ollama local models into a deployable workspace for building and testing resilient AI research agents entirely on local infrastructure.",
+      "formula": "langgraph + langchain + langchain-nextjs-template + ollama",
+      "repo_slugs": [
+        "langchain-ai/langgraph",
+        "langchain-ai/langchain",
+        "langchain-ai/langchain-nextjs-template",
+        "ollama/ollama"
+      ],
+      "repo_roles": [
+        {
+          "repo": "langchain-ai/langgraph",
+          "role": "Stateful graph-based orchestration layer for resilient agent workflows."
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "role": "Core agent/application framework and integrations used inside each graph node."
+        },
+        {
+          "repo": "langchain-ai/langchain-nextjs-template",
+          "role": "Starter UI and app shell for shipping a browser-based operator console."
+        },
+        {
+          "repo": "ollama/ollama",
+          "role": "Local model runtime for running supported open models without external API dependence."
+        }
+      ],
+      "steps": [
+        "Fork the Next.js template and expose a simple operator UI with inputs for task, model, and run history.",
+        "Implement a LangGraph workflow with nodes such as plan, retrieve/context, act, review, and finalize.",
+        "Use LangChain in graph nodes for prompt management, tool wiring, and model invocation.",
+        "Connect model calls to Ollama so the full stack can run locally on a developer machine.",
+        "Persist graph state and intermediate messages in a lightweight store so users can inspect retries and handoffs.",
+        "Add one benchmark flow: given a research question, produce a short cited brief plus an explicit execution trace."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A graph-based agent runtime, the broader LangChain app framework, a production-friendly web starter, and a local LLM serving layer.",
+      "capabilities": [
+        "Run multi-step agent workflows with explicit graph state transitions.",
+        "Inspect execution traces and intermediate decisions in a web UI.",
+        "Swap among locally served supported models through Ollama.",
+        "Prototype resilient agents with retries, review steps, and final answer synthesis."
+      ],
+      "supporting_primitives": [
+        "Graph orchestration",
+        "Agent framework components",
+        "Web app starter template",
+        "Local model serving"
+      ],
+      "why_fit": "LangGraph gives the control plane for reliable agent execution, LangChain supplies the application abstractions and integrations, the Next.js template provides the shortest path to a usable interface, and Ollama removes hosted-model dependency so teams can test quickly and privately.",
+      "use_case": "An internal AI engineering team wants a local-first sandbox to prototype and evaluate multi-step research agents before deploying anything to production cloud services.",
+      "why_better_than_single": "Using only LangChain or LangGraph would leave distribution and operator UX unfinished; using only the web template would lack agent orchestration; using only Ollama would provide models but no workflow logic. Together they form a usable product surface rather than a library demo.",
+      "first_user": "A startup AI engineer or solutions architect building their first internal agent console.",
+      "demo_72h": "Day 1: stand up Ollama and fork the Next.js template; wire a single LangChain call from the UI. Day 2: add a LangGraph workflow with plan/act/review/final nodes and execution trace display. Day 3: add model selection, run persistence, and one polished demo task showing local multi-step research from prompt to final brief.",
+      "key_risks": [
+        "Ollama model quality and latency may limit the perceived value of a local-first agent for harder tasks.",
+        "The Next.js template may require non-trivial adaptation to visualize graph state cleanly.",
+        "Without a carefully chosen toolset, the agent may look like a chat wrapper rather than a differentiated workflow product.",
+        "Local deployment simplicity varies across user hardware, especially for larger models."
+      ],
+      "novelty": 0.6,
+      "composable_fit": 0.95,
+      "accessibility_wedge": 0.88,
+      "time_to_demo": 0.93,
+      "category_upside": 0.75,
+      "narrative_clarity": 0.92
+    },
+    {
+      "title": "Long-Horizon Agent Builder for Code-and-Research Tasks",
+      "thesis": "Fuse Deer Flow’s long-horizon super-agent harness with LangGraph and LangChain to create a controllable builder for agents that can research, code, and iterate across extended tasks.",
+      "formula": "deer-flow + langgraph + langchain",
+      "repo_slugs": [
+        "bytedance/deer-flow",
+        "langchain-ai/langgraph",
+        "langchain-ai/langchain"
+      ],
+      "repo_roles": [
+        {
+          "repo": "bytedance/deer-flow",
+          "role": "Execution harness for long-horizon tasks with sandboxes, memories, tools, skills, subagents, and message gateway."
+        },
+        {
+          "repo": "langchain-ai/langgraph",
+          "role": "Explicit workflow control and resilience layer for structuring stages, retries, and checkpoints."
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "role": "Agent engineering substrate for model/tool interactions and reusable application components."
+        }
+      ],
+      "steps": [
+        "Use Deer Flow as the underlying worker harness for tasks that span many minutes and require coding plus research.",
+        "Wrap major task phases in a LangGraph state machine such as intake, decomposition, delegate, verify, and deliver.",
+        "Use LangChain to standardize prompts, tools, and model access inside each phase or subagent.",
+        "Define one opinionated product flow: generate a small code artifact after researching requirements and then summarize the implementation choices.",
+        "Expose run checkpoints and operator approvals between graph stages for controllability.",
+        "Package the system as a service for internal teams that need repeatable long-running AI task execution."
+      ],
+      "recommended_shell": "api",
+      "what_is_being_combined": "A long-horizon super-agent harness with a graph orchestrator and a mainstream agent engineering platform.",
+      "capabilities": [
+        "Handle tasks that involve multiple subagents and longer execution windows.",
+        "Separate high-level workflow control from low-level task execution.",
+        "Support coding and research style jobs with checkpoints and staged delivery.",
+        "Make long-running agent behavior more inspectable and governable."
+      ],
+      "supporting_primitives": [
+        "Long-horizon task harness",
+        "Subagents and memory",
+        "Graph checkpoints",
+        "Agent/tool abstractions"
+      ],
+      "why_fit": "Deer Flow already targets extended, multi-level tasks, while LangGraph adds explicit control over transitions and failure handling, and LangChain provides a familiar implementation layer for model and tool operations. The combination addresses both power and controllability.",
+      "use_case": "A product engineering org wants an internal service that can take a feature brief, research background material, produce a draft implementation artifact, and return a summary with review checkpoints.",
+      "why_better_than_single": "Deer Flow alone may be powerful but less opinionated on workflow governance; LangGraph alone gives orchestration but not the same long-horizon harness; LangChain alone is too general. Together they create a more enterprise-usable long-running agent product.",
+      "first_user": "An internal platform team supporting engineers who want bounded autonomous help on research-plus-coding tasks.",
+      "demo_72h": "Day 1: deploy Deer Flow and define a single long-horizon task schema for 'research then code'. Day 2: wrap that schema in a LangGraph pipeline with checkpointed stages and LangChain-powered calls. Day 3: run an end-to-end demo on a small coding task, capture stage outputs, and expose a simple API returning artifact plus audit trail.",
+      "key_risks": [
+        "Integration complexity may be high because Deer Flow is a substantial harness and LangGraph introduces another control layer.",
+        "The product can become over-engineered for simple tasks where a lighter agent loop would suffice.",
+        "Long-running tasks make failures and cost/latency more visible, so weak checkpoint design hurts trust.",
+        "Without a strong operator interface, users may not understand where the system is in a long execution."
+      ],
+      "novelty": 0.74,
+      "composable_fit": 0.89,
+      "accessibility_wedge": 0.63,
+      "time_to_demo": 0.68,
+      "category_upside": 0.84,
+      "narrative_clarity": 0.81
+    },
+    {
+      "title": "Autonomous Market Analyst for Prediction Traders",
+      "thesis": "Pair Polymarket trading agents with LangGraph and LangChain to build a supervised market analyst that researches events, produces trade rationales, and executes bounded autonomous actions for prediction market users.",
+      "formula": "polymarket/agents + langgraph + langchain",
+      "repo_slugs": [
+        "Polymarket/agents",
+        "langchain-ai/langgraph",
+        "langchain-ai/langchain"
+      ],
+      "repo_roles": [
+        {
+          "repo": "Polymarket/agents",
+          "role": "Domain-specific autonomous trading capability for Polymarket."
+        },
+        {
+          "repo": "langchain-ai/langgraph",
+          "role": "Safety-oriented orchestration for review gates, policy checks, and stateful trade workflows."
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "role": "General agent engineering layer for prompts, tools, and model-driven analysis steps."
+        }
+      ],
+      "steps": [
+        "Use Polymarket agents as the execution layer for market-specific actions and account interaction.",
+        "Build a LangGraph workflow that separates signal gathering, thesis generation, risk check, approval, and execution.",
+        "Use LangChain inside analysis nodes to structure event summaries, rationale generation, and market commentary.",
+        "Add mandatory human-in-the-loop approval before any real trade execution in the first version.",
+        "Return a trade memo with confidence, rationale, and execution trace so the system acts like an analyst first and trader second.",
+        "Start with paper-trading or restricted execution settings where possible before enabling live autonomous behavior."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A prediction-market trading agent repo with stateful orchestration and a general-purpose agent framework.",
+      "capabilities": [
+        "Generate market theses before acting.",
+        "Enforce multi-step review and risk gates around autonomous trading behavior.",
+        "Maintain a traceable workflow from analysis to execution.",
+        "Specialize agent behavior around the Polymarket domain rather than generic chat."
+      ],
+      "supporting_primitives": [
+        "Domain trading agent",
+        "Graph-based approvals",
+        "LLM analysis chains",
+        "Stateful execution logs"
+      ],
+      "why_fit": "Polymarket/agents provides a concrete action domain, but autonomous trading benefits from stronger orchestration and review logic; LangGraph supplies that control structure, and LangChain makes it easier to implement the analytical reasoning and tool-driven steps around each trade decision.",
+      "use_case": "A sophisticated prediction-market participant wants an assistant that monitors markets, drafts a rationale, and only executes within explicit risk and approval constraints.",
+      "why_better_than_single": "A trading agent alone can act but may be hard to govern; LangGraph alone cannot trade; LangChain alone is too generic for execution. The combination creates a domain-specific, supervised autonomy product with clearer trust boundaries.",
+      "first_user": "An advanced retail trader or small quant-style team active on Polymarket.",
+      "demo_72h": "Day 1: stand up a simple web dashboard that lists candidate markets and connects to analysis endpoints. Day 2: implement a LangGraph flow for analyze -> propose -> risk check -> approve -> execute, with LangChain generating the memo. Day 3: connect Polymarket agent actions in a restricted demo environment, show one end-to-end recommendation and a gated execution path.",
+      "key_risks": [
+        "Financial and regulatory sensitivity makes autonomous trading products high-risk even with human approval.",
+        "Model-generated rationales may appear persuasive while being weakly grounded.",
+        "Prediction market outcomes are noisy, so product value may be hard to prove quickly.",
+        "If live execution is enabled too early, operational and trust failures are severe."
+      ],
+      "novelty": 0.77,
+      "composable_fit": 0.86,
+      "accessibility_wedge": 0.57,
+      "time_to_demo": 0.71,
+      "category_upside": 0.87,
+      "narrative_clarity": 0.9
+    }
+  ],
+  "candidateOutput": [
+    {
+      "title": "Long-horizon internal research engineer with local model fallback",
+      "thesis": "Combine graph-based agent orchestration with a long-horizon execution harness and local model serving to create an internal AI engineer that can research, code, and iteratively complete multi-hour tasks with controlled resilience.",
+      "formula": "langgraph + deer-flow + ollama (+ langchain)",
+      "repo_slugs": [
+        "langchain-ai/langgraph",
+        "bytedance/deer-flow",
+        "ollama/ollama",
+        "langchain-ai/langchain"
+      ],
+      "repo_roles": [
+        {
+          "repo": "langchain-ai/langgraph",
+          "role": "anchor"
+        },
+        {
+          "repo": "bytedance/deer-flow",
+          "role": "enabling"
+        },
+        {
+          "repo": "ollama/ollama",
+          "role": "enabling"
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use LangGraph to define the durable task graph: planner, researcher, coder, reviewer, retry, and handoff states.",
+        "Embed Deer Flow as the execution harness for long-horizon tasks that need sandboxes, memory, tools, skills, subagents, and message gateway behavior.",
+        "Run models through Ollama for local/private inference and fallback routing when cloud models are unavailable or too expensive.",
+        "Use LangChain components where useful for model/tool abstractions and integration glue around prompts, tools, and execution.",
+        "Wrap the system around a narrow workflow such as 'turn a product spec into a prototype PRD + code scaffold + test plan'.",
+        "Add checkpoints and human approval nodes in LangGraph before any code write or final artifact delivery."
+      ],
+      "recommended_shell": "cli",
+      "what_is_being_combined": "A resilient graph orchestrator is combined with a superagent-style long-running task harness and local model runtime, producing a system that can decompose, execute, recover, and continue multi-step knowledge-work tasks over extended durations.",
+      "capabilities": [
+        "Graph-based resilient agent orchestration",
+        "Long-horizon task execution with memory/tools/subagents/sandboxes",
+        "Local model serving and model choice flexibility",
+        "Agent engineering abstractions for tools and model integration"
+      ],
+      "supporting_primitives": [
+        "LangGraph stateful graphs and resilient agent execution",
+        "Deer Flow sandboxes, memories, tools, skills, subagents, and message gateway",
+        "Ollama local model runtime",
+        "LangChain agent engineering and integrations"
+      ],
+      "why_fit": "The fit is strong because LangGraph handles deterministic control flow and recovery, Deer Flow provides the heavy-duty long-horizon execution substrate, and Ollama supplies deployable local inference; LangChain adds ecosystem glue without needing to be the core runtime.",
+      "use_case": "A product or platform team wants an internal agent that can take a Jira ticket like 'investigate auth provider migration and draft implementation plan' and return research notes, code suggestions, and an execution plan over a few hours.",
+      "why_better_than_single": "LangGraph alone gives orchestration but not the rich long-horizon harness; Deer Flow alone gives agent power but not as clear a graph-level control surface; Ollama alone is just model hosting. Together they form a controllable, deployable agent worker rather than a generic chatbot.",
+      "first_user": "An internal developer productivity engineer at a 20-200 person software company.",
+      "demo_72h": "Day 1: stand up Ollama, wire a small LangGraph workflow, and connect one Deer Flow task path for research-plus-code generation. Day 2: add a concrete task template such as 'analyze repo and draft migration plan', with checkpoints and artifact saving. Day 3: test on 3 real engineering tickets, record run traces, and show one end-to-end result to the developer productivity lead.",
+      "key_risks": [
+        "Long-horizon agents can drift without strong task constraints and approval gates.",
+        "Local models via Ollama may underperform on complex planning versus frontier hosted models.",
+        "Integration complexity between graph orchestration and external harness behavior could slow initial reliability."
+      ],
+      "novelty": 0.75,
+      "composable_fit": 0.94,
+      "accessibility_wedge": 0.73,
+      "time_to_demo": 0.78,
+      "category_upside": 0.87,
+      "narrative_clarity": 0.9
+    },
+    {
+      "title": "From 100-line prototype to production-grade agent: a migration path product",
+      "thesis": "Combine a minimal agent framework with production agent infrastructure and a starter app to offer teams a concrete path from fast agent prototyping to deployable, stateful applications.",
+      "formula": "PocketFlow + LangChain + LangGraph + langchain-nextjs-template",
+      "repo_slugs": [
+        "The-Pocket/PocketFlow",
+        "langchain-ai/langchain",
+        "langchain-ai/langgraph",
+        "langchain-ai/langchain-nextjs-template"
+      ],
+      "repo_roles": [
+        {
+          "repo": "The-Pocket/PocketFlow",
+          "role": "anchor"
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "role": "enabling"
+        },
+        {
+          "repo": "langchain-ai/langgraph",
+          "role": "enabling"
+        },
+        {
+          "repo": "langchain-ai/langchain-nextjs-template",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Start with PocketFlow to prototype an agent workflow in a minimal code footprint, making the core logic easy to understand and iterate.",
+        "Use LangChain as the broader agent engineering layer for model and tool abstractions once the prototype needs integrations.",
+        "Promote successful workflows into LangGraph when durable execution, branching control flow, and resilient state handling are needed.",
+        "Ship the experience in the LangChain Next.js template so users can interact with, inspect, and iterate on agent behavior from a web UI.",
+        "Package the product as a 'prototype-to-production converter' with opinionated examples and migration recipes."
+      ],
+      "recommended_shell": "web",
+      "what_is_being_combined": "A lightweight prototyping framework is combined with industrial-strength agent engineering, graph orchestration, and a starter frontend to create a practical lifecycle stack for teams building agents.",
+      "capabilities": [
+        "Rapid low-code-footprint agent prototyping",
+        "Production-oriented agent engineering abstractions",
+        "Stateful graph orchestration for resilient execution",
+        "Web app delivery for testing and stakeholder access"
+      ],
+      "supporting_primitives": [
+        "PocketFlow minimal 100-line framework",
+        "LangChain agent engineering platform",
+        "LangGraph resilient graph runtime",
+        "LangChain Next.js starter template"
+      ],
+      "why_fit": "These repos map cleanly onto different maturity stages of the same developer journey: PocketFlow for fast experimentation, LangChain for ecosystem depth, LangGraph for reliability and explicit control flow, and the Next.js template for shipping a usable interface.",
+      "use_case": "A startup wants to test 5 internal agent ideas quickly, then graduate the winning one into a customer-facing product without rewriting everything from scratch conceptually.",
+      "why_better_than_single": "PocketFlow alone is excellent for simplicity but not the full production path; LangChain alone can feel heavy for first experiments; LangGraph alone is not the right first sketching tool; the template alone is only a shell. Together they create a compelling developer product wedge around agent lifecycle management.",
+      "first_user": "A startup CTO or founding engineer evaluating which internal AI workflow is worth productizing.",
+      "demo_72h": "Day 1: build one PocketFlow prototype for a narrow workflow such as support ticket triage. Day 2: recreate the same workflow with LangChain plus LangGraph for durable execution, showing side-by-side code and behavior. Day 3: expose both via the Next.js template with run history and a simple migration guide for the CTO demo.",
+      "key_risks": [
+        "The value proposition depends on clear migration ergonomics, which may still require manual engineering work.",
+        "PocketFlow and LangChain/LangGraph may not have direct one-to-one abstractions, so migration may be conceptual rather than automatic.",
+        "Could be perceived as educational tooling unless packaged around a painful real workflow."
+      ],
+      "novelty": 0.8,
+      "composable_fit": 0.91,
+      "accessibility_wedge": 0.88,
+      "time_to_demo": 0.86,
+      "category_upside": 0.76,
+      "narrative_clarity": 0.92
+    },
+    {
+      "title": "Autonomous market research-to-trading agent for prediction markets",
+      "thesis": "Combine resilient agent orchestration with autonomous Polymarket trading and local model execution to build a constrained research-to-execution agent for event-driven prediction markets.",
+      "formula": "Polymarket agents + LangGraph + Ollama (+ LangChain)",
+      "repo_slugs": [
+        "Polymarket/agents",
+        "langchain-ai/langgraph",
+        "ollama/ollama",
+        "langchain-ai/langchain"
+      ],
+      "repo_roles": [
+        {
+          "repo": "Polymarket/agents",
+          "role": "anchor"
+        },
+        {
+          "repo": "langchain-ai/langgraph",
+          "role": "enabling"
+        },
+        {
+          "repo": "ollama/ollama",
+          "role": "enabling"
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "role": "amplification"
+        }
+      ],
+      "steps": [
+        "Use Polymarket agents as the execution core for autonomous market interaction on Polymarket.",
+        "Add LangGraph to formalize the strategy loop into states like signal intake, evidence review, trade proposal, risk check, execution, and post-trade monitoring.",
+        "Run local models with Ollama for private or low-cost reasoning on structured market summaries and strategy prompts.",
+        "Use LangChain abstractions for model/tool integration where useful, especially if the agent needs interchangeable model backends or tool wrappers.",
+        "Constrain the system to one market niche first, such as scheduled macro events or sports-related headline markets, with explicit risk limits and human approval options."
+      ],
+      "recommended_shell": "cli",
+      "what_is_being_combined": "A domain-specific autonomous trading repo is combined with graph-based agent control and local model serving to create a more inspectable and controllable market agent, rather than a black-box trader.",
+      "capabilities": [
+        "Autonomous Polymarket trading",
+        "Stateful strategy and approval graph",
+        "Local inference for lower-cost decision support",
+        "Reusable model/tool abstractions"
+      ],
+      "supporting_primitives": [
+        "Polymarket autonomous agent trading primitives",
+        "LangGraph graph control and resilience",
+        "Ollama local model runtime",
+        "LangChain integration abstractions"
+      ],
+      "why_fit": "Polymarket agents provides the narrow execution domain; LangGraph adds the missing explicit control surface for risk checks and recovery; Ollama lowers operating cost and supports private experimentation; LangChain helps standardize the agent plumbing.",
+      "use_case": "A quantitative hobbyist or small trading desk wants an agent that proposes and optionally executes trades on a narrow class of prediction markets with an auditable decision loop.",
+      "why_better_than_single": "Polymarket agents alone can automate trades, but adding LangGraph makes strategy logic and safety checkpoints inspectable; Ollama makes experimentation cheaper; LangChain improves portability. The combo shifts from raw automation to governable agentic trading infrastructure.",
+      "first_user": "An advanced retail prediction-market trader who already uses Polymarket and wants systematic execution with human-in-the-loop controls.",
+      "demo_72h": "Day 1: connect Polymarket agent flow and define a LangGraph state machine for propose/check/execute. Day 2: run Ollama locally for signal summarization and rationale generation, and add configurable trade limits. Day 3: simulate or paper-trade one narrow market strategy, record decisions and rationales, and demo to a power user trader.",
+      "key_risks": [
+        "Trading outcomes are highly sensitive to signal quality; the repos do not themselves guarantee alpha.",
+        "Autonomy in financial contexts raises safety and compliance expectations.",
+        "Local models may be insufficient for nuanced event interpretation without strong external data pipelines."
+      ],
+      "novelty": 0.77,
+      "composable_fit": 0.89,
+      "accessibility_wedge": 0.62,
+      "time_to_demo": 0.74,
+      "category_upside": 0.84,
+      "narrative_clarity": 0.88
+    }
+  ],
+  "judgment": {
+    "verdict": "candidate_wins",
+    "baseline": {
+      "repo_fit": 4,
+      "novelty": 3,
+      "clarity": 5,
+      "theoretical_plausibility": 4,
+      "signal_value": 4
+    },
+    "candidate": {
+      "repo_fit": 5,
+      "novelty": 4,
+      "clarity": 4,
+      "theoretical_plausibility": 4,
+      "signal_value": 5
+    },
+    "rationale": "Both outputs are strong and grounded in the provided repos, but the candidate better matches the query’s emphasis on LangChain-framework agent combinations around orchestration, memory, and execution surfaces. Baseline is clearer and very polished, especially the local LangGraph + LangChain + Next.js + Ollama concept, but one of its three ideas (Polymarket trading) is less aligned with the stated focus than with a domain-specific vertical. Candidate more consistently centers agent runtime design: LangGraph + Deer Flow + Ollama is a strong orchestration/memory/execution combo, and the PocketFlow -> LangChain -> LangGraph migration-path concept is notably more novel and high-signal for this repo set than baseline’s more standard stack proposals. Candidate loses some clarity because repo roles like anchor/enabling/amplification are less informative than baseline’s concrete role descriptions, and a few ideas feel slightly more packaging-oriented than directly build-ready. Still, candidate provides better differentiated, repo-aware combinations and stronger signal on how these repos relate across agent lifecycle, long-horizon execution, and deployable surfaces."
+  }
+}

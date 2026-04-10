@@ -55,7 +55,7 @@ vi.mock("@/db", async () => {
   };
 });
 
-import { search } from "@/services/search";
+import { computeAdaptiveWeights, runSearchMode, search } from "@/services/search";
 
 function makeParsed(overrides: Partial<ParsedQuery> = {}): ParsedQuery {
   return {
@@ -228,7 +228,7 @@ describe("search", () => {
     githubRepo.primitives = ["api-call"];
     mockSearchMulti.mockResolvedValue([githubRepo]);
 
-    const result = await search("some query");
+    await search("some query");
 
     expect(mockOnConflictDoUpdate).toHaveBeenCalled();
     expect(mockUpsertVectors).toHaveBeenCalled();
@@ -262,6 +262,20 @@ describe("search", () => {
     expect(result.combos.length).toBeGreaterThan(0);
   });
 
+  it("skips combo generation when disabled for eval mode", async () => {
+    const ftsRepos = Array.from({ length: 5 }, (_, i) =>
+      makeRepo(`fts/repo-${i}`, "fts", 0.8),
+    );
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+
+    const result = await search("query lab baseline", {
+      generateCombos: false,
+    });
+
+    expect(result.combos).toEqual([]);
+    expect(mockGenerateCombos).not.toHaveBeenCalled();
+  });
+
   it("skips combos when fewer than 2 repos", async () => {
     mockLimit.mockResolvedValue([]);
     mockSearchVectors.mockResolvedValue([]);
@@ -291,7 +305,7 @@ describe("search", () => {
     );
     mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
 
-    const result = await search("rerank test");
+    await search("rerank test");
 
     expect(mockRerank).toHaveBeenCalled();
     expect(mockRerank.mock.calls[0][0]).toBe("rerank test");
@@ -342,5 +356,103 @@ describe("search", () => {
     const notebooklmIdx = repos.findIndex((r: RepoDoc) => r.slug === "teng-lin/notebooklm-py");
     const randomIdx = repos.findIndex((r: RepoDoc) => r.slug === "someone/random-lib");
     expect(notebooklmIdx).toBeLessThan(randomIdx);
+  });
+
+  it("boosts FTS and dampens vector weight for lookup queries", () => {
+    const weights = computeAdaptiveWeights(
+      makeParsed({
+        intentType: "lookup",
+        queryType: "specific_tool",
+      }),
+      6,
+      0.4,
+    );
+
+    expect(weights.fts).toBeCloseTo(1.82);
+    expect(weights.vector).toBeCloseTo(0.84);
+    expect(weights.github).toBeCloseTo(1);
+  });
+
+  it("boosts vector and GitHub weights for exploratory queries with weak lexical recall", () => {
+    const weights = computeAdaptiveWeights(
+      makeParsed({
+        intentType: "explore",
+        queryType: "capability_search",
+      }),
+      2,
+      0.8,
+    );
+
+    expect(weights.fts).toBeCloseTo(1.61);
+    expect(weights.vector).toBeCloseTo(1.872);
+    expect(weights.github).toBeCloseTo(1.44);
+  });
+
+  it("applies build and alternative boosts together when both signals are present", () => {
+    const weights = computeAdaptiveWeights(
+      makeParsed({
+        intentType: "build",
+        queryType: "alternative",
+      }),
+      4,
+      0.4,
+    );
+
+    expect(weights.fts).toBeCloseTo(1.4);
+    expect(weights.vector).toBeCloseTo(2.016);
+    expect(weights.github).toBeCloseTo(1.44);
+  });
+
+  it("boosts both lexical and vector channels for comparison queries", () => {
+    const weights = computeAdaptiveWeights(
+      makeParsed({
+        intentType: "lookup",
+        queryType: "comparison",
+      }),
+      4,
+      0.4,
+    );
+
+    expect(weights.fts).toBeCloseTo(2.184);
+    expect(weights.vector).toBeCloseTo(1.008);
+    expect(weights.github).toBeCloseTo(1);
+  });
+
+  it("returns only lexical results in fts-only mode", async () => {
+    const ftsRepos = Array.from({ length: 5 }, (_, i) =>
+      makeRepo(`fts/repo-${i}`, "fts", 0.8),
+    );
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+    mockSearchVectors.mockResolvedValue([makeRepo("vector/repo-v1", "vector", 0.9)]);
+
+    const result = await runSearchMode("fts only", "fts-only");
+
+    expect(result.repos.every((repo) => repo.source === "fts")).toBe(true);
+  });
+
+  it("returns only vector results in vector-only mode", async () => {
+    mockLimit.mockResolvedValue([]);
+    mockSearchVectors.mockResolvedValue([
+      makeRepo("vector/repo-v1", "vector", 0.9),
+      makeRepo("vector/repo-v2", "vector", 0.8),
+    ]);
+
+    const result = await runSearchMode("vector only", "vector-only");
+
+    expect(result.repos).toHaveLength(2);
+    expect(result.repos.every((repo) => repo.source === "vector")).toBe(true);
+  });
+
+  it("does not hit GitHub in hybrid+rerank mode", async () => {
+    const ftsRepos = Array.from({ length: 2 }, (_, i) =>
+      makeRepo(`fts/repo-${i}`, "fts", 0.8),
+    );
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+    mockSearchVectors.mockResolvedValue([makeRepo("vector/repo-v1", "vector", 0.9)]);
+
+    await runSearchMode("hybrid rerank", "hybrid+rerank");
+
+    expect(mockSearchMulti).not.toHaveBeenCalled();
+    expect(mockRerank).toHaveBeenCalled();
   });
 });

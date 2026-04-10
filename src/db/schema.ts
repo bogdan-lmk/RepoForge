@@ -107,7 +107,31 @@ export const scanLog = pgTable("scan_log", {
   completedAt: timestamp("completed_at", { withTimezone: true }),
 });
 
+export const events = pgTable(
+  "events",
+  {
+    id: serial("id").primaryKey(),
+    sessionId: text("session_id").notNull(),
+    eventType: text("event_type").notNull(),
+    queryText: text("query_text"),
+    repoSlug: text("repo_slug"),
+    comboId: integer("combo_id"),
+    page: text("page"),
+    source: text("source"),
+    payload: jsonb("payload").$type<Record<string, unknown>>().default({}).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("events_event_type_created_at_idx").on(t.eventType, t.createdAt),
+    index("events_session_id_created_at_idx").on(t.sessionId, t.createdAt),
+    index("events_combo_id_idx").on(t.comboId),
+    index("events_repo_slug_idx").on(t.repoSlug),
+  ],
+);
+
 export type Repo = typeof repos.$inferSelect;
 export type NewRepo = typeof repos.$inferInsert;
 export type Combo = typeof combos.$inferSelect;
 export type NewCombo = typeof combos.$inferInsert;
+export type Event = typeof events.$inferSelect;
+export type NewEvent = typeof events.$inferInsert;

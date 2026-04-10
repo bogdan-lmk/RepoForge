@@ -101,4 +101,88 @@ describe("POST /api/events", () => {
       },
     ]);
   });
+
+  it("accepts newly added analytics event types with payloads", async () => {
+    const req = new NextRequest("http://localhost/api/events", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-categoryforge-session": "session-123",
+      },
+      body: JSON.stringify({
+        events: [
+          {
+            type: "chip_clicked",
+            page: "home",
+            source: "hero-chips",
+            payload: {
+              chipId: "build_ai_code_reviewer",
+              chipText: "Build an AI code reviewer",
+              position: 1,
+            },
+          },
+          {
+            type: "dice_clicked",
+            page: "home",
+            source: "hero-chips",
+            payload: {
+              poolSize: 6,
+              pickedId: "build_ai_code_reviewer",
+            },
+          },
+          {
+            type: "combo_save_failed",
+            comboId: 42,
+            page: "home",
+            source: "ideas-panel",
+            payload: {
+              title: "Agent Console",
+              status: 500,
+            },
+          },
+        ],
+      }),
+    });
+
+    const response = await POST(req);
+    const body = await response.json();
+
+    expect(response.status).toBe(201);
+    expect(body).toEqual({
+      data: {
+        accepted: 1,
+      },
+    });
+    expect(mockTrackEvents).toHaveBeenCalledWith("session-123", [
+      {
+        type: "chip_clicked",
+        page: "home",
+        source: "hero-chips",
+        payload: {
+          chipId: "build_ai_code_reviewer",
+          chipText: "Build an AI code reviewer",
+          position: 1,
+        },
+      },
+      {
+        type: "dice_clicked",
+        page: "home",
+        source: "hero-chips",
+        payload: {
+          poolSize: 6,
+          pickedId: "build_ai_code_reviewer",
+        },
+      },
+      {
+        type: "combo_save_failed",
+        comboId: 42,
+        page: "home",
+        source: "ideas-panel",
+        payload: {
+          title: "Agent Console",
+          status: 500,
+        },
+      },
+    ]);
+  });
 });

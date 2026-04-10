@@ -95,6 +95,36 @@ describe("events service", () => {
     ]);
   });
 
+  it("normalizes combo save failure events with payload metadata", async () => {
+    const inserted = await trackEvent("session-failure", {
+      type: "combo_save_failed",
+      comboId: 77,
+      page: "home",
+      source: "ideas-panel",
+      payload: {
+        title: "Agent Console",
+        status: 500,
+      },
+    });
+
+    expect(inserted).toBe(1);
+    expect(mockValues).toHaveBeenCalledWith([
+      {
+        sessionId: "session-failure",
+        eventType: "combo_save_failed",
+        queryText: null,
+        repoSlug: null,
+        comboId: 77,
+        page: "home",
+        source: "ideas-panel",
+        payload: {
+          title: "Agent Console",
+          status: 500,
+        },
+      },
+    ]);
+  });
+
   it("is a no-op for empty batches", async () => {
     const inserted = await trackEvents("session-empty", []);
 

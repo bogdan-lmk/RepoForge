@@ -21,6 +21,9 @@ export const EVENT_TYPES = [
   "combo_expanded",
   "combo_saved",
   "query_retried",
+  "chip_clicked",
+  "dice_clicked",
+  "combo_save_failed",
 ] as const;
 
 export type EventType = (typeof EVENT_TYPES)[number];
@@ -50,6 +53,20 @@ export const SEARCH_MODES = [
 ] as const;
 
 export type SearchMode = (typeof SEARCH_MODES)[number];
+
+export interface SearchTrace {
+  ftsCount: number;
+  vectorCount: number;
+  githubCount: number;
+  githubTriggered: boolean;
+  mergedCount: number;
+  rerankedCount: number;
+  topSlugs: string[];
+  latencyFtsMs: number;
+  latencyVectorMs: number;
+  latencyGithubMs: number | null;
+  latencyTotalMs: number;
+}
 
 export interface ParsedQuery {
   text: string;

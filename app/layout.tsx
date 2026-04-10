@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "CategoryForge",
   description:
-    "Discover open-source repos and combine them into product ideas with AI",
+    "Turn open-source repos into startup ideas in minutes",
 };
 
 export default function RootLayout({

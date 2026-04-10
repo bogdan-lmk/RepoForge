@@ -5,7 +5,7 @@ import { rerank } from "@/services/reranker";
 import { persistTrace } from "@/services/tracing";
 import { logger } from "@/lib/logger";
 import { sql, getTableColumns } from "drizzle-orm";
-import type { RepoDoc, ParsedQuery, QueryType, SearchMode } from "@/core/types";
+import type { RepoDoc, ParsedQuery, QueryType, SearchMode, SearchTrace } from "@/core/types";
 
 type SearchOptions = {
   comboLimit?: number;
@@ -30,7 +30,7 @@ export type SearchRunResult = {
 export async function search(
   queryText: string,
   options: number | SearchOptions = 3,
-): Promise<{ parsed: ParsedQuery; repos: RepoDoc[]; combos: unknown[] }> {
+): Promise<{ parsed: ParsedQuery; repos: RepoDoc[]; combos: unknown[]; trace: SearchTrace }> {
   const comboLimit =
     typeof options === "number" ? options : (options.comboLimit ?? 3);
   const shouldGenerateCombos =
@@ -46,14 +46,14 @@ export async function search(
     ? await generateCombos(result.repos, queryText, comboLimit)
     : [];
 
-  return { parsed: result.parsed, repos: result.repos, combos };
+  return { parsed: result.parsed, repos: result.repos, combos, trace: result.trace };
 }
 
 export async function runSearchMode(
   queryText: string,
   mode: SearchMode,
   options: SearchExecutionOptions = {},
-): Promise<SearchRunResult> {
+): Promise<SearchRunResult & { trace: SearchTrace }> {
   const parsed = await parseQuery(queryText);
   logger.info({ parsed, mode }, "Query parsed");
 
@@ -93,6 +93,20 @@ export async function runSearchMode(
 
   const latencyTotalMs = performance.now() - t0;
 
+  const trace: SearchTrace = {
+    ftsCount: ftsRepos.length,
+    vectorCount: vectorRepos.length,
+    githubCount: 0,
+    githubTriggered: false,
+    mergedCount: repos.length,
+    rerankedCount: repos.length,
+    topSlugs: repos.slice(0, 5).map((r) => r.slug),
+    latencyFtsMs,
+    latencyVectorMs,
+    latencyGithubMs: null,
+    latencyTotalMs,
+  };
+
   logger.info(
     {
       mode,
@@ -106,15 +120,15 @@ export async function runSearchMode(
   void persistTrace({
     queryText,
     parsed,
-    ftsCount: ftsRepos.length,
-    vectorCount: vectorRepos.length,
-    githubCount: 0,
-    githubTriggered: false,
-    mergedCount: repos.length,
-    rerankedCount: repos.length,
-    topSlugs: repos.slice(0, 5).map((r) => r.slug),
+    ftsCount: trace.ftsCount,
+    vectorCount: trace.vectorCount,
+    githubCount: trace.githubCount,
+    githubTriggered: trace.githubTriggered,
+    mergedCount: trace.mergedCount,
+    rerankedCount: trace.rerankedCount,
+    topSlugs: trace.topSlugs,
     scores: repos.map((r) => r.score ?? 0),
-    latencyMs: { fts: latencyFtsMs, vector: latencyVectorMs, github: null, total: latencyTotalMs },
+    latencyMs: { fts: trace.latencyFtsMs, vector: trace.latencyVectorMs, github: trace.latencyGithubMs, total: trace.latencyTotalMs },
   }).catch((e) => logger.warn({ err: e }, "Trace persist failed"));
 
   return {
@@ -123,6 +137,7 @@ export async function runSearchMode(
     ftsRepos,
     vectorRepos,
     mode,
+    trace,
   };
 }
 

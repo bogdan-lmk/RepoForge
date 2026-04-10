@@ -11,6 +11,9 @@ import { FUN_FACTS } from "@/data/fun-facts"
 
 interface ForgeSpinnerProps {
   step?: number
+  steps?: string[]
+  title?: string
+  subtitle?: string
 }
 
 const STEPS = [
@@ -31,7 +34,7 @@ function pickRandom(exclude: number): number {
   return next
 }
 
-export function ForgeSpinner({ step = 2 }: ForgeSpinnerProps) {
+export function ForgeSpinner({ step = 1, steps = STEPS, title = "Forging ideas...", subtitle = "Searching repos and combining them into product ideas" }: ForgeSpinnerProps) {
   const [factIndex, setFactIndex] = useState(() => Math.floor(Math.random() * FUN_FACTS.length))
   const [factKey, setFactKey] = useState(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -76,7 +79,7 @@ export function ForgeSpinner({ step = 2 }: ForgeSpinnerProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
-        Forging ideas...
+        {title}
       </motion.h2>
 
       <motion.p
@@ -85,11 +88,11 @@ export function ForgeSpinner({ step = 2 }: ForgeSpinnerProps) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.3 }}
       >
-        Searching repos and combining them into product ideas
+        {subtitle}
       </motion.p>
 
       <div className="flex w-[400px] max-w-[90vw] flex-col gap-3 pt-4">
-        {STEPS.map((label, i) => (
+        {steps.map((label, i) => (
           <motion.div
             key={label}
             initial={{ opacity: 0, x: -8 }}
@@ -97,16 +100,16 @@ export function ForgeSpinner({ step = 2 }: ForgeSpinnerProps) {
             transition={{ delay: 0.6 + i * 0.15, duration: 0.35 }}
             className={cn(
               "flex items-center gap-3 transition-all duration-500",
-              i <= step ? "text-teal" : "text-fg-muted",
+              i + 1 <= step ? "text-teal" : "text-fg-muted",
             )}
-            style={{ opacity: i <= step ? 1 : 0.4 }}
+            style={{ opacity: i + 1 <= step ? 1 : 0.4 }}
           >
             <div
               className={cn(
                 "size-2 shrink-0 rounded transition-all duration-300",
-                i < step
+                i + 1 < step
                   ? "bg-teal"
-                  : i === step
+                  : i + 1 === step
                     ? "bg-teal animate-pulse"
                     : "bg-fg-muted/40",
               )}

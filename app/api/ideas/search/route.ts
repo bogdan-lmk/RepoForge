@@ -90,6 +90,7 @@ async function buildSearchPayload(
 
   return {
     query: result.parsed,
+    trace: result.trace,
     repos: result.repos.map((repo) => ({
       slug: repo.slug,
       name: repo.name,

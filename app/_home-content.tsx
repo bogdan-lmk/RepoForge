@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { Nav } from "@/components/Nav";
 import { SearchBar } from "@/components/SearchBar";
 import { RepoCard } from "@/components/RepoCard";
@@ -10,7 +10,8 @@ import { IdeaCard } from "@/components/IdeaCard";
 import { ForgeSpinner } from "@/components/ForgeSpinner";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { CursorGlow } from "@/components/CursorGlow";
-import type { ComboIdea } from "@/core/types";
+import type { ComboIdea, SearchTrace } from "@/core/types";
+import type { HomeMetrics } from "@/lib/home-metrics";
 import { enqueueEvent, flushEvents } from "@/lib/analytics";
 import {
   createHomeSearchSnapshot,
@@ -49,6 +50,59 @@ const heroLetter: Variants = {
     transition: { type: "spring" as const, stiffness: 120, damping: 14 },
   },
 };
+
+const INSPIRATION_CHIPS = [
+  { id: "chip-stripe", text: "Open-source Stripe alternative" },
+  { id: "chip-review", text: "AI code review tool" },
+  { id: "chip-collab", text: "Real-time collaboration app" },
+  { id: "chip-portfolio", text: "Developer portfolio generator" },
+  { id: "chip-database", text: "Serverless database for edge" },
+  { id: "chip-mocking", text: "Mock APIs from the command line" },
+] as const;
+
+const DICE_QUERIES = [
+  { id: "dice-crm-small-teams", text: "Open-source CRM for small teams" },
+  { id: "dice-privacy-analytics", text: "Privacy-first analytics dashboard" },
+  { id: "dice-github-triage-bot", text: "GitHub issues triage bot" },
+  { id: "dice-feature-flags", text: "Feature flag service for startups" },
+  { id: "dice-local-notes", text: "Local-first notes app" },
+  { id: "dice-screenshot-review", text: "Screenshot review tool" },
+  { id: "dice-browser-runner", text: "Browser automation runner" },
+  { id: "dice-docs-search", text: "Docs site search for developer tools" },
+  { id: "dice-community-forum", text: "Community forum alternative" },
+  { id: "dice-newsletter-platform", text: "Newsletter platform for creators" },
+  { id: "dice-snippet-manager", text: "Code snippet manager" },
+  { id: "dice-onboarding-checklist", text: "Onboarding checklist builder" },
+  { id: "dice-password-extension", text: "Password manager browser extension" },
+  { id: "dice-form-builder", text: "Form builder for ops teams" },
+  { id: "dice-error-tracking", text: "Error tracking dashboard" },
+  { id: "dice-ci-insights", text: "CI insights dashboard" },
+  { id: "dice-design-handoff", text: "Design handoff tool" },
+  { id: "dice-chatbot-widget", text: "Chatbot widget for SaaS apps" },
+  { id: "dice-kanban", text: "Project management kanban" },
+  { id: "dice-blog-cms", text: "Blog CMS for developers" },
+] as const;
+
+const FORGE_MIN_LOADING_MS = 1400;
+const FORGE_STEP_DELAYS = [0, 450, 950, 1300] as const;
+
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+function formatCount(value: number | null): string {
+  return value === null ? "—" : numberFormatter.format(value);
+}
+
+function formatLatency(value: number | null): string {
+  return value === null ? "—" : `${Math.round(value)}ms`;
+}
+
+function truncate(text: string, max = 36): string {
+  return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+}
+
+function pickRandom<T>(items: readonly T[]): T {
+  return items[Math.floor(Math.random() * items.length)]!;
+}
 
 const badgePop: Variants = {
   hidden: { opacity: 0, scale: 0.5, y: 10 },
@@ -101,15 +155,35 @@ function TrustMetric({ value, label, delay }: { value: string; label: string; de
   );
 }
 
-export default function HomeContent() {
+export default function HomeContent({ stats }: { stats: HomeMetrics }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const [loading, setLoading] = useState(false);
   const [repos, setRepos] = useState<HomeSearchRepo[]>([]);
   const [ideas, setIdeas] = useState<ComboIdea[]>([]);
   const [searched, setSearched] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchTrace, setSearchTrace] = useState<SearchTrace | null>(null);
+  const [forgeStep, setForgeStep] = useState(1);
+  const progressTimersRef = useRef<number[]>([]);
+
+  const clearProgressTimers = useCallback(() => {
+    for (const timer of progressTimersRef.current) {
+      window.clearTimeout(timer);
+    }
+    progressTimersRef.current = [];
+  }, []);
+
+  useEffect(() => () => clearProgressTimers(), [clearProgressTimers]);
+
+  const scheduleProgressStep = useCallback((step: number, delay: number) => {
+    const timer = window.setTimeout(() => {
+      setForgeStep(step);
+    }, delay);
+    progressTimersRef.current.push(timer);
+  }, []);
 
   const updateURL = useCallback(
     (q: string) => {
@@ -128,6 +202,9 @@ export default function HomeContent() {
     async (q: string) => {
       const source = searched ? "results-searchbar" : "hero-searchbar";
       clearPendingRestore();
+      clearProgressTimers();
+      setForgeStep(1);
+      setSearchTrace(null);
 
       enqueueEvent({
         type: searched ? "query_retried" : "search_started",
@@ -143,6 +220,14 @@ export default function HomeContent() {
       setSearchQuery(q);
       updateURL(q);
 
+      if (!reduceMotion) {
+        scheduleProgressStep(2, FORGE_STEP_DELAYS[1]);
+        scheduleProgressStep(3, FORGE_STEP_DELAYS[2]);
+        scheduleProgressStep(4, FORGE_STEP_DELAYS[3]);
+      }
+
+      const startedAt = performance.now();
+
       try {
         const res = await fetch("/api/ideas/search", {
           method: "POST",
@@ -157,6 +242,7 @@ export default function HomeContent() {
 
         setRepos(nextRepos);
         setIdeas(nextIdeas);
+        setSearchTrace((payload.trace ?? null) as SearchTrace | null);
         persistSearchSnapshot(q, nextRepos, nextIdeas);
         enqueueEvent({
           type: "results_rendered",
@@ -172,6 +258,7 @@ export default function HomeContent() {
       } catch {
         setRepos([]);
         setIdeas([]);
+        setSearchTrace(null);
         enqueueEvent({
           type: "search_failed",
           queryText: q,
@@ -180,10 +267,18 @@ export default function HomeContent() {
         });
         void flushEvents();
       } finally {
+        const elapsed = performance.now() - startedAt;
+        const remaining = reduceMotion ? 0 : Math.max(FORGE_MIN_LOADING_MS - elapsed, 0);
+        if (remaining > 0) {
+          await new Promise<void>((resolve) => {
+            window.setTimeout(resolve, remaining);
+          });
+        }
+        clearProgressTimers();
         setLoading(false);
       }
     },
-    [searched, updateURL],
+    [searched, updateURL, clearProgressTimers, scheduleProgressStep, reduceMotion],
   );
 
   const handleClear = useCallback(() => {
@@ -191,9 +286,45 @@ export default function HomeContent() {
     setRepos([]);
     setIdeas([]);
     setSearchQuery("");
+    setSearchTrace(null);
+    setForgeStep(1);
+    clearProgressTimers();
     clearSearchSession();
     updateURL("");
-  }, [updateURL]);
+  }, [updateURL, clearProgressTimers]);
+
+  const handleChipClick = useCallback(
+    (chip: { id: string; text: string }, position: number) => {
+      enqueueEvent({
+        type: "chip_clicked",
+        page: "home",
+        source: "inspiration-chips",
+        payload: {
+          chipId: chip.id,
+          chipText: chip.text,
+          position,
+        },
+      });
+      void flushEvents();
+      void handleSearch(chip.text);
+    },
+    [handleSearch],
+  );
+
+  const handleDiceClick = useCallback(() => {
+    const picked = pickRandom(DICE_QUERIES);
+    enqueueEvent({
+      type: "dice_clicked",
+      page: "home",
+      source: "hero-dice",
+      payload: {
+        poolSize: DICE_QUERIES.length,
+        pickedId: picked.id,
+      },
+    });
+    void flushEvents();
+    void handleSearch(picked.text);
+  }, [handleSearch]);
 
   useEffect(() => {
     const q = searchParams.get("q");
@@ -215,38 +346,96 @@ export default function HomeContent() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSave = useCallback(async (idea: ComboIdea) => {
-    if (idea.id) {
-      const response = await fetch(`/api/combos/${idea.id}`, { method: "PATCH" });
+    try {
+      if (idea.id) {
+        const response = await fetch(`/api/combos/${idea.id}`, { method: "PATCH" });
+        if (response.ok) {
+          enqueueEvent({
+            type: "combo_saved",
+            comboId: idea.id,
+            queryText: searchQuery || null,
+            page: "home",
+            source: "ideas-panel",
+            payload: { title: idea.title },
+          });
+          void flushEvents();
+          return;
+        }
+
+        enqueueEvent({
+          type: "combo_save_failed",
+          comboId: idea.id,
+          queryText: searchQuery || null,
+          page: "home",
+          source: "ideas-panel",
+          payload: {
+            title: idea.title,
+            status: response.status,
+          },
+        });
+        void flushEvents();
+        return;
+      }
+
+      const response = await fetch("/api/combos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(idea),
+      });
       if (response.ok) {
         enqueueEvent({
           type: "combo_saved",
-          comboId: idea.id,
           queryText: searchQuery || null,
           page: "home",
           source: "ideas-panel",
           payload: { title: idea.title },
         });
         void flushEvents();
+        return;
       }
-      return;
-    }
 
-    const response = await fetch("/api/combos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(idea),
-    });
-    if (response.ok) {
       enqueueEvent({
-        type: "combo_saved",
+        type: "combo_save_failed",
         queryText: searchQuery || null,
         page: "home",
         source: "ideas-panel",
-        payload: { title: idea.title },
+        payload: {
+          title: idea.title,
+          status: response.status,
+        },
+      });
+      void flushEvents();
+    } catch (error) {
+      enqueueEvent({
+        type: "combo_save_failed",
+        comboId: idea.id ?? null,
+        queryText: searchQuery || null,
+        page: "home",
+        source: "ideas-panel",
+        payload: {
+          title: idea.title,
+          reason: error instanceof Error ? error.message : "unknown_error",
+        },
       });
       void flushEvents();
     }
   }, [searchQuery]);
+
+  const forgeQueryLabel = truncate(searchQuery || "your idea", 28);
+  const forgeFoundCount = searchTrace?.mergedCount ?? null;
+  const forgeStepLabels = [
+    "Parsing intent...",
+    forgeFoundCount != null
+      ? `Found ${formatCount(forgeFoundCount)} repos matching “${forgeQueryLabel}”`
+      : `Finding repos matching “${forgeQueryLabel}”…`,
+    forgeFoundCount != null
+      ? `Analyzing capabilities across ${formatCount(forgeFoundCount)} repos...`
+      : "Analyzing capabilities...",
+    "Generating combos...",
+  ];
+  const forgeSubtitle = forgeFoundCount != null
+    ? `Found ${formatCount(forgeFoundCount)} repos. Building blueprints now.`
+    : `Searching for “${forgeQueryLabel}”...`;
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -296,7 +485,7 @@ export default function HomeContent() {
                 transition={{ delay: 1.1, duration: 0.6 }}
                 className="mb-8 max-w-[480px] text-center text-base leading-relaxed text-fg-secondary md:mb-10 md:text-[17px]"
               >
-                Search GitHub repositories and forge them into product ideas with AI
+                Turn open-source repos into startup ideas in minutes
               </motion.p>
 
               <motion.div
@@ -305,7 +494,46 @@ export default function HomeContent() {
                 transition={{ delay: 1.3, type: "spring", stiffness: 120, damping: 18 }}
                 className="w-full"
               >
-                <SearchBar onSearch={handleSearch} variant="hero" onClear={handleClear} />
+                <SearchBar
+                  value={searchQuery}
+                  onValueChange={setSearchQuery}
+                  onSearch={handleSearch}
+                  variant="hero"
+                  onClear={handleClear}
+                />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.55, duration: 0.5 }}
+                className="mt-6 flex max-w-[760px] flex-wrap items-center justify-center gap-2.5"
+              >
+                {INSPIRATION_CHIPS.map((chip) => (
+                  <motion.button
+                    key={chip.id}
+                    type="button"
+                    onClick={() => handleChipClick(chip, INSPIRATION_CHIPS.indexOf(chip) + 1)}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="rounded-full border border-border/60 bg-surface/70 px-4 py-2 text-[13px] font-medium text-fg-secondary transition-colors hover:border-teal/30 hover:bg-teal/10 hover:text-fg"
+                  >
+                    {chip.text}
+                  </motion.button>
+                ))}
+                <motion.button
+                  type="button"
+                  onClick={handleDiceClick}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex items-center gap-2 rounded-full border border-teal/20 bg-teal/10 px-4 py-2 text-[13px] font-semibold text-teal transition-colors hover:border-teal/30 hover:bg-teal/15"
+                  aria-label="Surprise me with a random inspiration"
+                >
+                  <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                    <path d="M12 2 2 7l10 5 10-5-10-5Zm0 10L2 7v10l10 5 10-5V7l-10 5Zm0 0v10" />
+                  </svg>
+                  Surprise me
+                </motion.button>
               </motion.div>
 
               <motion.div
@@ -314,37 +542,11 @@ export default function HomeContent() {
                 transition={{ delay: 2, duration: 0.8 }}
                 className="mt-10 flex items-center gap-8 md:mt-14 md:gap-12"
               >
-                <TrustMetric value="50k+" label="Repos indexed" delay={2.1} />
+                <TrustMetric value={formatCount(stats.repoCount)} label="Repos indexed" delay={2.1} />
                 <div className="h-8 w-px bg-border" />
-                <TrustMetric value="<2s" label="Idea generation" delay={2.3} />
+                <TrustMetric value={formatLatency(stats.p50LatencyMs)} label="P50 latency" delay={2.3} />
                 <div className="h-8 w-px bg-border" />
-                <TrustMetric value="6" label="Score dimensions" delay={2.5} />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.6, duration: 0.6 }}
-                className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px] text-fg-muted md:mt-10"
-              >
-                <span className="flex items-center gap-1.5">
-                  <svg className="size-[14px] text-teal/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Semantic search
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <svg className="size-[14px] text-teal/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  AI-powered combos
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <svg className="size-[14px] text-teal/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  72h demo plans
-                </span>
+                <TrustMetric value={formatCount(stats.comboCount)} label="Ideas generated" delay={2.5} />
               </motion.div>
             </motion.main>
           ) : loading ? (
@@ -355,7 +557,12 @@ export default function HomeContent() {
               exit={{ opacity: 0 }}
               className="flex flex-1 items-center justify-center px-5 pt-10"
             >
-              <ForgeSpinner step={2} />
+              <ForgeSpinner
+                step={forgeStep}
+                steps={forgeStepLabels}
+                title="Forging ideas..."
+                subtitle={forgeSubtitle}
+              />
             </motion.div>
           ) : (
             <motion.main
@@ -366,7 +573,14 @@ export default function HomeContent() {
               className="flex flex-col gap-6 px-4 py-6 md:px-6 md:py-8 lg:py-10"
             >
               <div className="mx-auto w-full max-w-[1200px]">
-                <SearchBar onSearch={handleSearch} loading={loading} variant="compact" defaultValue={searchQuery} onClear={handleClear} />
+                <SearchBar
+                  value={searchQuery}
+                  onValueChange={setSearchQuery}
+                  onSearch={handleSearch}
+                  loading={loading}
+                  variant="compact"
+                  onClear={handleClear}
+                />
               </div>
 
               <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 lg:flex-row">

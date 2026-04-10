@@ -13,21 +13,23 @@ const PLACEHOLDERS = [
 ];
 
 interface SearchBarProps {
+  value: string;
+  onValueChange: (query: string) => void;
   onSearch: (query: string) => void;
   loading?: boolean;
   variant?: "hero" | "compact";
-  defaultValue?: string;
   onClear?: () => void;
 }
 
 export function SearchBar({
+  value,
+  onValueChange,
   onSearch,
   loading,
   variant = "hero",
-  defaultValue,
   onClear,
 }: SearchBarProps) {
-  const [query, setQuery] = useState(defaultValue ?? "");
+  const query = value;
   const [focused, setFocused] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [placeholderText, setPlaceholderText] = useState("");
@@ -89,12 +91,13 @@ export function SearchBar({
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     const trimmed = query.trim();
     if (trimmed) onSearch(trimmed);
   };
 
   const handleClear = () => {
-    setQuery("");
+    onValueChange("");
     inputRef.current?.focus();
     onClear?.();
   };
@@ -134,7 +137,7 @@ export function SearchBar({
           <input
             ref={inputRef}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => onValueChange(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             placeholder={hydrated && !query && !focused ? "" : "Describe what you want to build..."}

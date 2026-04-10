@@ -3,6 +3,7 @@ import { searchMulti, fetchReadme } from "@/lib/github";
 import { parseQuery, generateCombos } from "@/lib/openai";
 import { searchVectors, upsertVectors } from "@/lib/qdrant";
 import { rerank } from "@/services/reranker";
+import { persistTrace } from "@/services/tracing";
 import { logger } from "@/lib/logger";
 import { sql, getTableColumns } from "drizzle-orm";
 import type { RepoDoc, ParsedQuery, QueryType, SearchMode } from "@/core/types";
@@ -62,9 +63,13 @@ export async function runSearchMode(
     ...parsed.capabilityTerms,
   ].join(" ") || queryText;
 
+  const t0 = performance.now();
+  let latencyFtsMs = 0;
+  let latencyVectorMs = 0;
+
   const [ftsResult, vectorResult] = await Promise.allSettled([
-    lexicalSearch(parsed, limit),
-    searchVectors(enrichedVectorQuery, parsed, limit),
+    (async () => { const t = performance.now(); const r = await lexicalSearch(parsed, limit); latencyFtsMs = performance.now() - t; return r; })(),
+    (async () => { const t = performance.now(); const r = await searchVectors(enrichedVectorQuery, parsed, limit); latencyVectorMs = performance.now() - t; return r; })(),
   ]);
 
   const ftsRepos = ftsResult.status === "fulfilled" ? ftsResult.value : [];
@@ -77,14 +82,17 @@ export async function runSearchMode(
     logger.warn({ err: vectorResult.reason, mode }, "Vector search failed");
   }
 
-  const needsGithub = shouldUseGithubFallback(parsed, ftsRepos, options);
+  const needsGithub = shouldUseGithubFallback(parsed, ftsRepos, vectorRepos, options);
+  let latencyGithubMs: number | null = null;
   const githubRepos = mode === "hybrid+github-fallback" && needsGithub && parsed.githubQueries.length > 0
-    ? rescoreGithubRepos(
-      await searchFromGithub(parsed.githubQueries, rerankLimit, {
-        persistResults: persistGithubResults,
-      }),
-      parsed,
-    )
+    ? await (async () => {
+        const tGh = performance.now();
+        const raw = await searchFromGithub(parsed.githubQueries, rerankLimit, {
+          persistResults: persistGithubResults,
+        });
+        latencyGithubMs = performance.now() - tGh;
+        return rescoreGithubRepos(raw, parsed);
+      })()
     : [];
 
   const repos = await executeMode(queryText, parsed, mode, {
@@ -94,6 +102,8 @@ export async function runSearchMode(
     limit,
     rerankLimit,
   });
+
+  const latencyTotalMs = performance.now() - t0;
 
   logger.info(
     {
@@ -105,6 +115,20 @@ export async function runSearchMode(
     },
     "Search mode complete",
   );
+
+  void persistTrace({
+    queryText,
+    parsed,
+    ftsCount: ftsRepos.length,
+    vectorCount: vectorRepos.length,
+    githubCount: githubRepos.length,
+    githubTriggered: needsGithub,
+    mergedCount: repos.length,
+    rerankedCount: repos.length,
+    topSlugs: repos.slice(0, 5).map((r) => r.slug),
+    scores: repos.map((r) => r.score ?? 0),
+    latencyMs: { fts: latencyFtsMs, vector: latencyVectorMs, github: latencyGithubMs, total: latencyTotalMs },
+  }).catch((e) => logger.warn({ err: e }, "Trace persist failed"));
 
   return {
     parsed,
@@ -183,19 +207,24 @@ async function rerankResults(
   }
 }
 
+// GitHub is rescue-only: only trigger when BOTH fts and vector signals are weak.
+// vectorAvgScore uses cosine similarity (normalized [0,1]), which is more reliable
+// than ts_rank_cd scores (unnormalized, frequently low even for correct results).
 function shouldUseGithubFallback(
   parsed: ParsedQuery,
   ftsRepos: RepoDoc[],
+  vectorRepos: RepoDoc[],
   options: SearchExecutionOptions,
 ) {
   if (options.disableGithubFallback) {
     return false;
   }
-
-  const intentNeedsGithub =
-    parsed.intentType === "explore" || parsed.intentType === "build";
-
-  return intentNeedsGithub || ftsRepos.length < 4 || avgScore(ftsRepos) < 0.5;
+  const vectorAvgScore = avgScore(vectorRepos);
+  return (
+    parsed.githubQueries.length > 0 &&
+    ftsRepos.length < 3 &&
+    vectorAvgScore < 0.4
+  );
 }
 
 /* ------------------------------------------------------------------ */

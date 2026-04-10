@@ -125,9 +125,15 @@ export async function searchVectors(
   query: string,
   parsed: ParsedQuery,
   limit = 12,
+  modeOverride?: "hybrid" | "dense-only",
 ): Promise<RepoDoc[]> {
   await ensureCollection();
   const denseVector = await buildDenseVectorValue(query);
+
+  const effectiveMode = modeOverride ?? env.VECTOR_MODE;
+  if (effectiveMode === "dense-only") {
+    return fallbackDenseSearch(denseVector, parsed, limit);
+  }
 
   try {
     const results = await client.query(COLLECTION, {

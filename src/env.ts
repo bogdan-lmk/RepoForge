@@ -17,6 +17,7 @@ export const env = createEnv({
     LIBRARIES_IO_API_KEY: z.string().optional(),
     INGEST_SECRET: z.string().optional(),
     REINDEX_SECRET: z.string().optional(),
+    VECTOR_MODE: z.enum(["hybrid", "dense-only"]).default("hybrid"),
   },
   client: {},
   runtimeEnv: {
@@ -34,5 +35,6 @@ export const env = createEnv({
     LIBRARIES_IO_API_KEY: process.env.LIBRARIES_IO_API_KEY,
     INGEST_SECRET: process.env.INGEST_SECRET,
     REINDEX_SECRET: process.env.REINDEX_SECRET,
+    VECTOR_MODE: process.env.VECTOR_MODE,
   },
 });

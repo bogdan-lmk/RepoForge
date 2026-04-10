@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  compareBenchQueryScores,
   compareBenchRuns,
   summarizeBenchRun,
   type RetrievalBenchRun,
@@ -72,5 +73,56 @@ describe("retrieval bench", () => {
 
     expect(comparison.decision).toBe("kill");
     expect(comparison.notes[0]).toContain("minimum relevance uplift");
+  });
+
+  it("returns per-query deltas for internal retrieval lab views", () => {
+    const baseline = summarizeBenchRun(
+      "hybrid",
+      [
+        makeScore({
+          queryId: "q1",
+          query: "first query",
+          topSlugs: ["baseline/one"],
+          reciprocalRank: 0.25,
+          ndcgAt10: 0.2,
+        }),
+        makeScore({
+          queryId: "q2",
+          query: "second query",
+          topSlugs: ["baseline/two"],
+          reciprocalRank: 1,
+          ndcgAt10: 0.9,
+        }),
+      ],
+      [100, 105],
+    );
+    const candidate = summarizeBenchRun(
+      "hybrid+rerank",
+      [
+        makeScore({
+          queryId: "q1",
+          query: "first query",
+          topSlugs: ["candidate/one"],
+          reciprocalRank: 0.5,
+          ndcgAt10: 0.4,
+        }),
+        makeScore({
+          queryId: "q2",
+          query: "second query",
+          topSlugs: ["candidate/two"],
+          reciprocalRank: 0.5,
+          ndcgAt10: 0.5,
+        }),
+      ],
+      [120, 125],
+    );
+
+    const deltas = compareBenchQueryScores(baseline, candidate);
+
+    expect(deltas).toHaveLength(2);
+    expect(deltas[0]?.queryId).toBe("q2");
+    expect(deltas[0]?.status).toBe("degraded");
+    expect(deltas[1]?.queryId).toBe("q1");
+    expect(deltas[1]?.status).toBe("improved");
   });
 });

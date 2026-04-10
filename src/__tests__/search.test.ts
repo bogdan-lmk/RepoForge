@@ -125,7 +125,7 @@ beforeEach(() => {
 });
 
 describe("search", () => {
-  it("skips GitHub when FTS returns >= 3 results regardless of intent type", async () => {
+  it("uses the reranked hybrid pipeline as the default search path", async () => {
     mockParseQuery.mockResolvedValue(
       makeParsed({ intentType: "explore", queryType: "capability_search" }),
     );
@@ -142,48 +142,7 @@ describe("search", () => {
     expect(result.repos.length).toBeGreaterThan(0);
     expect(mockSearchVectors).toHaveBeenCalled();
     expect(mockSearchMulti).not.toHaveBeenCalled();
-  });
-
-  it("triggers GitHub only when both fts < 3 AND vector avg score < 0.4", async () => {
-    mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore", anchorTerms: ["obscure-lib"], queryType: "capability_search", requiredEntities: [] }),
-    );
-    // Vector returns weak results (avg score 0.2 < 0.4 threshold)
-    mockSearchVectors.mockResolvedValue([
-      makeRepo("vector/weak", "vector", 0.2),
-    ]);
-
-    const ftsRepos = [makeRepo("fts/solo", "fts", 0.3)];
-    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
-
-    const githubRepos = [
-      makeRepo("gh/fresh-repo", "github", 0.5),
-      makeRepo("gh/another", "github", 0.4),
-    ];
-    mockSearchMulti.mockResolvedValue(githubRepos);
-
-    const result = await search("obscure-lib tool");
-
-    expect(mockSearchMulti).toHaveBeenCalled();
-    expect(result.repos.length).toBeGreaterThan(0);
-  });
-
-  it("skips GitHub when explore intent has strong vector results (rescue-only)", async () => {
-    mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }),
-    );
-    // Vector returns strong results (avg score 0.75 > 0.4 threshold)
-    mockSearchVectors.mockResolvedValue([
-      makeRepo("vector/strong-1", "vector", 0.8),
-      makeRepo("vector/strong-2", "vector", 0.7),
-    ]);
-    // FTS returns < 3 results but vector is strong — should NOT trigger GitHub
-    const ftsRepos = [makeRepo("fts/solo", "fts", 0.3)];
-    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
-
-    await search("some explore query");
-
-    expect(mockSearchMulti).not.toHaveBeenCalled();
+    expect(mockRerank).toHaveBeenCalled();
   });
 
   it("continues when vector search fails (rejected promise)", async () => {
@@ -245,36 +204,15 @@ describe("search", () => {
     expect(result.repos.length).toBeGreaterThan(0);
   });
 
-  it("calls persistRepos when GitHub results come in", async () => {
-    mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }),
-    );
-    mockSearchVectors.mockResolvedValue([]);
-    mockLimit.mockResolvedValue([]);
-
-    const githubRepo = makeRepo("gh/new-repo", "github", 0.5);
-    githubRepo.capabilities = ["auto-generated"];
-    githubRepo.primitives = ["api-call"];
-    mockSearchMulti.mockResolvedValue([githubRepo]);
-
-    await search("some query");
-
-    expect(mockOnConflictDoUpdate).toHaveBeenCalled();
-    expect(mockUpsertVectors).toHaveBeenCalled();
-  });
-
-  it("handles FTS rejection gracefully and falls through to GitHub", async () => {
-    mockParseQuery.mockResolvedValue(
-      makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }),
-    );
+  it("handles FTS rejection gracefully when vector results are still available", async () => {
+    mockSearchVectors.mockResolvedValue([
+      makeRepo("vector/repo-v1", "vector", 0.9),
+    ]);
     mockLimit.mockRejectedValue(new Error("DB connection lost"));
-
-    const githubRepo = makeRepo("gh/fallback", "github", 0.5);
-    mockSearchMulti.mockResolvedValue([githubRepo]);
 
     const result = await search("broken query");
 
-    expect(result.repos.some((r) => r.slug === "gh/fallback")).toBe(true);
+    expect(result.repos.some((r) => r.slug === "vector/repo-v1")).toBe(true);
   });
 
   it("generates combos when 2+ repos found", async () => {
@@ -315,19 +253,6 @@ describe("search", () => {
     expect(mockGenerateCombos).not.toHaveBeenCalled();
   });
 
-  it("handles upsertVectors failure in GitHub path gracefully", async () => {
-    mockParseQuery.mockResolvedValue(makeParsed({ intentType: "explore", queryType: "capability_search", requiredEntities: [] }));
-    mockLimit.mockResolvedValue([]);
-    mockUpsertVectors.mockRejectedValue(new Error("Qdrant write error"));
-
-    const githubRepo = makeRepo("gh/resilient", "github", 0.5);
-    mockSearchMulti.mockResolvedValue([githubRepo]);
-
-    const result = await search("resilient query");
-
-    expect(result.repos.some((r) => r.slug === "gh/resilient")).toBe(true);
-  });
-
   it("calls reranker with RRF merged results", async () => {
     const ftsRepos = Array.from({ length: 5 }, (_, i) =>
       makeRepo(`fts/repo-${i}`, "fts", 0.8),
@@ -353,40 +278,6 @@ describe("search", () => {
     expect(result.repos.length).toBeGreaterThan(0);
   });
 
-  it("re-scores GitHub results based on text relevance", async () => {
-    mockParseQuery.mockResolvedValue(
-      makeParsed({
-        intentType: "explore",
-        anchorTerms: ["notebooklm"],
-        capabilityTerms: ["python api"],
-        queryType: "specific_tool",
-        requiredEntities: ["notebooklm"],
-        githubQueries: ["notebooklm python"],
-      }),
-    );
-    mockSearchVectors.mockResolvedValue([]);
-    mockLimit.mockResolvedValue([]);
-
-    const popular = makeRepo("someone/random-lib", "github", 0);
-    popular.description = "A random popular library";
-    popular.stars = 50000;
-
-    const relevant = makeRepo("teng-lin/notebooklm-py", "github", 0);
-    relevant.description = "Unofficial Python API for Google NotebookLM";
-    relevant.stars = 9000;
-    relevant.topics = ["notebooklm", "python-api"];
-
-    mockSearchMulti.mockResolvedValue([popular, relevant]);
-
-    await search("python api for notebookLM");
-
-    const rerankCall = mockRerank.mock.calls[0];
-    const repos = rerankCall[1] as RepoDoc[];
-    const notebooklmIdx = repos.findIndex((r: RepoDoc) => r.slug === "teng-lin/notebooklm-py");
-    const randomIdx = repos.findIndex((r: RepoDoc) => r.slug === "someone/random-lib");
-    expect(notebooklmIdx).toBeLessThan(randomIdx);
-  });
-
   it("boosts FTS and dampens vector weight for lookup queries", () => {
     const weights = computeAdaptiveWeights(
       makeParsed({
@@ -399,10 +290,9 @@ describe("search", () => {
 
     expect(weights.fts).toBeCloseTo(1.82);
     expect(weights.vector).toBeCloseTo(0.84);
-    expect(weights.github).toBeCloseTo(1);
   });
 
-  it("boosts vector and GitHub weights for exploratory queries with weak lexical recall", () => {
+  it("boosts vector weight for exploratory queries with weak lexical recall", () => {
     const weights = computeAdaptiveWeights(
       makeParsed({
         intentType: "explore",
@@ -414,7 +304,6 @@ describe("search", () => {
 
     expect(weights.fts).toBeCloseTo(1.61);
     expect(weights.vector).toBeCloseTo(1.872);
-    expect(weights.github).toBeCloseTo(1.44);
   });
 
   it("applies build and alternative boosts together when both signals are present", () => {
@@ -429,7 +318,6 @@ describe("search", () => {
 
     expect(weights.fts).toBeCloseTo(1.4);
     expect(weights.vector).toBeCloseTo(2.016);
-    expect(weights.github).toBeCloseTo(1.44);
   });
 
   it("boosts both lexical and vector channels for comparison queries", () => {
@@ -444,7 +332,6 @@ describe("search", () => {
 
     expect(weights.fts).toBeCloseTo(2.184);
     expect(weights.vector).toBeCloseTo(1.008);
-    expect(weights.github).toBeCloseTo(1);
   });
 
   it("returns only lexical results in fts-only mode", async () => {
@@ -483,5 +370,27 @@ describe("search", () => {
 
     expect(mockSearchMulti).not.toHaveBeenCalled();
     expect(mockRerank).toHaveBeenCalled();
+  });
+
+  it("supports disabling rerank through the internal execution flag", async () => {
+    const ftsRepos = [
+      makeRepo("fts/repo-1", "fts", 0.8),
+      makeRepo("fts/repo-2", "fts", 0.7),
+    ];
+    const vectorRepos = [
+      makeRepo("vector/repo-1", "vector", 0.9),
+      makeRepo("vector/repo-2", "vector", 0.6),
+    ];
+
+    mockLimit.mockResolvedValue(ftsRepos.map(ftsRow));
+    mockSearchVectors.mockResolvedValue(vectorRepos);
+
+    const result = await runSearchMode("hybrid no rerank", "hybrid+rerank", {
+      disableRerank: true,
+      rerankLimit: 3,
+    });
+
+    expect(mockRerank).not.toHaveBeenCalled();
+    expect(result.repos).toHaveLength(3);
   });
 });

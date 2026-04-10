@@ -10,8 +10,9 @@
  * Requires env vars: QDRANT_URL, OPENAI_API_KEY, DATABASE_URL
  *
  * Decision criterion:
- *   overlapAt5 < 0.6 on explore queries → hybrid produces meaningfully different results → keep it
- *   overlapAt5 consistently high         → dense-only may be sufficient and simpler
+ *   1. Prefer the mode with better quality at rank 1 / rank 5.
+ *   2. Penalize any mode that returns empty results for known-good queries.
+ *   3. Use overlap only as a secondary complexity signal, not as the primary verdict.
  */
 import { describe, it, expect } from "vitest";
 import { searchVectors } from "@/lib/qdrant";
@@ -100,14 +101,37 @@ describe.skipIf(!RUN_COMPARE)("Vector Mode Comparison: hybrid vs dense-only", ()
     }
 
     const lowOverlap = rows.filter((r) => r.overlapAt5 < 0.6);
+    const hybridWinsS1 = rows.filter((r) => r.hybridScore1 > r.denseScore1).length;
+    const hybridWinsS5 = rows.filter((r) => r.hybridScore5 > r.denseScore5).length;
+    const denseEmpty = rows.filter((r) => r.denseTop5.length === 0).length;
+    const hybridEmpty = rows.filter((r) => r.hybridTop5.length === 0).length;
+    const hybridQualityWins =
+      hybridWinsS1 >= Math.ceil(rows.length * 0.7) &&
+      hybridWinsS5 >= Math.ceil(rows.length * 0.7);
+
     console.log(
       `\n${lowOverlap.length}/${rows.length} queries where hybrid diverges from dense-only (overlap < 0.6)`,
     );
+    console.log(
+      `${hybridWinsS1}/${rows.length} queries where hybrid wins at rank 1; ` +
+      `${hybridWinsS5}/${rows.length} where it wins at rank 5`,
+    );
+    console.log(
+      `Empty result penalty — hybrid: ${hybridEmpty}, dense-only: ${denseEmpty}`,
+    );
 
-    if (lowOverlap.length > rows.length / 2) {
-      console.log("\nVerdict: KEEP hybrid — diverges on >50% of queries, meaningful BM25 signal.");
+    if (hybridQualityWins || denseEmpty > hybridEmpty) {
+      console.log(
+        "\nVerdict: KEEP hybrid — quality wins materially outweigh any simplicity gain from dense-only.",
+      );
+    } else if (lowOverlap.length > rows.length / 2) {
+      console.log(
+        "\nVerdict: KEEP hybrid — diverges on >50% of queries, meaningful BM25 signal.",
+      );
     } else {
-      console.log("\nVerdict: CONSIDER dense-only — results largely overlap, simpler pipeline may suffice.");
+      console.log(
+        "\nVerdict: CONSIDER dense-only — quality is broadly similar and overlap is high enough that simpler retrieval may suffice.",
+      );
     }
 
     if (lowOverlap.length > 0) {

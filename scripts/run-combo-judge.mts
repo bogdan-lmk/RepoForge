@@ -73,8 +73,7 @@ async function main() {
 
   const items = [];
   for (const query of queries) {
-    const searchResult = await Search.runSearchMode(query.query, "hybrid+github-fallback", {
-      persistGithubResults: false,
+    const searchResult = await Search.runSearchMode(query.query, "hybrid+rerank", {
       rerankLimit: 10,
     });
     const repos = searchResult.repos.slice(0, 8);

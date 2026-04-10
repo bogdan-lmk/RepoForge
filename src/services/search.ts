@@ -1,7 +1,6 @@
 import { db, repos } from "@/db";
-import { searchMulti, fetchReadme } from "@/lib/github";
 import { parseQuery, generateCombos } from "@/lib/openai";
-import { searchVectors, upsertVectors } from "@/lib/qdrant";
+import { searchVectors } from "@/lib/qdrant";
 import { rerank } from "@/services/reranker";
 import { persistTrace } from "@/services/tracing";
 import { logger } from "@/lib/logger";
@@ -11,13 +10,13 @@ import type { RepoDoc, ParsedQuery, QueryType, SearchMode } from "@/core/types";
 type SearchOptions = {
   comboLimit?: number;
   generateCombos?: boolean;
+  disableRerank?: boolean;
 };
 
 export type SearchExecutionOptions = {
   limit?: number;
   rerankLimit?: number;
-  disableGithubFallback?: boolean;
-  persistGithubResults?: boolean;
+  disableRerank?: boolean;
 };
 
 export type SearchRunResult = {
@@ -25,7 +24,6 @@ export type SearchRunResult = {
   repos: RepoDoc[];
   ftsRepos: RepoDoc[];
   vectorRepos: RepoDoc[];
-  githubRepos: RepoDoc[];
   mode: SearchMode;
 };
 
@@ -37,8 +35,12 @@ export async function search(
     typeof options === "number" ? options : (options.comboLimit ?? 3);
   const shouldGenerateCombos =
     typeof options === "number" ? true : (options.generateCombos ?? true);
+  const disableRerank =
+    typeof options === "number" ? false : (options.disableRerank ?? false);
 
-  const result = await runSearchMode(queryText, "hybrid+github-fallback");
+  const result = await runSearchMode(queryText, "hybrid+rerank", {
+    disableRerank,
+  });
 
   const combos = shouldGenerateCombos && result.repos.length >= 2
     ? await generateCombos(result.repos, queryText, comboLimit)
@@ -57,7 +59,6 @@ export async function runSearchMode(
 
   const limit = options.limit ?? 12;
   const rerankLimit = options.rerankLimit ?? 15;
-  const persistGithubResults = options.persistGithubResults ?? true;
   const enrichedVectorQuery = [
     ...parsed.anchorTerms,
     ...parsed.capabilityTerms,
@@ -82,25 +83,12 @@ export async function runSearchMode(
     logger.warn({ err: vectorResult.reason, mode }, "Vector search failed");
   }
 
-  const needsGithub = shouldUseGithubFallback(parsed, ftsRepos, vectorRepos, options);
-  let latencyGithubMs: number | null = null;
-  const githubRepos = mode === "hybrid+github-fallback" && needsGithub && parsed.githubQueries.length > 0
-    ? await (async () => {
-        const tGh = performance.now();
-        const raw = await searchFromGithub(parsed.githubQueries, rerankLimit, {
-          persistResults: persistGithubResults,
-        });
-        latencyGithubMs = performance.now() - tGh;
-        return rescoreGithubRepos(raw, parsed);
-      })()
-    : [];
-
   const repos = await executeMode(queryText, parsed, mode, {
     ftsRepos,
     vectorRepos,
-    githubRepos,
     limit,
     rerankLimit,
+    disableRerank: options.disableRerank ?? false,
   });
 
   const latencyTotalMs = performance.now() - t0;
@@ -110,7 +98,6 @@ export async function runSearchMode(
       mode,
       fts: ftsRepos.length,
       vector: vectorRepos.length,
-      github: githubRepos.length,
       returned: repos.length,
     },
     "Search mode complete",
@@ -121,13 +108,13 @@ export async function runSearchMode(
     parsed,
     ftsCount: ftsRepos.length,
     vectorCount: vectorRepos.length,
-    githubCount: githubRepos.length,
-    githubTriggered: needsGithub,
+    githubCount: 0,
+    githubTriggered: false,
     mergedCount: repos.length,
     rerankedCount: repos.length,
     topSlugs: repos.slice(0, 5).map((r) => r.slug),
     scores: repos.map((r) => r.score ?? 0),
-    latencyMs: { fts: latencyFtsMs, vector: latencyVectorMs, github: latencyGithubMs, total: latencyTotalMs },
+    latencyMs: { fts: latencyFtsMs, vector: latencyVectorMs, github: null, total: latencyTotalMs },
   }).catch((e) => logger.warn({ err: e }, "Trace persist failed"));
 
   return {
@@ -135,7 +122,6 @@ export async function runSearchMode(
     repos,
     ftsRepos,
     vectorRepos,
-    githubRepos,
     mode,
   };
 }
@@ -149,9 +135,9 @@ function getSearchSelectColumns() {
 type SearchSources = {
   ftsRepos: RepoDoc[];
   vectorRepos: RepoDoc[];
-  githubRepos: RepoDoc[];
   limit: number;
   rerankLimit: number;
+  disableRerank: boolean;
 };
 
 async function executeMode(
@@ -177,19 +163,9 @@ async function executeMode(
     }
     case "hybrid+rerank": {
       const hybridRepos = await executeMode(queryText, parsed, "hybrid", sources);
-      return rerankResults(queryText, hybridRepos, sources.rerankLimit);
-    }
-    case "hybrid+github-fallback": {
-      const weights = computeAdaptiveWeights(parsed, sources.ftsRepos.length, avgScore(sources.ftsRepos));
-      const mergedRepos = weightedRRF(
-        [
-          { repos: sources.ftsRepos, weight: weights.fts },
-          { repos: sources.vectorRepos, weight: weights.vector },
-          { repos: sources.githubRepos, weight: weights.github },
-        ],
-        { k: 20 },
-      ).slice(0, Math.max(sources.limit * 2, 30));
-      return rerankResults(queryText, mergedRepos, sources.rerankLimit);
+      return sources.disableRerank
+        ? hybridRepos.slice(0, sources.rerankLimit)
+        : rerankResults(queryText, hybridRepos, sources.rerankLimit);
     }
   }
 }
@@ -205,26 +181,6 @@ async function rerankResults(
     logger.warn({ err: e }, "Re-ranking failed, using source order");
     return repos.slice(0, rerankLimit);
   }
-}
-
-// GitHub is rescue-only: only trigger when BOTH fts and vector signals are weak.
-// vectorAvgScore uses cosine similarity (normalized [0,1]), which is more reliable
-// than ts_rank_cd scores (unnormalized, frequently low even for correct results).
-function shouldUseGithubFallback(
-  parsed: ParsedQuery,
-  ftsRepos: RepoDoc[],
-  vectorRepos: RepoDoc[],
-  options: SearchExecutionOptions,
-) {
-  if (options.disableGithubFallback) {
-    return false;
-  }
-  const vectorAvgScore = avgScore(vectorRepos);
-  return (
-    parsed.githubQueries.length > 0 &&
-    ftsRepos.length < 3 &&
-    vectorAvgScore < 0.4
-  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -312,158 +268,14 @@ function toRepoDoc(
   };
 }
 
-async function searchFromGithub(
-  queries: string[],
-  maxTotal: number,
-  options: {
-    persistResults?: boolean;
-  } = {},
-): Promise<RepoDoc[]> {
-  const docs = await searchMulti(queries, maxTotal);
-  if (!docs.length) return [];
-
-  const enriched = await Promise.all(
-    docs.slice(0, 5).map(async (d) => {
-      const [owner, repo] = d.slug.split("/");
-      if (owner && repo) {
-        d.readme = await fetchReadme(owner, repo);
-      }
-      return d;
-    }),
-  );
-
-  if (options.persistResults ?? true) {
-    await persistRepos(enriched);
-    try {
-      await upsertVectors(enriched);
-    } catch (e) {
-      logger.warn({ err: e }, "Vector upsert failed after GitHub search");
-    }
-  }
-
-  return enriched.map((d) => ({ ...d, source: "github" }));
-}
-
-async function persistRepos(repoDocs: RepoDoc[]): Promise<void> {
-  for (const doc of repoDocs) {
-    await db
-      .insert(repos)
-      .values({
-        slug: doc.slug,
-        name: doc.name,
-        url: doc.url,
-        description: doc.description,
-        readme: doc.readme,
-        language: doc.language,
-        topics: doc.topics,
-        stars: doc.stars,
-        capabilities: doc.capabilities,
-        primitives: doc.primitives,
-      })
-      .onConflictDoUpdate({
-        target: repos.slug,
-        set: {
-          name: doc.name,
-          url: doc.url,
-          description: doc.description ?? undefined,
-          readme: doc.readme || undefined,
-          language: doc.language ?? undefined,
-          topics: doc.topics?.length ? doc.topics : undefined,
-          stars: doc.stars ?? undefined,
-          capabilities: doc.capabilities?.length ? doc.capabilities : undefined,
-          primitives: doc.primitives?.length ? doc.primitives : undefined,
-          updatedAt: new Date(),
-        },
-      });
-  }
-}
-
-// ── GitHub Re-Scoring ───────────────────────────────────────────────────────
-//
-// Compute text relevance score for GitHub results before feeding into RRF.
-// RRF assumes rank=1 means "most relevant", but GitHub returns by stars.
-// This re-scores so ranks reflect textual relevance, not popularity.
-
-function rescoreGithubRepos(
-  repos: RepoDoc[],
-  parsed: ParsedQuery,
-): RepoDoc[] {
-  const queryTerms = [
-    ...parsed.anchorTerms,
-    ...parsed.capabilityTerms,
-  ].map((t) => t.toLowerCase());
-
-  const anchorLower = parsed.anchorTerms.map((t) => t.toLowerCase());
-  const requiredLower = parsed.requiredEntities.map((e) => e.toLowerCase());
-
-  if (queryTerms.length === 0) return repos;
-
-  const scored = repos.map((repo) => {
-    const slugLower = repo.slug.toLowerCase();
-    const nameLower = repo.name.toLowerCase();
-    const descLower = (repo.description ?? "").toLowerCase();
-    const topicsLower = (repo.topics ?? []).join(" ").toLowerCase();
-
-    const docTerms = new Set(
-      `${slugLower} ${nameLower} ${descLower} ${topicsLower}`
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-
-    let matchCount = 0;
-    let slugBonus = 0;
-    let anchorBonus = 0;
-
-    for (const term of queryTerms) {
-      const inDoc =
-        slugLower.includes(term) ||
-        nameLower.includes(term) ||
-        descLower.includes(term) ||
-        topicsLower.includes(term);
-      if (inDoc) matchCount++;
-
-      if (slugLower.includes(term) || nameLower.includes(term)) {
-        slugBonus++;
-      }
-    }
-
-    for (const anchor of anchorLower) {
-      if (slugLower.includes(anchor) || nameLower.includes(anchor)) {
-        anchorBonus++;
-      }
-    }
-
-    let requiredBonus = 0;
-    for (const req of requiredLower) {
-      if (slugLower.includes(req) || nameLower.includes(req) || descLower.includes(req)) {
-        requiredBonus++;
-      }
-    }
-
-    const jaccard = matchCount / (queryTerms.length + docTerms.size - matchCount || 1);
-    const baseScore = 0.2 + 0.5 * jaccard;
-    const slugWeight = Math.min(slugBonus / queryTerms.length, 1) * 0.15;
-    const anchorWeight = Math.min(anchorBonus / Math.max(anchorLower.length, 1), 1) * 0.1;
-    const requiredWeight = requiredBonus > 0 ? 0.05 * requiredBonus : 0;
-
-    const score = Math.min(baseScore + slugWeight + anchorWeight + requiredWeight, 1.0);
-
-    return { ...repo, score };
-  });
-
-  scored.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
-
-  return scored;
-}
-
 // ── Adaptive RRF Weights ────────────────────────────────────────────────────
 
 export function computeAdaptiveWeights(
   parsed: ParsedQuery,
   ftsCount: number,
   ftsAvgScore: number,
-): { fts: number; vector: number; github: number } {
-  const w = { fts: 1.4, vector: 1.2, github: 1.0 };
+): { fts: number; vector: number } {
+  const w = { fts: 1.4, vector: 1.2 };
 
   const qt: QueryType = parsed.queryType ?? "capability_search";
 
@@ -473,15 +285,12 @@ export function computeAdaptiveWeights(
   }
   if (parsed.intentType === "explore" || qt === "capability_search") {
     w.vector *= 1.3;
-    w.github *= 1.2;
   }
   if (parsed.intentType === "build") {
     w.vector *= 1.2;
-    w.github *= 1.2;
   }
   if (qt === "alternative") {
     w.vector *= 1.4;
-    w.github *= 1.2;
   }
   if (qt === "comparison") {
     w.fts *= 1.2;
@@ -490,7 +299,6 @@ export function computeAdaptiveWeights(
 
   if (ftsCount < 3) {
     w.vector *= 1.2;
-    w.github *= 1.2;
   }
   if (ftsAvgScore > 0.7) {
     w.fts *= 1.15;

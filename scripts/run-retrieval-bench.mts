@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { SearchMode } from "../src/core/types.ts";
 
-const defaultModes: SearchMode[] = ["fts-only", "vector-only", "hybrid", "hybrid+rerank", "hybrid+github-fallback"];
+const defaultModes: SearchMode[] = ["fts-only", "vector-only", "hybrid", "hybrid+rerank"];
 
 function parseArg(name: string) {
   const raw = process.argv.find((arg) => arg.startsWith(`--${name}=`));
@@ -95,9 +95,7 @@ async function main() {
 
     for (const query of queries) {
       const startedAt = performance.now();
-      const repos = await SearchEval.runSearchEval(query.query, mode, {
-        disableGithubFallback: mode !== "hybrid+github-fallback",
-      });
+      const repos = await SearchEval.runSearchEval(query.query, mode);
       latenciesMs.push(Number((performance.now() - startedAt).toFixed(2)));
       scores.push(Bench.createBenchScore(query, repos.map((repo) => repo.slug)));
     }

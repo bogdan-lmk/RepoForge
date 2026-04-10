@@ -30,6 +30,27 @@ export type RetrievalBenchComparison = {
   notes: string[];
 };
 
+export type RetrievalBenchReport = {
+  runId: string;
+  generatedAt: string;
+  baselineMode: SearchMode;
+  runs: RetrievalBenchRun[];
+  comparisons: RetrievalBenchComparison[];
+};
+
+export type RetrievalBenchQueryDelta = {
+  queryId: string;
+  query: string;
+  baselineTopSlug: string | null;
+  candidateTopSlug: string | null;
+  baselineRank: number | null;
+  candidateRank: number | null;
+  baselineComposite: number;
+  candidateComposite: number;
+  delta: number;
+  status: "improved" | "degraded" | "unchanged";
+};
+
 export function createBenchScore(query: EvalQuery, topSlugs: string[]) {
   return scoreEvalQuery(query, topSlugs);
 }
@@ -52,30 +73,10 @@ export function compareBenchRuns(
   baseline: RetrievalBenchRun,
   candidate: RetrievalBenchRun,
 ): RetrievalBenchComparison {
-  const baselineMap = new Map(baseline.scores.map((score) => [score.queryId, score]));
-  const candidateMap = new Map(candidate.scores.map((score) => [score.queryId, score]));
-
-  let improvedQueries = 0;
-  let degradedQueries = 0;
-  let unchangedQueries = 0;
-
-  for (const [queryId, baselineScore] of baselineMap) {
-    const candidateScore = candidateMap.get(queryId);
-    if (!candidateScore) {
-      continue;
-    }
-
-    const baselineComposite = compositeScore(baselineScore);
-    const candidateComposite = compositeScore(candidateScore);
-
-    if (candidateComposite > baselineComposite) {
-      improvedQueries++;
-    } else if (candidateComposite < baselineComposite) {
-      degradedQueries++;
-    } else {
-      unchangedQueries++;
-    }
-  }
+  const deltas = compareBenchQueryScores(baseline, candidate);
+  const improvedQueries = deltas.filter((delta) => delta.status === "improved").length;
+  const degradedQueries = deltas.filter((delta) => delta.status === "degraded").length;
+  const unchangedQueries = deltas.filter((delta) => delta.status === "unchanged").length;
 
   const queryCount = Math.max(baseline.queryCount, candidate.queryCount, 1);
   const mrrDeltaPct = pctDelta(baseline.metrics.avgMRR, candidate.metrics.avgMRR);
@@ -122,6 +123,42 @@ export function compareBenchRuns(
     decision,
     notes,
   };
+}
+
+export function compareBenchQueryScores(
+  baseline: RetrievalBenchRun,
+  candidate: RetrievalBenchRun,
+): RetrievalBenchQueryDelta[] {
+  const baselineMap = new Map(baseline.scores.map((score) => [score.queryId, score]));
+  const candidateMap = new Map(candidate.scores.map((score) => [score.queryId, score]));
+
+  return [...baselineMap.entries()]
+    .flatMap(([queryId, baselineScore]) => {
+      const candidateScore = candidateMap.get(queryId);
+      if (!candidateScore) {
+        return [];
+      }
+
+      const baselineComposite = compositeScore(baselineScore);
+      const candidateComposite = compositeScore(candidateScore);
+      const delta = round(candidateComposite - baselineComposite);
+      const status: RetrievalBenchQueryDelta["status"] =
+        delta > 0 ? "improved" : delta < 0 ? "degraded" : "unchanged";
+
+      return [{
+        queryId,
+        query: baselineScore.query,
+        baselineTopSlug: baselineScore.topSlugs[0] ?? null,
+        candidateTopSlug: candidateScore.topSlugs[0] ?? null,
+        baselineRank: baselineScore.firstRelevantRank,
+        candidateRank: candidateScore.firstRelevantRank,
+        baselineComposite: round(baselineComposite),
+        candidateComposite: round(candidateComposite),
+        delta,
+        status,
+      }];
+    })
+    .sort((left, right) => Math.abs(right.delta) - Math.abs(left.delta));
 }
 
 function compositeScore(score: QueryLabScore) {

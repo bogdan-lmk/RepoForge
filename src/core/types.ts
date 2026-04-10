@@ -47,7 +47,6 @@ export const SEARCH_MODES = [
   "vector-only",
   "hybrid",
   "hybrid+rerank",
-  "hybrid+github-fallback",
 ] as const;
 
 export type SearchMode = (typeof SEARCH_MODES)[number];
